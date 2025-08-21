@@ -27,6 +27,7 @@
 		21F0D57028CA084E00814C1C /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0D56F28CA084E00814C1C /* Header.swift */; };
 		21F0D57328CA105800814C1C /* TrackControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0D57228CA105800814C1C /* TrackControl.swift */; };
 		21F0D57728CA1C0500814C1C /* SequenceControlsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0D57628CA1C0500814C1C /* SequenceControlsScreen.swift */; };
+		4FB7E1B72E57D620009FE171 /* MultitrackPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB7E1B62E57D620009FE171 /* MultitrackPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		21F0D56F28CA084E00814C1C /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		21F0D57228CA105800814C1C /* TrackControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackControl.swift; sourceTree = "<group>"; };
 		21F0D57628CA1C0500814C1C /* SequenceControlsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceControlsScreen.swift; sourceTree = "<group>"; };
+		4FB7E1B62E57D620009FE171 /* MultitrackPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultitrackPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +276,7 @@
 		21F0D57428CA1A7400814C1C /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				4FB7E1B62E57D620009FE171 /* MultitrackPicker.swift */,
 				21F0D53128CA060300814C1C /* DashboardScreen.swift */,
 			);
 			path = Dashboard;
@@ -450,6 +453,7 @@
 				21F0D55828CA060700814C1C /* Play_SecuenceApp.swift in Sources */,
 				219215D029AA76BC00EB7937 /* Track.swift in Sources */,
 				219215D529AA813D00EB7937 /* MultitrackLocalRepository.swift in Sources */,
+				4FB7E1B72E57D620009FE171 /* MultitrackPicker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

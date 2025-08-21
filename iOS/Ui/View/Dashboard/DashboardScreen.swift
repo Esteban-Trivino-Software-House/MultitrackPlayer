@@ -16,37 +16,32 @@ struct DashboardScreen: View {
         VStack(spacing: 0) {
             Header()
             Spacer()
-            VStack(spacing: 0) {
-                HStack {
-                    Text("Selected multitrack: ")
-                    Text(self.viewModel.getSelectedMultitrack()?.name ?? "Ninguno")
-                        .foregroundColor(Color.blue)
-                    Spacer()
-                }
-                controlButtons
+            VStack(alignment: .leading, spacing: 0) {
                 Divider().padding(.top, 8)
-                ScrollView(.horizontal) {
                     HStack {
-                        ForEach(self.viewModel.multitracks.map() { $0.value }) { multitrack in
-                            Button(action: {
-                                self.viewModel.selectMultitrack(multitrack.id)
-                            }){
-                                Text(multitrack.name)
-                                    .foregroundColor(/*@START_MENU_TOKEN@*/Color.blue/*@END_MENU_TOKEN@*/)
-                            }
-                            Divider()
+                        if let selectedMultitrackIndex = viewModel.selectedMultitrackIndex {
+                            // MARK: Multitrack Picker
+                            Text("Current multitrack: ")
+                            MultitrackPicker(
+                                selectedMultitrackIndex: selectedMultitrackIndex,
+                                multitracks: Array(viewModel.multitracks.values)) { selectedMultitrackIndex in
+                                    self.viewModel.selectMultitrack(selectedMultitrackIndex)
+                                }
+                            Spacer()
                         }
+                        Spacer()
                         Button(action: { self.showPicker.toggle() }) {
                             Image(systemName: "folder.badge.plus")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 30, alignment: .center)
                         }
-                        Spacer()
+                        .padding(.leading)
                     }
-                }
+                
                 .frame(minHeight:30, maxHeight: 40)
                 Divider().padding(.bottom, 8)
+                controlButtons
                 Spacer()
                 SequenceControlsScreen(viewModel: viewModel)
             }
@@ -61,7 +56,7 @@ struct DashboardScreen: View {
             }
         }
         .confirmationDialog("¿Deseas eliminar el multitrack?", isPresented: self.$presentModalDelete) {
-            Button("Eliminar multitrack", role: .destructive) {
+            Button("Eliminar \(viewModel.getSelectedMultitrackName())", role: .destructive) {
                 self.viewModel.deleteSelectedMultitrack()
             }
         }
@@ -69,26 +64,18 @@ struct DashboardScreen: View {
     
     @ViewBuilder
     var controlButtons: some View {
-        HStack {
+        HStack(spacing: 16) {
             Button(action: { self.viewModel.playTracks() }) {
-                Image(systemName: "play.circle")
+                Image(systemName: "play.square")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 30, alignment: .center)
+                    .frame(height: 50, alignment: .center)
             }
-            Spacer()
-            Button(action: { self.viewModel.pauseTracks() }) {
-                Image(systemName: "pause.circle")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 30, alignment: .center)
-            }
-            Spacer()
             Button(action: { self.viewModel.stopTracks() }) {
                 Image(systemName: "stop.circle")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 30, alignment: .center)
+                    .frame(height: 50, alignment: .center)
             }
             if let _ = self.viewModel.selectedMultitrackIndex {
                 Spacer()
@@ -98,7 +85,7 @@ struct DashboardScreen: View {
                     Image(systemName: "trash")
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 30, alignment: .center)
+                        .frame(height: 50, alignment: .center)
                         .foregroundColor(.red)
                 }
             }
@@ -110,8 +97,26 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = DashboardViewModel()
         let id1 = UUID()
-        viewModel.multitracks[id1] = (.init(id: id1, name: "Rey de reyes", tracks: [.init(id: UUID(), name: "Click", relativePath: "", config: .init(pan: 0, volume: 0.5, isMuted: false))]))
-        viewModel.appendTrackController(using: Track(id: UUID(), name: "Click", relativePath: "", config: .init(pan: -1, volume: 0.5, isMuted: false)) )
+        viewModel.multitracks[id1] = (
+            .init(
+                id: id1,
+                name: "Rey de reyes",
+                tracks: [.init(
+                    id: id1,
+                    name: "Click",
+                    relativePath: "",
+                    config: .init(pan: 0, volume: 0.5, isMuted: false)
+                )]
+            )
+        )
+        viewModel.appendTrackController(
+            using: Track(
+                id: UUID(),
+                name: "Click",
+                relativePath: "",
+                config: .init(pan: -1, volume: 0.5, isMuted: false)
+            )
+        )
         return DashboardScreen(viewModel: viewModel)
             .previewInterfaceOrientation(.landscapeLeft)
     }

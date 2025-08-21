@@ -54,6 +54,13 @@ final class DashboardViewModel: ObservableObject {
         }
     }
     
+    func getSelectedMultitrackName() -> String {
+        guard let selectedMultitrackIndex = self.selectedMultitrackIndex,
+              let name = self.multitracks[selectedMultitrackIndex]?.name else {
+            return "Multitrack"
+        }
+        return name
+    }
     
     func createMultitrack(with tracksTmpUrls: [URL]) {
         var multitrack = Multitrack(id: UUID(),
