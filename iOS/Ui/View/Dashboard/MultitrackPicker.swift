@@ -8,18 +8,9 @@
 import SwiftUI
 
 struct MultitrackPicker: View {
-    @State private var selectedMultitrackIndex: UUID
+    @State var selectedMultitrackIndex: UUID
     var multitracks: [Multitrack]
     var onChange: (UUID) -> Void
-    
-    init(selectedMultitrackIndex: UUID,
-         multitracks: [Multitrack],
-         onChange: @escaping (UUID) -> Void
-    ) {
-        self.selectedMultitrackIndex = selectedMultitrackIndex
-        self.multitracks = multitracks
-        self.onChange = onChange
-    }
     
     var body: some View {
         VStack {
@@ -29,18 +20,26 @@ struct MultitrackPicker: View {
                 }
             }
             .pickerStyle(.menu)
+            .onChange(of: selectedMultitrackIndex) { oldValue, newValue in
+                onChange(newValue)
+            }
         }
     }
 }
 
 struct MultitrackPicker_Previews: PreviewProvider {
+    struct MyPreview: View {
+        @State var id: UUID = UUID()
+        var body: some View {
+            MultitrackPicker(
+                selectedMultitrackIndex: id,
+                multitracks: [.init(id: id, name: "Multitrack 1")],
+                onChange: { _ in
+                }
+            )
+        }
+    }
     static var previews: some View {
-        let id = UUID()
-        MultitrackPicker(
-            selectedMultitrackIndex: id,
-            multitracks: [.init(id: id, name: "Multitrack 1")],
-            onChange: { _ in
-            }
-        )
+        MyPreview()
     }
 }

@@ -9,35 +9,52 @@ import SwiftUI
 
 struct DashboardScreen: View {
     @State private var showPicker: Bool = false
+    @State private var showNewMultitrackNameInputDialog: Bool = false
     @StateObject var viewModel = DashboardViewModel()
     @State private var presentModalDelete: Bool = false
+    @State private var newMultitrackNameTmp: String = ""
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack {
             Header()
+            switch viewModel.isLoading {
+                case true:
+                LoadingScreen()
+                case false:
+                content
+            }
+        }
+        .onAppear(){
+            self.viewModel.onAppear()
+        }
+    }
+    
+    @ViewBuilder
+    var content: some View {
+        VStack(spacing: 0) {
             Spacer()
             VStack(alignment: .leading, spacing: 0) {
                 Divider().padding(.top, 8)
-                    HStack {
-                        if let selectedMultitrackIndex = viewModel.selectedMultitrackIndex {
-                            // MARK: Multitrack Picker
-                            Text("Current multitrack: ")
-                            MultitrackPicker(
-                                selectedMultitrackIndex: selectedMultitrackIndex,
-                                multitracks: Array(viewModel.multitracks.values)) { selectedMultitrackIndex in
-                                    self.viewModel.selectMultitrack(selectedMultitrackIndex)
-                                }
-                            Spacer()
-                        }
-                        Spacer()
-                        Button(action: { self.showPicker.toggle() }) {
-                            Image(systemName: "folder.badge.plus")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 30, alignment: .center)
-                        }
-                        .padding(.leading)
+                HStack {
+                    // MARK: Multitrack Picker
+                    if let selectedMultitrackIndex = viewModel.selectedMultitrackIndex {
+                        Text("Current multitrack: ")
+                        MultitrackPicker(
+                            selectedMultitrackIndex: selectedMultitrackIndex,
+                            multitracks: Array(viewModel.multitracks.values)) { selectedMultitrackIndex in
+                                self.viewModel.selectMultitrack(selectedMultitrackIndex)
+                            }
                     }
+                    Spacer()
+                    // MARK: Add new multitrack button
+                    Button(action: { self.showNewMultitrackNameInputDialog = true }) {
+                        Image(systemName: "folder.badge.plus")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 30, alignment: .center)
+                    }
+                    .padding(.leading)
+                }
                 
                 .frame(minHeight:30, maxHeight: 40)
                 Divider().padding(.bottom, 8)
@@ -47,14 +64,24 @@ struct DashboardScreen: View {
             }
             .padding(.horizontal, 30)
         }
-        .onAppear(){
-            self.viewModel.onAppear()
-        }
         .sheet(isPresented: $showPicker) {
             DocumentPicker() { urls in
-                self.viewModel.createMultitrack(with: urls)
+                self.viewModel.createMultitrack(
+                    withName: newMultitrackNameTmp,
+                    using: urls
+                )
             }
         }
+        .sheet(isPresented: $showNewMultitrackNameInputDialog, content: {
+            NameInputDialogView { newMultitrackName in
+                newMultitrackNameTmp = newMultitrackName
+                showNewMultitrackNameInputDialog = false
+                showPicker = true
+            } onCancel: {
+                newMultitrackNameTmp = ""
+                showNewMultitrackNameInputDialog = false
+            }
+        })
         .confirmationDialog("¿Deseas eliminar el multitrack?", isPresented: self.$presentModalDelete) {
             Button("Eliminar \(viewModel.getSelectedMultitrackName())", role: .destructive) {
                 self.viewModel.deleteSelectedMultitrack()
