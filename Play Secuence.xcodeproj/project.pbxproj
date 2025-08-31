@@ -28,6 +28,8 @@
 		21F0D57328CA105800814C1C /* TrackControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0D57228CA105800814C1C /* TrackControl.swift */; };
 		21F0D57728CA1C0500814C1C /* SequenceControlsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0D57628CA1C0500814C1C /* SequenceControlsScreen.swift */; };
 		4FB7E1B72E57D620009FE171 /* MultitrackPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB7E1B62E57D620009FE171 /* MultitrackPicker.swift */; };
+		4FB7E1B92E57E2CA009FE171 /* NameInputDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB7E1B82E57E2CA009FE171 /* NameInputDialogView.swift */; };
+		4FB7E1BB2E57F0E6009FE171 /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB7E1BA2E57F0E0009FE171 /* LoadingScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		21F0D57228CA105800814C1C /* TrackControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackControl.swift; sourceTree = "<group>"; };
 		21F0D57628CA1C0500814C1C /* SequenceControlsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceControlsScreen.swift; sourceTree = "<group>"; };
 		4FB7E1B62E57D620009FE171 /* MultitrackPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultitrackPicker.swift; sourceTree = "<group>"; };
+		4FB7E1B82E57E2CA009FE171 /* NameInputDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameInputDialogView.swift; sourceTree = "<group>"; };
+		4FB7E1BA2E57F0E0009FE171 /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +280,7 @@
 		21F0D57428CA1A7400814C1C /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				4FB7E1B82E57E2CA009FE171 /* NameInputDialogView.swift */,
 				4FB7E1B62E57D620009FE171 /* MultitrackPicker.swift */,
 				21F0D53128CA060300814C1C /* DashboardScreen.swift */,
 			);
@@ -293,6 +298,7 @@
 		21F0D57828CA1EA600814C1C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				4FB7E1BA2E57F0E0009FE171 /* LoadingScreen.swift */,
 				2124071228CBE5B100A85A14 /* TrackControl */,
 				2124070428CAF34A00A85A14 /* DocumentPicker */,
 				21F0D57528CA1A8200814C1C /* SequenceControls */,
@@ -446,12 +452,14 @@
 				21F0D57028CA084E00814C1C /* Header.swift in Sources */,
 				219215D129AA76DB00EB7937 /* Sequences.xcdatamodeld in Sources */,
 				2124070628CAF36C00A85A14 /* DocumentPicker.swift in Sources */,
+				4FB7E1BB2E57F0E6009FE171 /* LoadingScreen.swift in Sources */,
 				219215DB29AD7BEF00EB7937 /* MultitrackRepository.swift in Sources */,
 				21F0D57728CA1C0500814C1C /* SequenceControlsScreen.swift in Sources */,
 				219215CF29AA76B900EB7937 /* Multitrack.swift in Sources */,
 				219215D929AD7AA800EB7937 /* CoreDataMultitrackManager.swift in Sources */,
 				21F0D55828CA060700814C1C /* Play_SecuenceApp.swift in Sources */,
 				219215D029AA76BC00EB7937 /* Track.swift in Sources */,
+				4FB7E1B92E57E2CA009FE171 /* NameInputDialogView.swift in Sources */,
 				219215D529AA813D00EB7937 /* MultitrackLocalRepository.swift in Sources */,
 				4FB7E1B72E57D620009FE171 /* MultitrackPicker.swift in Sources */,
 			);
@@ -616,7 +624,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeLeft;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -650,7 +658,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeLeft;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

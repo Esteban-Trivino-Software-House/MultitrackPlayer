@@ -29,10 +29,12 @@ struct Play_SecuenceApp: App {
     
     var body: some Scene {
         WindowGroup {
-            DashboardScreen()
-                .onAppear() {
-                    UIApplication.shared.isIdleTimerDisabled = true
-                }
+            ZStack {
+                DashboardScreen()
+                    .onAppear() {
+                        UIApplication.shared.isIdleTimerDisabled = true
+                    }
+            }
         }
     }
 }

@@ -7,51 +7,67 @@
 
 import Foundation
 
+@MainActor
 final class DashboardViewModel: ObservableObject {
     @Published var multitracks = Dictionary<UUID, Multitrack>()
     @Published var trackControllers = Dictionary<UUID, TrackControlViewModel>()
-    private(set) var selectedMultitrackIndex: UUID?
+    @Published var selectedMultitrackIndex: UUID?
+    @Published var isLoading = true
     
     let multitrackRepository: MultitrackRepository = MultitrackLocalRepository()
     
     func onAppear() {
         // Loads local multiracks
-        self.multitracks = multitrackRepository.loadMultitracks()
+        reloadMultitracks()
         
         // TODO: Get the selectedMultitrackIndex value from userdefaults and assign the value to selectedMultitrackIndex
         if let selectedMultitrackIndex = self.multitracks.first?.key {
             self.selectMultitrack(selectedMultitrackIndex)
         }
+        hideLoader()
     }
     
     func selectMultitrack(_ multitrackId: UUID) {
         if self.selectedMultitrackIndex != multitrackId {
-            self.selectedMultitrackIndex = multitrackId
-            self.stopTracks()
+            reloadMultitracks()
+            selectedMultitrackIndex = multitrackId
+            stopTracks()
             trackControllers.removeAll()
             if let selectedMultitrackIndex = self.selectedMultitrackIndex,
                let tracks = multitracks[selectedMultitrackIndex]?.tracks {
                 for track in tracks {
                     self.appendTrackController(using: track)
                 }
-                self.objectWillChange.send()
             }
         }
     }
     
+    private func reloadMultitracks() {
+        self.multitracks = multitrackRepository.loadMultitracks()
+    }
+    
     func deleteMultitrack(_ multitrackId: UUID) {
-        if let selectedMultitrackIndex = self.selectedMultitrackIndex,
-           multitrackId == selectedMultitrackIndex {
-            self.selectedMultitrackIndex = nil
+        showLoader()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+            guard let self = self else { return }
+            if let selectedMultitrackIndex = self.selectedMultitrackIndex, multitrackId == selectedMultitrackIndex {
+                stopTracks()
+                trackControllers.removeAll()
+                guard let selectedMultitrackIndex = self.multitracks.first?.key else {
+                    self.selectedMultitrackIndex = nil
+                    return
+                }
+                selectMultitrack(selectedMultitrackIndex)
+            }
+            self.multitracks.removeValue(forKey: multitrackId)
+            self.multitrackRepository.deleteMultitrack(multitrackId)
+            hideLoader()
         }
-        self.multitracks.removeValue(forKey: multitrackId)
-        self.multitrackRepository.deleteMultitrack(multitrackId)
     }
     
     func deleteSelectedMultitrack() {
-        if let selectedMultitrackIndex = self.selectedMultitrackIndex {
-            self.deleteMultitrack(selectedMultitrackIndex)
-        }
+        guard let selectedMultitrackIndex = self.selectedMultitrackIndex else { return }
+        self.deleteMultitrack(selectedMultitrackIndex)
     }
     
     func getSelectedMultitrackName() -> String {
@@ -62,16 +78,33 @@ final class DashboardViewModel: ObservableObject {
         return name
     }
     
-    func createMultitrack(with tracksTmpUrls: [URL]) {
-        var multitrack = Multitrack(id: UUID(),
-                                    name: "Multitrack \(self.multitracks.count)")
-        for tmpUrl in tracksTmpUrls {
-            let track = self.saveTrack(from: tmpUrl)
-            multitrack.tracks.append(track)
+    func createMultitrack(withName name: String, using tracksTmpUrls: [URL]) {
+        showLoader()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+            guard let self = self else { return }
+            var multitrack = Multitrack(id: UUID(),
+                                        name: name)
+            for tmpUrl in tracksTmpUrls {
+                let track = self.saveTrack(from: tmpUrl)
+                multitrack.tracks.append(track)
+            }
+            self.multitracks[multitrack.id]  = multitrack
+            self.multitrackRepository.saveMultitrack(multitrack)
+            self.selectMultitrack(multitrack.id)
+            self.hideLoader()
         }
-        self.multitracks[multitrack.id]  = multitrack
-        self.multitrackRepository.saveMultitrack(multitrack)
-        self.selectMultitrack(multitrack.id)
+    }
+    
+    func showLoader() {
+        DispatchQueue.main.async { [weak self] in
+            self?.isLoading = true
+        }
+    }
+    
+    func hideLoader() {
+        DispatchQueue.main.async { [weak self] in
+            self?.isLoading = false
+        }
     }
     
     private func saveTrack(from tmpUrl: URL) -> Track {
