@@ -1,144 +1,529 @@
 {
   "images" : [
     {
-      "idiom" : "iphone",
+      "filename" : "AppIcon-iOS-Default-20x20@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "idiom" : "iphone",
+      "filename" : "AppIcon-iOS-Default-20x20@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
-      "idiom" : "iphone",
+      "filename" : "AppIcon-iOS-Default-29x29@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "idiom" : "iphone",
+      "filename" : "AppIcon-iOS-Default-29x29@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "idiom" : "iphone",
+      "filename" : "AppIcon-iOS-Default-38x38@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "38x38"
+    },
+    {
+      "filename" : "AppIcon-iOS-Default-38x38@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "38x38"
+    },
+    {
+      "filename" : "AppIcon-iOS-Default-40x40@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "idiom" : "iphone",
+      "filename" : "AppIcon-iOS-Default-40x40@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "idiom" : "iphone",
+      "filename" : "AppIcon-iOS-Default-60x60@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "idiom" : "iphone",
+      "filename" : "AppIcon-iOS-Default-60x60@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "idiom" : "ipad",
-      "scale" : "1x",
-      "size" : "20x20"
-    },
-    {
-      "idiom" : "ipad",
+      "filename" : "AppIcon-iOS-Default-64x64@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
-      "size" : "20x20"
+      "size" : "64x64"
     },
     {
-      "idiom" : "ipad",
-      "scale" : "1x",
-      "size" : "29x29"
+      "filename" : "AppIcon-iOS-Default-64x64@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "64x64"
     },
     {
-      "idiom" : "ipad",
+      "filename" : "AppIcon-iOS-Default-68x68@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
-      "size" : "29x29"
+      "size" : "68x68"
     },
     {
-      "idiom" : "ipad",
-      "scale" : "1x",
-      "size" : "40x40"
-    },
-    {
-      "idiom" : "ipad",
-      "scale" : "2x",
-      "size" : "40x40"
-    },
-    {
-      "idiom" : "ipad",
-      "scale" : "1x",
-      "size" : "76x76"
-    },
-    {
-      "idiom" : "ipad",
+      "filename" : "AppIcon-iOS-Default-76x76@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
-      "idiom" : "ipad",
+      "filename" : "AppIcon-iOS-Default-83.5x83.5@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "83.5x83.5"
     },
     {
-      "idiom" : "ios-marketing",
-      "scale" : "1x",
+      "filename" : "AppIcon-iOS-Default-1024x1024@1x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "size" : "1024x1024"
     },
     {
-      "idiom" : "mac",
-      "scale" : "1x",
-      "size" : "16x16"
-    },
-    {
-      "idiom" : "mac",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-20x20@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
-      "size" : "16x16"
+      "size" : "20x20"
     },
     {
-      "idiom" : "mac",
-      "scale" : "1x",
-      "size" : "32x32"
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-20x20@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "20x20"
     },
     {
-      "idiom" : "mac",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-29x29@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
-      "size" : "32x32"
+      "size" : "29x29"
     },
     {
-      "idiom" : "mac",
-      "scale" : "1x",
-      "size" : "128x128"
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-29x29@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "29x29"
     },
     {
-      "idiom" : "mac",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-38x38@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
-      "size" : "128x128"
+      "size" : "38x38"
     },
     {
-      "idiom" : "mac",
-      "scale" : "1x",
-      "size" : "256x256"
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-38x38@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "38x38"
     },
     {
-      "idiom" : "mac",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-40x40@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
-      "size" : "256x256"
+      "size" : "40x40"
     },
     {
-      "idiom" : "mac",
-      "scale" : "1x",
-      "size" : "512x512"
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-40x40@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "40x40"
     },
     {
-      "idiom" : "mac",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-60x60@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
-      "size" : "512x512"
+      "size" : "60x60"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-60x60@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "60x60"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-64x64@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "64x64"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-64x64@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "64x64"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-68x68@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "68x68"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-76x76@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "76x76"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-83.5x83.5@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "83.5x83.5"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "AppIcon-iOS-Dark-1024x1024@1x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-20x20@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "20x20"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-20x20@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "20x20"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-29x29@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "29x29"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-29x29@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "29x29"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-38x38@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "38x38"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-38x38@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "38x38"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-40x40@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "40x40"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-40x40@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "40x40"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-60x60@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "60x60"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-60x60@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "60x60"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-64x64@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "64x64"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-64x64@3x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "64x64"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-68x68@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "68x68"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-76x76@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "76x76"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-83.5x83.5@2x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "83.5x83.5"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "AppIcon-iOS-TintedLight-1024x1024@1x.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
     }
   ],
   "info" : {

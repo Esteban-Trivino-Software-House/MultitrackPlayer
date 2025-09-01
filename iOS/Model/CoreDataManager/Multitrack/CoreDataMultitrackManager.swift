@@ -46,7 +46,6 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
         
         do {
             multitracks = try self.context.fetch(fetchRequest)
-            print(multitracks)
         } catch {
             print("Unable to Fetch MultitrackDaos, (\(error))")
         }
@@ -60,7 +59,6 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
         fetchRequest.predicate = NSPredicate(format: "id == %@", track.id as CVarArg)
         do {
             if let trackDao = try self.context.fetch(fetchRequest).first {
-                print(trackDao.multitrack?.name ?? "")
                 trackDao.name = track.name
                 trackDao.relativePath = track.relativePath
                 trackDao.volume = track.config.volume
@@ -85,7 +83,6 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
         fetchRequest.predicate = NSPredicate(format: "multitrack == %@", multitrack)
         do {
             tracks = try self.context.fetch(fetchRequest)
-            tracks.forEach() { print($0.multitrack?.name ?? "") }
         } catch {
             print("Unable to Fetch TrackDaos in loadTracks, (\(error))")
         }

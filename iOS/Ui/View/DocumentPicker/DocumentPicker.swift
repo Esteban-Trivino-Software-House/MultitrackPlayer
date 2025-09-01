@@ -36,7 +36,6 @@ struct DocumentPicker: UIViewControllerRepresentable {
         }
         
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-            print(urls)
             self.documentPicker.onPickElements(urls)
         }
     }

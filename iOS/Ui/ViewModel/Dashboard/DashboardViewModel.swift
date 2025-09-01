@@ -53,11 +53,11 @@ final class DashboardViewModel: ObservableObject {
             if let selectedMultitrackIndex = self.selectedMultitrackIndex, multitrackId == selectedMultitrackIndex {
                 stopTracks()
                 trackControllers.removeAll()
-                guard let selectedMultitrackIndex = self.multitracks.first?.key else {
+                guard let multitrackToSelectIndex = self.multitracks.first?.key else {
                     self.selectedMultitrackIndex = nil
                     return
                 }
-                selectMultitrack(selectedMultitrackIndex)
+                selectMultitrack(multitrackToSelectIndex)
             }
             self.multitracks.removeValue(forKey: multitrackId)
             self.multitrackRepository.deleteMultitrack(multitrackId)
@@ -121,7 +121,6 @@ final class DashboardViewModel: ObservableObject {
         )
         
         let basePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(track.relativePath)
-        print(basePath)
         
         let encryptedData = NSData(contentsOf: tmpUrl)
         if(encryptedData != nil){
