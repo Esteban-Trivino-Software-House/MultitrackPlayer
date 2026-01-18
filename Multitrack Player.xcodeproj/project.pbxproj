@@ -43,7 +43,6 @@
 		4F57C9132E677ADD0039C13A /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F57C9122E677ADD0039C13A /* UserDefaultsKeys.swift */; };
 		4F57C9162E677EC00039C13A /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 4F57C9152E677EC00039C13A /* GoogleSignIn */; };
 		4F57C9182E677EC00039C13A /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4F57C9172E677EC00039C13A /* GoogleSignInSwift */; };
-		4F57C91C2E6782CD0039C13A /* GoogleAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F57C91B2E6782CD0039C13A /* GoogleAuthViewModel.swift */; };
 		4F57C91F2E67D5050039C13A /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F57C91E2E67D5050039C13A /* View+Extensions.swift */; };
 		4F57C9242E67DA370039C13A /* SystemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F57C9232E67DA300039C13A /* SystemInfo.swift */; };
 		4F78A43B2F1CAC55002934AD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4F78A4392F1CAC55002934AD /* Localizable.xcstrings */; };
@@ -97,7 +96,6 @@
 		4F57C90D2E6758DA0039C13A /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		4F57C9102E677A690039C13A /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		4F57C9122E677ADD0039C13A /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
-		4F57C91B2E6782CD0039C13A /* GoogleAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthViewModel.swift; sourceTree = "<group>"; };
 		4F57C91E2E67D5050039C13A /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		4F57C9232E67DA300039C13A /* SystemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemInfo.swift; sourceTree = "<group>"; };
 		4F78A4392F1CAC55002934AD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -418,7 +416,6 @@
 		4F57C9062E6756FD0039C13A /* Authenticator */ = {
 			isa = PBXGroup;
 			children = (
-				4F57C91B2E6782CD0039C13A /* GoogleAuthViewModel.swift */,
 				4F57C9072E67573F0039C13A /* GoogleAuthenticatorManager.swift */,
 			);
 			path = Authenticator;
@@ -648,7 +645,6 @@
 				4F57C9132E677ADD0039C13A /* UserDefaultsKeys.swift in Sources */,
 				219215DB29AD7BEF00EB7937 /* MultitrackRepository.swift in Sources */,
 				21F0D57728CA1C0500814C1C /* SequenceControlsScreen.swift in Sources */,
-				4F57C91C2E6782CD0039C13A /* GoogleAuthViewModel.swift in Sources */,
 				4F57C9112E677A690039C13A /* UserDefaultsManager.swift in Sources */,
 				219215CF29AA76B900EB7937 /* Multitrack.swift in Sources */,
 				219215D929AD7AA800EB7937 /* CoreDataMultitrackManager.swift in Sources */,
