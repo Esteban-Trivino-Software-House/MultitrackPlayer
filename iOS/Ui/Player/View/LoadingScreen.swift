@@ -16,7 +16,7 @@ public struct LoadingScreen: View {
                 .progressViewStyle(CircularProgressViewStyle())
             Spacer()
         }
-        .background(.white)
+        .background(.clear)
     }
 }
 
