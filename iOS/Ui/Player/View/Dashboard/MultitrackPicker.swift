@@ -16,7 +16,8 @@ struct MultitrackPicker: View {
         VStack {
             Picker("", selection: $selectedMultitrackIndex) {
                 ForEach(multitracks) { multitrack in
-                    Text(multitrack.name).tag(multitrack.id)
+                    Text(multitrack.name)
+                        .tag(multitrack.id)
                 }
             }
             .pickerStyle(.menu)

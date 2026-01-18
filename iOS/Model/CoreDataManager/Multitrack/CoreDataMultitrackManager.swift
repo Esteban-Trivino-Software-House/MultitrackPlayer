@@ -40,6 +40,20 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
         self.saveTracks(multitrack.tracks, for: multitrackDao)
     }
     
+    func updateMultitrackName(multitrackId: UUID, newName: String) {
+        let fetchRequest: NSFetchRequest<MultitrackDao> = MultitrackDao.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", multitrackId as CVarArg)
+        
+        do {
+            if let multitrackDao = try self.context.fetch(fetchRequest).first {
+                multitrackDao.name = newName
+                self.commit()
+            }
+        } catch {
+            print("Unable to Update MultitrackDao in updateMultitrackName, (\(error))")
+        }
+    }
+    
     func loadMultitracks() -> [MultitrackDao] {
         var multitracks: [MultitrackDao] = []
         let fetchRequest: NSFetchRequest<MultitrackDao> = MultitrackDao.fetchRequest()

@@ -1,3 +1,11 @@
+//
+//  UserDefaultsManager.swift
+//  Play Secuence
+//
+//  Created by Esteban Triviño on 2/09/25.
+//
+
+
 import Foundation
 import SwiftUI
 
@@ -14,8 +22,8 @@ final class UserDefaultsManager {
     }
     
     /// Obtener valor simple con valor por defecto
-    func get<T>(forKey key: String, defaultValue: T) -> T {
-        return defaults.object(forKey: key) as? T ?? defaultValue
+    func get<T>(forKey key: String) -> T? {
+        return defaults.object(forKey: key) as? T
     }
     
     /// Guardar un objeto que sea Codable

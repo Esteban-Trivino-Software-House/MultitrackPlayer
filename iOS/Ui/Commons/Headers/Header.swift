@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct Header: View {
+    @State var showInfoSheet: Bool = false
     var body: some View {
         HStack {
             Image(systemName: "iphone.badge.play")
@@ -15,13 +16,46 @@ struct Header: View {
                 .scaledToFit()
                 .frame(height: 35, alignment: .center)
             Text("Play Secuence").bold().font(.system(size: 18))
-            Text("by Esteban Triviño").italic().font(.system(size: 14))
+            if let version = SystemInfo.version {
+                Text("v\(version)").italic().font(.system(size: 14))
+            }
             Spacer()
+            Image(systemName: "info.circle")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 20)
+                .onTapGesture {
+                    showInfoSheet = true
+                }
         }
         .padding(25)
         .frame(height: 40)
         .background(Color("PSNavy"))
         .foregroundColor(Color("PSWhite"))
+        .sheet(isPresented: $showInfoSheet) {
+            AppInfoView(showInfoSheet: $showInfoSheet)
+        }
+    }
+}
+
+struct AppInfoView: View {
+    @Binding var showInfoSheet: Bool
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Play Secuence").bold().font(.system(size: 18))
+            Text("Developed by Esteban Triviño").italic().font(.system(size: 14))
+            if let version = SystemInfo.version, let buildNumber = SystemInfo.build {
+                Text("v\(version) - \(buildNumber)").italic().font(.system(size: 14))
+            }
+            Button {
+                showInfoSheet = false
+            } label: {
+                Text("Close")
+                    .foregroundStyle(Color("PSRed"))
+            }
+            .padding(.vertical)
+
+        }
     }
 }
 
