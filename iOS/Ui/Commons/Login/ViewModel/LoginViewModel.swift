@@ -46,4 +46,11 @@ final class LoginViewModel: ObservableObject {
         }
     }
     
+    func logOut() {
+        authenticator.signOut()
+        SessionManager.shared.clearSession()
+        loginSuccessful = false
+        showInitialView = true
+    }
+    
 }

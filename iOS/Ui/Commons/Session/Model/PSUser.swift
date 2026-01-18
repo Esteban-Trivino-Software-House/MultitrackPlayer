@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PSUser {
+struct PSUser: Codable {
     let id: String?
     var name: String?
     var email: String?

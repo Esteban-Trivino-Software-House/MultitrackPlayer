@@ -15,12 +15,12 @@ final class DashboardViewModel: ObservableObject {
     @Published var isLoading = true
     
     let multitrackRepository: MultitrackRepository
-    let authenticator: GoogleAuthenticatorManager
+    let loginViewModel: LoginViewModel
     
     init(multitrackRepository: MultitrackRepository,
-         authenticator: GoogleAuthenticatorManager) {
+         loginViewModel: LoginViewModel) {
         self.multitrackRepository = multitrackRepository
-        self.authenticator = authenticator
+        self.loginViewModel = loginViewModel
     }
     
     func onAppear() {
@@ -196,6 +196,6 @@ final class DashboardViewModel: ObservableObject {
     }
     
     func didTapOnLogOut() {
-        authenticator.signOut()
+        loginViewModel.logOut()
     }
 }
