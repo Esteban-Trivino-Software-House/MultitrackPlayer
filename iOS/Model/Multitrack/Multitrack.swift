@@ -10,7 +10,7 @@ import CoreData
 
 struct Multitrack: Identifiable {
     private(set) var id: UUID
-    private(set) var name: String
+    var name: String
     var tracks: [Track] = []
 }
 

@@ -77,7 +77,7 @@
 		21F0D53028CA060300814C1C /* Play_SecuenceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Play_SecuenceApp.swift; sourceTree = "<group>"; };
 		21F0D53128CA060300814C1C /* DashboardScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardScreen.swift; sourceTree = "<group>"; };
 		21F0D53228CA060700814C1C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		21F0D53728CA060700814C1C /* Play Secuence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Play Secuence.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		21F0D53728CA060700814C1C /* Multitrack Player.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multitrack Player.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21F0D53F28CA060700814C1C /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		21F0D54428CA060700814C1C /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21F0D54828CA060700814C1C /* Tests_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOS.swift; sourceTree = "<group>"; };
@@ -260,7 +260,7 @@
 		21F0D53828CA060700814C1C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				21F0D53728CA060700814C1C /* Play Secuence.app */,
+				21F0D53728CA060700814C1C /* Multitrack Player.app */,
 				21F0D54428CA060700814C1C /* Tests iOS.xctest */,
 				21F0D55028CA060700814C1C /* Tests macOS.xctest */,
 			);
@@ -458,9 +458,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		21F0D53628CA060700814C1C /* Play Secuence (iOS) */ = {
+		21F0D53628CA060700814C1C /* Multitrack Player (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 21F0D56028CA060700814C1C /* Build configuration list for PBXNativeTarget "Play Secuence (iOS)" */;
+			buildConfigurationList = 21F0D56028CA060700814C1C /* Build configuration list for PBXNativeTarget "Multitrack Player (iOS)" */;
 			buildPhases = (
 				21F0D53328CA060700814C1C /* Sources */,
 				21F0D53428CA060700814C1C /* Frameworks */,
@@ -470,9 +470,9 @@
 			);
 			dependencies = (
 			);
-			name = "Play Secuence (iOS)";
+			name = "Multitrack Player (iOS)";
 			productName = "Play Secuence (iOS)";
-			productReference = 21F0D53728CA060700814C1C /* Play Secuence.app */;
+			productReference = 21F0D53728CA060700814C1C /* Multitrack Player.app */;
 			productType = "com.apple.product-type.application";
 		};
 		21F0D54328CA060700814C1C /* Tests iOS */ = {
@@ -533,7 +533,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 21F0D52E28CA060200814C1C /* Build configuration list for PBXProject "Play Secuence" */;
+			buildConfigurationList = 21F0D52E28CA060200814C1C /* Build configuration list for PBXProject "Multitrack Player" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -550,7 +550,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				21F0D53628CA060700814C1C /* Play Secuence (iOS) */,
+				21F0D53628CA060700814C1C /* Multitrack Player (iOS) */,
 				21F0D54328CA060700814C1C /* Tests iOS */,
 				21F0D54F28CA060700814C1C /* Tests macOS */,
 			);
@@ -642,7 +642,7 @@
 /* Begin PBXTargetDependency section */
 		21F0D54628CA060700814C1C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 21F0D53628CA060700814C1C /* Play Secuence (iOS) */;
+			target = 21F0D53628CA060700814C1C /* Multitrack Player (iOS) */;
 			targetProxy = 21F0D54528CA060700814C1C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -784,7 +784,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.estebantrivino.Play-Secuence";
-				PRODUCT_NAME = "Play Secuence";
+				PRODUCT_NAME = "Multitrack Player";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -817,7 +817,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.estebantrivino.Play-Secuence";
-				PRODUCT_NAME = "Play Secuence";
+				PRODUCT_NAME = "Multitrack Player";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -908,7 +908,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		21F0D52E28CA060200814C1C /* Build configuration list for PBXProject "Play Secuence" */ = {
+		21F0D52E28CA060200814C1C /* Build configuration list for PBXProject "Multitrack Player" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21F0D55E28CA060700814C1C /* Debug */,
@@ -917,7 +917,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		21F0D56028CA060700814C1C /* Build configuration list for PBXNativeTarget "Play Secuence (iOS)" */ = {
+		21F0D56028CA060700814C1C /* Build configuration list for PBXNativeTarget "Multitrack Player (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21F0D56128CA060700814C1C /* Debug */,

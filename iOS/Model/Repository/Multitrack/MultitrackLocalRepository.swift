@@ -11,8 +11,8 @@ class MultitrackLocalRepository: MultitrackRepository {
     
     private let dataManager: CoreDataMultitrackManager
     
-    init() {
-        self.dataManager = CoreDataMultitrackManager()
+    public init(dataManager: CoreDataMultitrackManager) {
+        self.dataManager = dataManager
     }
     
     func saveMultitrack(_ multitrack: Multitrack) {
@@ -39,5 +39,9 @@ class MultitrackLocalRepository: MultitrackRepository {
     func deleteMultitrack(_ multitrackId: UUID) {
         self.dataManager.deleteMultitrack(multitrackId)
         self.dataManager.commit()
+    }
+    
+    func updateMultitrackName(multitrackId: UUID, newName: String) {
+        dataManager.updateMultitrackName(multitrackId: multitrackId, newName: newName)
     }
 }

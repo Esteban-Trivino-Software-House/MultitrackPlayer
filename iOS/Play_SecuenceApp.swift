@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseCore
+import GoogleSignIn
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     
@@ -15,22 +17,29 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return AppDelegate.orientationLock
     }
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-//        UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation") // Forcing the rotation to portrait
-        AppDelegate.orientationLock = .landscapeRight // And making sure it stays that way
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        AppDelegate.orientationLock = .landscapeRight // Making sure it stays that way
         application.isIdleTimerDisabled = true
+        FirebaseApp.configure()
         return true
+    }
+    
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+      return GIDSignIn.sharedInstance.handle(url)
     }
 }
 
 @main
 struct Play_SecuenceApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
         WindowGroup {
             ZStack {
-                DashboardScreen()
+                LoginView(viewModel: .init(authenticator: .init()))
                     .onAppear() {
                         UIApplication.shared.isIdleTimerDisabled = true
                     }

@@ -14,7 +14,14 @@ final class DashboardViewModel: ObservableObject {
     @Published var selectedMultitrackIndex: UUID?
     @Published var isLoading = true
     
-    let multitrackRepository: MultitrackRepository = MultitrackLocalRepository()
+    let multitrackRepository: MultitrackRepository
+    let authenticator: GoogleAuthenticatorManager
+    
+    init(multitrackRepository: MultitrackRepository,
+         authenticator: GoogleAuthenticatorManager) {
+        self.multitrackRepository = multitrackRepository
+        self.authenticator = authenticator
+    }
     
     func onAppear() {
         // Loads local multiracks
@@ -59,9 +66,24 @@ final class DashboardViewModel: ObservableObject {
                 }
                 selectMultitrack(multitrackToSelectIndex)
             }
-            self.multitracks.removeValue(forKey: multitrackId)
-            self.multitrackRepository.deleteMultitrack(multitrackId)
+            deleteTracks(for: multitrackId)
+            multitracks.removeValue(forKey: multitrackId)
+            multitrackRepository.deleteMultitrack(multitrackId)
             hideLoader()
+        }
+    }
+    
+    private func deleteTracks(for multitrackId: UUID) {
+        guard let multitrack = multitracks[multitrackId] else { return }
+        let fileManager = FileManager.default
+        
+        multitrack.tracks.forEach { track in
+            let path = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(track.relativePath)
+            do {
+                try fileManager.removeItem(at: URL(fileURLWithPath: path))
+            } catch {
+                print("Error al eliminar el archivo \(path): \(error.localizedDescription)")
+            }
         }
     }
     
@@ -120,16 +142,16 @@ final class DashboardViewModel: ObservableObject {
             config: .init(pan: 0, volume: 0.5, isMuted: false)
         )
         
-        let basePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(track.relativePath)
+        let path = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(track.relativePath)
         
         let encryptedData = NSData(contentsOf: tmpUrl)
         if(encryptedData != nil){
             let fileManager = FileManager.default
-            fileManager.createFile(atPath: basePath as String, contents: encryptedData as Data?, attributes: nil)
+            fileManager.createFile(atPath: path as String, contents: encryptedData as Data?, attributes: nil)
         }
         return track
     }
-
+    
     func getSelectedMultitrack() -> Multitrack? {
         if let selectedMultitrack = self.selectedMultitrackIndex {
             return self.multitracks[selectedMultitrack]
@@ -140,6 +162,12 @@ final class DashboardViewModel: ObservableObject {
     
     func appendTrackController(using track: Track) {
         self.trackControllers[track.id] = TrackControlViewModel(track: track)
+    }
+    
+    func editMultitrackName(_ newName: String) {
+        guard let selectedMultitrackIndex else { return }
+        self.multitracks[selectedMultitrackIndex]?.name = newName
+        multitrackRepository.updateMultitrackName(multitrackId: selectedMultitrackIndex, newName: newName)
     }
     
     func playTracks() {
@@ -165,5 +193,9 @@ final class DashboardViewModel: ObservableObject {
         for controller in trackControllers {
             controller.value.stopTrack()
         }
+    }
+    
+    func didTapOnLogOut() {
+        authenticator.signOut()
     }
 }
