@@ -11,7 +11,7 @@ struct PanSelector: View {
     @Binding var selectedPan: TrackControlViewModel.PanOptions
         var body: some View {
             VStack {
-                Picker(String(localized: "favorite_color"), selection: $selectedPan) {
+                Picker(String(localized: "pan_options"), selection: $selectedPan) {
                     Text(String(localized: "left")).tag(TrackControlViewModel.PanOptions.left)
                     Text(String(localized: "center")).tag(TrackControlViewModel.PanOptions.center)
                     Text(String(localized: "right")).tag(TrackControlViewModel.PanOptions.right)
