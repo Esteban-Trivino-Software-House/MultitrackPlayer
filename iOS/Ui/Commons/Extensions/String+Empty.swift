@@ -5,7 +5,7 @@ import Foundation
 
 extension String {
     /// Representa un string vacío de forma segura para localización y uso general.
-    static var empty: String { String(localized: "") }
+    static let empty: String = ""
 }
 
 // Uso sugerido:
