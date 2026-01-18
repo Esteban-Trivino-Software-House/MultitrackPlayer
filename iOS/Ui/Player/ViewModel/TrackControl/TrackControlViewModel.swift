@@ -41,7 +41,7 @@ class TrackControlViewModel: ObservableObject, Identifiable {
             
         } catch let error {
             player = AVAudioPlayer()
-            print(error.localizedDescription)
+            AppLogger.general.error("\(error.localizedDescription)")
         }
         return player
     }

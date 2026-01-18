@@ -3,6 +3,7 @@
 //  Play Secuence
 //
 //  Created by Esteban Triviño on 2/09/25.
+//  This file is part of the Multitrack Player project.
 //
 
 import SwiftUI

@@ -3,9 +3,11 @@
 //  Play Secuence
 //
 //  Created by Esteban Triviño on 21/08/25.
+//  This file is part of the Multitrack Player project.
 //
 
 import SwiftUI
+import os
 
 struct NameInputDialogView: View {
     @State var name: String = String.empty
@@ -30,7 +32,7 @@ struct NameInputDialogView: View {
                 Spacer()
                 
                 Button(String(localized: "accept")) {
-                    // Aquí puedes validar o guardar el nombre
+                    // Here you can validate or save the name
                     onAccept(name)
                 }
                 .foregroundColor(.blue)
@@ -44,7 +46,7 @@ struct NameInputDialogView: View {
 struct NameInputDialogView_Previews: PreviewProvider {
     static var previews: some View {
         NameInputDialogView { name in
-            print(name)
+            AppLogger.ui.info("Name entered: \(name)")
         } onCancel: {
             
         }
