@@ -14,7 +14,7 @@ struct MultitrackPicker: View {
     
     var body: some View {
         VStack {
-            Picker("", selection: $selectedMultitrackIndex) {
+            Picker(String.empty, selection: $selectedMultitrackIndex) {
                 ForEach(multitracks) { multitrack in
                     Text(multitrack.name)
                         .tag(multitrack.id)

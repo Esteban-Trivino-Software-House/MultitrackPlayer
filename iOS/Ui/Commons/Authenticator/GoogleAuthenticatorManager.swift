@@ -23,7 +23,7 @@ final class GoogleAuthenticatorManager {
             }
             if let user = user?.psUser {
                 onComplete(.success(user))
-                print("✅ Sesión restaurada con: \(user.email ?? "")")
+                print("✅ Sesión restaurada con: \(user.email ?? String.empty)")
             }
         }
     }
@@ -69,17 +69,17 @@ final class GoogleAuthenticatorManager {
         GIDSignIn.sharedInstance.signOut()
     }
     
-    // MARK: Anonimous authentication
+    // MARK: Anonymous authentication
     
-    func signInAnoniymouslyIfNeeded() {
+    func signInAnonymouslyIfNeeded() {
         guard let sessionUser = UserDefaultsManager.shared.get(forKey: UserDefaultsKeys.Session.user) as PSUser? else {
-            signInWithGoogleAnonimously()
+            signInWithGoogleAnonymously()
             return
         }
         SessionManager.shared.setSession(user: sessionUser)
     }
     
-    func signInWithGoogleAnonimously() {
+    func signInWithGoogleAnonymously() {
         Auth.auth().signInAnonymously { authResult, error in
             guard let user = authResult?.user else { return }
             let sessionUser = PSUser(id: user.uid, isAnonymous: true)

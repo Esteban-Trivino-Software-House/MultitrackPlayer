@@ -14,7 +14,7 @@ struct DashboardScreen: View {
     @StateObject var viewModel = DashboardViewModel(multitrackRepository: MultitrackLocalRepository(dataManager: .init()),
                                                     authenticator: GoogleAuthenticatorManager())
     @State private var presentModalDelete: Bool = false
-    @State private var newMultitrackNameTmp: String = ""
+    @State private var newMultitrackNameTmp: String = String.empty
     
     var body: some View {
         VStack {
@@ -54,7 +54,7 @@ struct DashboardScreen: View {
                 showNewMultitrackNameInputDialog = false
                 showPicker = true
             } onCancel: {
-                newMultitrackNameTmp = ""
+                newMultitrackNameTmp = String.empty
                 showNewMultitrackNameInputDialog = false
             }
         })
@@ -66,8 +66,8 @@ struct DashboardScreen: View {
                 showEditMultitrackNameInputDialog = false
             }
         })
-        .confirmationDialog("Do you want to delete the multitrack?", isPresented: self.$presentModalDelete) {
-            Button("Delete \(viewModel.getSelectedMultitrackName())", role: .destructive) {
+        .confirmationDialog(String(localized: "confirm_delete"), isPresented: self.$presentModalDelete) {
+            Button("delete \(viewModel.getSelectedMultitrackName())", role: .destructive) {
                 self.viewModel.deleteSelectedMultitrack()
             }
         }
@@ -76,7 +76,7 @@ struct DashboardScreen: View {
     var noMultitracksView: some View {
         VStack {
             Spacer()
-            Text("Add a multitrack to start")
+            Text(String(localized: "add_multitrack"))
                 .font(.largeTitle)
             Button(action: { self.showNewMultitrackNameInputDialog = true }) {
                 Image(systemName: "folder.badge.plus")
@@ -98,7 +98,7 @@ struct DashboardScreen: View {
                 // MARK: Multitrack Picker
                 if let selectedMultitrackIndex = viewModel.selectedMultitrackIndex {
                     HStack {
-                        Text("Current multitrack: ")
+                        Text(String(localized: "current_multitrack"))
                         MultitrackPicker(
                             selectedMultitrackIndex: selectedMultitrackIndex,
                             multitracks: Array(viewModel.multitracks.values)) { selectedMultitrackIndex in
@@ -181,7 +181,7 @@ struct ContentView_Previews: PreviewProvider {
                 tracks: [.init(
                     id: id1,
                     name: "Click",
-                    relativePath: "",
+                    relativePath: String.empty,
                     config: .init(pan: 0, volume: 0.5, isMuted: false)
                 )]
             )
@@ -190,7 +190,7 @@ struct ContentView_Previews: PreviewProvider {
             using: Track(
                 id: UUID(),
                 name: "Click",
-                relativePath: "",
+                relativePath: String.empty,
                 config: .init(pan: -1, volume: 0.5, isMuted: false)
             )
         )

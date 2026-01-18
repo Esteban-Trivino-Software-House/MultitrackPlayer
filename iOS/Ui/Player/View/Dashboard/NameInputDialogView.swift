@@ -8,28 +8,28 @@
 import SwiftUI
 
 struct NameInputDialogView: View {
-    @State var name: String = ""
+    @State var name: String = String.empty
     var onAccept: ((String) -> Void)
     var onCancel: (() -> Void)
     
     var body: some View {
         VStack(spacing: 20) {
-            Text("Enter the multitrack's name")
+            Text(String(localized: "enter_name"))
                 .font(.headline)
 
-            TextField("Name", text: $name)
+            TextField(String(localized: "name"), text: $name)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
 
             HStack {
-                Button("Cancel") {
+                Button(String(localized: "cancel")) {
                     onCancel()
                 }
                 .foregroundColor(.red)
                 
                 Spacer()
                 
-                Button("Accept") {
+                Button(String(localized: "accept")) {
                     // Aquí puedes validar o guardar el nombre
                     onAccept(name)
                 }

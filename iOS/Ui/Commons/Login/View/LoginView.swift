@@ -48,9 +48,9 @@ struct LoginView: View {
     var initialScreen: some View {
         VStack {
             Spacer()
-            Text("Bienvenido a Multitrack Player")
+            Text(String(localized: "welcome"))
                 .font(.largeTitle)
-            Text("Por favor inicia sesión para empezar")
+            Text(String(localized: "login_prompt"))
                 .font(.title2)
                 .padding(.vertical)
             Button(action: {

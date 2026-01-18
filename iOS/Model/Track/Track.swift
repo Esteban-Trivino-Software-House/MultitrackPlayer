@@ -40,6 +40,6 @@ extension Track {
 
 extension TrackDao {
     func mapToTrack() -> Track {
-        Track(id: self.id ?? UUID(), name: self.name ?? "", relativePath: self.relativePath ?? "", config: .init(pan: self.pan, volume: self.volume, isMuted: self.mute))
+    Track(id: self.id ?? UUID(), name: self.name ?? String.empty, relativePath: self.relativePath ?? String.empty, config: .init(pan: self.pan, volume: self.volume, isMuted: self.mute))
     }
 }

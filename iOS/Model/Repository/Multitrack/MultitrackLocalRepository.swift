@@ -33,7 +33,7 @@ class MultitrackLocalRepository: MultitrackRepository {
     }
     
     func loadMultitrack(id: UUID) -> Multitrack {
-        Multitrack(id: id, name: "", tracks: [])
+    Multitrack(id: id, name: String.empty, tracks: [])
     }
     
     func deleteMultitrack(_ multitrackId: UUID) {
