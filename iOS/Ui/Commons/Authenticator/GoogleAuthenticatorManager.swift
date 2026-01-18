@@ -69,10 +69,10 @@ final class GoogleAuthenticatorManager {
         GIDSignIn.sharedInstance.signOut()
     }
     
-    // MARK: Anonymous authentication
+    // MARK: Anonymous authentication - Not implemented yet for production
     
     func signInAnonymouslyIfNeeded() {
-        guard let sessionUser = UserDefaultsManager.shared.get(forKey: UserDefaultsKeys.Session.user) as PSUser? else {
+        guard let sessionUser = UserDefaultsManager.shared.getObject(PSUser.self, forKey: UserDefaultsKeys.Session.user) else {
             signInWithGoogleAnonymously()
             return
         }
@@ -83,7 +83,7 @@ final class GoogleAuthenticatorManager {
         Auth.auth().signInAnonymously { authResult, error in
             guard let user = authResult?.user else { return }
             let sessionUser = PSUser(id: user.uid, isAnonymous: true)
-            UserDefaultsManager.shared.set(sessionUser, forKey: UserDefaultsKeys.Session.user)
+            UserDefaultsManager.shared.setObject(sessionUser, forKey: UserDefaultsKeys.Session.user)
             SessionManager.shared.setSession(user: sessionUser)
         }
     }

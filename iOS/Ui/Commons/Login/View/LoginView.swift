@@ -26,9 +26,15 @@ struct LoginView: View {
                 }
                 Spacer()
             }
-            .navigationDestination(isPresented: $viewModel.loginSuccessful,
-                                   destination: {
-                DashboardScreen()
+            .navigationDestination(
+                isPresented: $viewModel.loginSuccessful,
+                destination: {
+                    DashboardScreen(
+                        viewModel: .init(
+                            multitrackRepository: MultitrackLocalRepository(dataManager: .init()),
+                            loginViewModel: viewModel
+                        )
+                    )
                     .navigationBarHidden(true)
             })
             .onAppear {

@@ -11,10 +11,13 @@ struct DashboardScreen: View {
     @State private var showPicker: Bool = false
     @State private var showNewMultitrackNameInputDialog: Bool = false
     @State private var showEditMultitrackNameInputDialog: Bool = false
-    @StateObject var viewModel = DashboardViewModel(multitrackRepository: MultitrackLocalRepository(dataManager: .init()),
-                                                    authenticator: GoogleAuthenticatorManager())
+    @StateObject private var viewModel: DashboardViewModel
     @State private var presentModalDelete: Bool = false
     @State private var newMultitrackNameTmp: String = String.empty
+    
+    init(viewModel: DashboardViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         VStack {
@@ -172,7 +175,7 @@ struct DashboardScreen: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = DashboardViewModel(multitrackRepository: MultitrackLocalRepository(dataManager: .init()),
-                                           authenticator: GoogleAuthenticatorManager())
+                                           loginViewModel: .init(authenticator: .init()))
         let id1 = UUID()
         viewModel.multitracks[id1] = (
             .init(
