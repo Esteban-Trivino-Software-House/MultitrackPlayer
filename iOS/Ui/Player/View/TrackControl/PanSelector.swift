@@ -11,10 +11,10 @@ struct PanSelector: View {
     @Binding var selectedPan: TrackControlViewModel.PanOptions
         var body: some View {
             VStack {
-                Picker("What is your favorite color?", selection: $selectedPan) {
-                    Text("Left").tag(TrackControlViewModel.PanOptions.left)
-                    Text("Center").tag(TrackControlViewModel.PanOptions.center)
-                    Text("Right").tag(TrackControlViewModel.PanOptions.right)
+                Picker(String(localized: "favorite_color"), selection: $selectedPan) {
+                    Text(String(localized: "left")).tag(TrackControlViewModel.PanOptions.left)
+                    Text(String(localized: "center")).tag(TrackControlViewModel.PanOptions.center)
+                    Text(String(localized: "right")).tag(TrackControlViewModel.PanOptions.right)
                 }
                 .pickerStyle(.menu )
             }

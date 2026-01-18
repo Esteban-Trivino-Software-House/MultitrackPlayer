@@ -15,7 +15,7 @@ struct Header: View {
                 .resizable()
                 .scaledToFit()
                 .frame(height: 35, alignment: .center)
-            Text("Play Secuence").bold().font(.system(size: 18))
+            Text(String(localized: "app_title")).bold().font(.system(size: 18))
             if let version = SystemInfo.version {
                 Text("v\(version)").italic().font(.system(size: 14))
             }
@@ -42,15 +42,15 @@ struct AppInfoView: View {
     @Binding var showInfoSheet: Bool
     var body: some View {
         VStack(spacing: 16) {
-            Text("Play Secuence").bold().font(.system(size: 18))
-            Text("Developed by Esteban Triviño").italic().font(.system(size: 14))
+            Text(String(localized: "app_title")).bold().font(.system(size: 18))
+            Text(String(localized: "developer")).italic().font(.system(size: 14))
             if let version = SystemInfo.version, let buildNumber = SystemInfo.build {
                 Text("v\(version) - \(buildNumber)").italic().font(.system(size: 14))
             }
             Button {
                 showInfoSheet = false
             } label: {
-                Text("Close")
+                Text(String(localized: "close"))
                     .foregroundStyle(Color("PSRed"))
             }
             .padding(.vertical)

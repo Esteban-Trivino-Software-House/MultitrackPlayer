@@ -12,7 +12,7 @@ public struct LoadingScreen: View {
     public var body: some View {
         VStack {
             Spacer()
-            ProgressView("Loading...")
+            ProgressView(String(localized: "loading"))
                 .progressViewStyle(CircularProgressViewStyle())
             Spacer()
         }

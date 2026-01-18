@@ -29,9 +29,9 @@ struct Faders_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = DashboardViewModel(multitrackRepository: MultitrackLocalRepository(dataManager: .init()),
                                            authenticator: GoogleAuthenticatorManager())
-        viewModel.appendTrackController(using: Track(id: UUID(), name: "Click", relativePath: "", config: .init(pan: 0, volume: 0.5, isMuted: false)))
-        viewModel.appendTrackController(using: Track(id: UUID(), name: "Sequence", relativePath: "", config: .init(pan: 0, volume: 0.5, isMuted: false)))
-        viewModel.appendTrackController(using: Track(id: UUID(), name: "Keys", relativePath: "", config: .init(pan: 0, volume: 0.5, isMuted: false)))
+    viewModel.appendTrackController(using: Track(id: UUID(), name: "Click", relativePath: String.empty, config: .init(pan: 0, volume: 0.5, isMuted: false)))
+    viewModel.appendTrackController(using: Track(id: UUID(), name: "Sequence", relativePath: String.empty, config: .init(pan: 0, volume: 0.5, isMuted: false)))
+    viewModel.appendTrackController(using: Track(id: UUID(), name: "Keys", relativePath: String.empty, config: .init(pan: 0, volume: 0.5, isMuted: false)))
         return SequenceControlsScreen(viewModel: viewModel)
             .previewInterfaceOrientation(.landscapeLeft)
     }

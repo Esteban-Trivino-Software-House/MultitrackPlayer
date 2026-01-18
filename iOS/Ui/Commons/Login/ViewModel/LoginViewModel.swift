@@ -41,7 +41,7 @@ final class LoginViewModel: ObservableObject {
                 SessionManager.shared.setSession(user: user)
                 loginSuccessful = true
             case .failure:
-                errorMessage = "No se pudo iniciar la sesión, por favor intenta nuevamente."
+                errorMessage = String(localized: "login_error")
             }
         }
     }
