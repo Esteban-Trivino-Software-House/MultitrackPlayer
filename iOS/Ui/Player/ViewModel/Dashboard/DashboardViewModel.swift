@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 @MainActor
 final class DashboardViewModel: ObservableObject {
@@ -82,7 +83,7 @@ final class DashboardViewModel: ObservableObject {
             do {
                 try fileManager.removeItem(at: URL(fileURLWithPath: path))
             } catch {
-                print("Error al eliminar el archivo \(path): \(error.localizedDescription)")
+                AppLogger.general.error("Error deleting file \(path): \(error.localizedDescription)")
             }
         }
     }

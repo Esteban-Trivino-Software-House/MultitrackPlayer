@@ -1,10 +1,10 @@
 // String+Empty.swift
-// Extensión para manejar el empty string de forma segura y evitar el uso directo de ""
+// Extension to safely handle the empty string and avoid direct use of ""
 
 import Foundation
 
 extension String {
-    /// Representa un string vacío de forma segura para localización y uso general.
+    /// Represents an empty string safely for localization and general use.
     static let empty: String = ""
 }
 

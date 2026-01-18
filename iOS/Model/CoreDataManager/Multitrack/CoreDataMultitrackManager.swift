@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import CoreData
 
 
@@ -21,7 +22,7 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
     init() {
         container.loadPersistentStores { description, error in
             if let error = error {
-                print("Core Data failed to load: \(error.localizedDescription)")
+                AppLogger.coreData.error("Core Data failed to load: \(error.localizedDescription)")
             }
         }
     }
@@ -30,7 +31,7 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
         do {
             try self.container.viewContext.save()
         } catch {
-            print(error.localizedDescription)
+            AppLogger.coreData.error("Core Data commit error: \(error.localizedDescription)")
         }
     }
     
@@ -50,7 +51,7 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
                 self.commit()
             }
         } catch {
-            print("Unable to Update MultitrackDao in updateMultitrackName, (\(error))")
+            AppLogger.coreData.error("Unable to Update MultitrackDao in updateMultitrackName, (\(error.localizedDescription))")
         }
     }
     
@@ -61,7 +62,7 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
         do {
             multitracks = try self.context.fetch(fetchRequest)
         } catch {
-            print("Unable to Fetch MultitrackDaos, (\(error))")
+            AppLogger.coreData.error("Unable to Fetch MultitrackDaos, (\(error.localizedDescription))")
         }
         return multitracks
     }
@@ -81,7 +82,7 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
                 self.commit()
             }
         } catch {
-            print("Unable to Update TrackDao in updateTrack, (\(error))")
+            AppLogger.coreData.error("Unable to Update TrackDao in updateTrack, (\(error.localizedDescription))")
         }
     }
     
@@ -98,7 +99,7 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
         do {
             tracks = try self.context.fetch(fetchRequest)
         } catch {
-            print("Unable to Fetch TrackDaos in loadTracks, (\(error))")
+            AppLogger.coreData.error("Unable to Fetch TrackDaos in loadTracks, (\(error.localizedDescription))")
         }
         return tracks
     }
@@ -125,7 +126,7 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
                 self.commit()
             }
         } catch {
-            print("Unable to Delete MultitrackDao in deleteMultitrack, (\(error))")
+            AppLogger.coreData.error("Unable to Delete MultitrackDao in deleteMultitrack, (\(error.localizedDescription))")
         }
     }
 }
