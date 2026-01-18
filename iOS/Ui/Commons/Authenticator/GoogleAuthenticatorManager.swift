@@ -12,18 +12,18 @@ import GoogleSignIn
 
 final class GoogleAuthenticatorManager {
     
-    // MARK: Authentication with google
+    // MARK: Google authentication
     
     func restoreSession(onComplete: @escaping (Result<PSUser, Error>) -> Void) {
         GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
             if let error = error {
-                print("❌ No se pudo restaurar la sesión: \(error.localizedDescription)")
+                FirebaseAnalyticsManager.shared.logAuthEvent("restore_session_failed", method: "google", userEmail: nil, userId: nil, isAnonymous: nil, error: error)
                 onComplete(.failure(error))
                 return
             }
             if let user = user?.psUser {
+                FirebaseAnalyticsManager.shared.logAuthEvent("restore_session_success", method: "google", userEmail: user.email, userId: user.id, isAnonymous: user.isAnonymous)
                 onComplete(.success(user))
-                print("✅ Sesión restaurada con: \(user.email ?? String.empty)")
             }
         }
     }
@@ -31,7 +31,7 @@ final class GoogleAuthenticatorManager {
     func signIn(onComplete: @escaping (Result<PSUser, Error>) -> Void) {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
 
-        // Configuración de Google
+        // Google configuration
         GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: clientID)
 
         guard let rootViewController = UIApplication.shared.connectedScenes
@@ -44,32 +44,47 @@ final class GoogleAuthenticatorManager {
             result,
             error in
             if let error {
-                print("❌ Error al iniciar sesión con Google: \(error.localizedDescription)")
+                FirebaseAnalyticsManager.shared.logAuthEvent("login_failed", method: "google", error: error)
                 return onComplete(.failure(error))
             }
-            
             guard let user = result?.user.psUser else {
-                return onComplete(
-                    .failure(
-                        NSError(
-                            domain: "GoogleAuthenticatorManager",
-                            code: 1001,
-                            userInfo: [NSLocalizedDescriptionKey : "No se pudo obtener el usuario"]
-                        )
-                    )
+                let nsError = NSError(
+                    domain: "GoogleAuthenticatorManager",
+                    code: 1001,
+                    userInfo: [NSLocalizedDescriptionKey : "No se pudo obtener el usuario"]
                 )
+                FirebaseAnalyticsManager.shared.logAuthEvent(
+                    "login_failed",
+                    method: "google",
+                    error: nsError
+                )
+                return onComplete(.failure(nsError))
             }
-            
-            print("✅ Usuario: \(user.email ?? "Sin email")")
+            FirebaseAnalyticsManager.shared.logAuthEvent(
+                "login_success",
+                method: "google",
+                userEmail: user.email,
+                userId: user.id,
+                isAnonymous: user.isAnonymous
+            )
             onComplete(.success(user))
         }
     }
 
     func signOut() {
         GIDSignIn.sharedInstance.signOut()
+        // Get current user if available
+        let sessionUser = UserDefaultsManager.shared.getObject(PSUser.self, forKey: UserDefaultsKeys.Session.user)
+        FirebaseAnalyticsManager.shared.logAuthEvent(
+            "logout",
+            method: "google",
+            userEmail: sessionUser?.email,
+            userId: sessionUser?.id,
+            isAnonymous: sessionUser?.isAnonymous
+        )
     }
     
-    // MARK: Anonymous authentication - Not implemented yet for production
+    // MARK: Anonymous authentication - Not yet implemented for production
     
     func signInAnonymouslyIfNeeded() {
         guard let sessionUser = UserDefaultsManager.shared.getObject(PSUser.self, forKey: UserDefaultsKeys.Session.user) else {
