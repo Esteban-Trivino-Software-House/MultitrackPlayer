@@ -31,7 +31,14 @@ final class GoogleAuthenticatorManager {
     }
     
     func signIn(onComplete: @escaping (Result<PSUser, Error>) -> Void) {
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        guard let clientID = FirebaseApp.app()?.options.clientID else {
+            FirebaseAnalyticsManager.shared.logAuthEvent("login_failed", method: "google", error: NSError(
+                domain: "GoogleAuthenticatorManager",
+                code: 1000,
+                userInfo: [NSLocalizedDescriptionKey : "No se pudo obtener el clientID de Firebase"]
+            ))
+            return
+        }
 
         // Google configuration
         GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: clientID)
