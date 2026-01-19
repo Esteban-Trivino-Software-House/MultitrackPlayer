@@ -2,11 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<false/>
-	</dict>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -14,10 +9,15 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.892893595286-9diemec6jrqstb1gi0vagsbrlldjdf0a</string>
+				<string>com.googleusercontent.apps.579732110526-pe1fee2db4lmki1a5977mjl0cmlju16d</string>
 			</array>
 		</dict>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
