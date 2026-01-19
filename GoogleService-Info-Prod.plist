@@ -2,22 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>892893595286-9diemec6jrqstb1gi0vagsbrlldjdf0a.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.892893595286-9diemec6jrqstb1gi0vagsbrlldjdf0a</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAnRs5RBwZKmoHiHSdjZqAKWOsFoKhVY5E</string>
+	<string>AIzaSyAe-dWljeiZQnDSDdX5Nz4J9ZOcYybw86g</string>
 	<key>GCM_SENDER_ID</key>
-	<string>892893595286</string>
+	<string>579732110526</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.estebantrivino.Play-Secuence</string>
+	<string>com.estebantrivino.multitrack-player</string>
 	<key>PROJECT_ID</key>
-	<string>multitrackplayer-52314</string>
+	<string>multitrack-player---ios---dev</string>
 	<key>STORAGE_BUCKET</key>
-	<string>multitrackplayer-52314.firebasestorage.app</string>
+	<string>multitrack-player---ios---dev.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:892893595286:ios:56b5244e53472e44b0e4b7</string>
+	<string>1:579732110526:ios:0f763429661686e7e8f2ef</string>
 </dict>
 </plist>

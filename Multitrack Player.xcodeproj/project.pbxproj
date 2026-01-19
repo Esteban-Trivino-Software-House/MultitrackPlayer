@@ -47,6 +47,7 @@
 		4F57C9182E677EC00039C13A /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4F57C9172E677EC00039C13A /* GoogleSignInSwift */; };
 		4F57C91F2E67D5050039C13A /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F57C91E2E67D5050039C13A /* View+Extensions.swift */; };
 		4F57C9242E67DA370039C13A /* SystemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F57C9232E67DA300039C13A /* SystemInfo.swift */; };
+		4F677D172F1DC33F0030D101 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 4F677D162F1DC33F0030D101 /* AppIcon.icon */; };
 		4F78A43B2F1CAC55002934AD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4F78A4392F1CAC55002934AD /* Localizable.xcstrings */; };
 		4F78A43D2F1CBCEE002934AD /* String+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F78A43C2F1CBCEE002934AD /* String+Empty.swift */; };
 		4F78A45D2F1CD534002934AD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F78A45C2F1CD534002934AD /* GoogleService-Info.plist */; };
@@ -102,6 +103,7 @@
 		4F57C9122E677ADD0039C13A /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		4F57C91E2E67D5050039C13A /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		4F57C9232E67DA300039C13A /* SystemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemInfo.swift; sourceTree = "<group>"; };
+		4F677D162F1DC33F0030D101 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		4F78A4392F1CAC55002934AD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		4F78A43C2F1CBCEE002934AD /* String+Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Empty.swift"; sourceTree = "<group>"; };
 		4F78A4592F1CD50B002934AD /* GoogleService-Info-Dev.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Dev.plist"; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				21F0D55328CA060700814C1C /* Tests macOS */,
 				4F57C9012E6756B00039C13A /* Frameworks */,
 				21F0D53828CA060700814C1C /* Products */,
+				4F677D162F1DC33F0030D101 /* AppIcon.icon */,
 			);
 			sourceTree = "<group>";
 		};
@@ -489,6 +492,7 @@
 				21F0D53328CA060700814C1C /* Sources */,
 				21F0D53428CA060700814C1C /* Frameworks */,
 				21F0D53528CA060700814C1C /* Resources */,
+				4F677D0C2F1DBE940030D101 /* Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -587,6 +591,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21F0D55C28CA060700814C1C /* Assets.xcassets in Resources */,
+				4F677D172F1DC33F0030D101 /* AppIcon.icon in Resources */,
 				4F78A43B2F1CAC55002934AD /* Localizable.xcstrings in Resources */,
 				4F78A45D2F1CD534002934AD /* GoogleService-Info.plist in Resources */,
 			);
@@ -609,6 +614,32 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4F677D0C2F1DBE940030D101 /* Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}.debug.dylib",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+			);
+			name = Crashlytics;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"DWARF File: ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"   \n";
+		};
 		4F78A4502F1CCDC0002934AD /* Select GoogleService-Info */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -816,8 +847,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 948FLR64UL;
+				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Play-Secuence--iOS--Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Multitrack Player for iOS";
@@ -851,8 +885,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 948FLR64UL;
+				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Play-Secuence--iOS--Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Multitrack Player for iOS";
@@ -1025,8 +1062,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 948FLR64UL;
+				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Play-Secuence--iOS--Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Multitrack Player for iOS";

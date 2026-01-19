@@ -5,6 +5,12 @@
 //  Created by Esteban Rafael Trivino Guerra on 8/09/22.
 //
 
+
+/*
+ Ideas to implement:
+ For your multitrack player, consider Firebase Authentication for user management, Cloud Storage for Firebase to store audio tracks, and Cloud Firestore or Realtime Database for managing song metadata and user data. These are excellent starting points for your "multitrack-player---ios---dev" project.
+ */
+
 import SwiftUI
 import FirebaseCore
 import GoogleSignIn
@@ -25,11 +31,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
     
-    func application(_ app: UIApplication,
-                     open url: URL,
-                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-      return GIDSignIn.sharedInstance.handle(url)
-    }
 }
 
 @main
@@ -42,6 +43,9 @@ struct Play_SecuenceApp: App {
                 LoginView(viewModel: .init(authenticator: .init()))
                     .onAppear() {
                         UIApplication.shared.isIdleTimerDisabled = true
+                    }
+                    .onOpenURL { url in
+                        _ = GIDSignIn.sharedInstance.handle(url)
                     }
             }
         }
