@@ -386,6 +386,74 @@
           }
         }
       }
+    },
+    "account_deletion_error" : {
+      "comment" : "Error message when account deletion fails",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to delete account. Please try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo eliminar la cuenta. Por favor intenta nuevamente."
+          }
+        }
+      }
+    },
+    "delete_account_title" : {
+      "comment" : "Title for account deletion confirmation dialog",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Account"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar Cuenta"
+          }
+        }
+      }
+    },
+    "delete_account_confirm" : {
+      "comment" : "Button text to confirm account deletion",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete My Account"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar Mi Cuenta"
+          }
+        }
+      }
+    },
+    "delete_account_warning" : {
+      "comment" : "Warning message before account deletion",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This will permanently delete your account and all associated data. This action cannot be undone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto eliminará permanentemente tu cuenta y todos los datos asociados. Esta acción no se puede deshacer."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

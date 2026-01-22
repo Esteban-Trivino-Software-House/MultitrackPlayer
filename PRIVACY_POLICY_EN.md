@@ -100,13 +100,26 @@ You have the right to:
 
 - **Access:** Request a copy of the personal data we have about you
 - **Rectify:** Correct inaccurate or incomplete data
-- **Delete:** Request deletion of your personal data
+- **Delete:** Request deletion of your personal data and account
 - **Revoke consent:** Log out and stop using the application at any time
 
 To exercise these rights, you can:
+- Delete your account directly within the app (Settings → Delete Account)
 - Log out from the application
-- Uninstall the application to delete all local data
 - Contact us at the address provided in Section 11
+
+### 7.1 Account Deletion
+
+You have the right to request deletion of your account and all associated personal data at any time. To delete your account:
+
+1. Open The Multitrack Player on your device
+2. Go to your account settings
+3. Select "Delete Account"
+4. Confirm the deletion when prompted
+
+**Important:** Account deletion is permanent and cannot be undone. All personal information, including authentication data, will be permanently removed from our systems. Locally stored audio files and project data on your device may be removed by uninstalling the application.
+
+The deletion process is processed immediately. For account deletion requests, please allow up to 30 days for complete removal from backup systems, in compliance with data protection regulations.
 
 ## 8. Children's Privacy
 

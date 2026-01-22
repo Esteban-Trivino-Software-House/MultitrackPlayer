@@ -168,6 +168,29 @@ struct DashboardScreen: View {
                     .foregroundStyle(Color("PSRed"))
             }
             .padding(.leading)
+            // MARK: Delete account button
+            Button(action: { viewModel.loginViewModel.requestAccountDeletion() }) {
+                Image(systemName: "trash")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 30, alignment: .center)
+                    .foregroundStyle(Color("PSRed"))
+            }
+            .padding(.leading)
+        }
+        .confirmationDialog(
+            String(localized: "delete_account_title"),
+            isPresented: $viewModel.loginViewModel.showDeleteConfirmation,
+            presenting: ()
+        ) { _ in
+            Button("delete_account_confirm", role: .destructive) {
+                viewModel.loginViewModel.confirmAccountDeletion()
+            }
+            Button("cancel", role: .cancel) {
+                viewModel.loginViewModel.cancelAccountDeletion()
+            }
+        } message: { _ in
+            Text("delete_account_warning")
         }
     }
 }

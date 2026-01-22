@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import FirebaseAuth
 
 /// Facade/Coordinator for managing authentication across different providers
 /// Provides a unified API for the app to interact with multiple authentication methods
@@ -31,22 +32,34 @@ final class AuthenticationService {
     /// Sign in with Google
     func signInWithGoogle(completion: @escaping (Result<PSUser, Error>) -> Void) {
         googleProvider.signIn { [weak self] result in
-            if case .success(let user) = result {
-                self?.currentProvider = self?.googleProvider
-                self?.saveUserSession(user)
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let user):
+                self.currentProvider = self.googleProvider
+                self.saveUserSession(user)
+                completion(.success(user))
+                
+            case .failure(let error):
+                completion(.failure(error))
             }
-            completion(result)
         }
     }
     
     /// Sign in with Apple
     func signInWithApple(completion: @escaping (Result<PSUser, Error>) -> Void) {
         appleProvider.signIn { [weak self] result in
-            if case .success(let user) = result {
-                self?.currentProvider = self?.appleProvider
-                self?.saveUserSession(user)
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let user):
+                self.currentProvider = self.appleProvider
+                self.saveUserSession(user)
+                completion(.success(user))
+                
+            case .failure(let error):
+                completion(.failure(error))
             }
-            completion(result)
         }
     }
     

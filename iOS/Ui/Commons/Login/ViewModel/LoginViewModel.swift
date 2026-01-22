@@ -8,14 +8,17 @@
 
 import Foundation
 
-
 final class LoginViewModel: ObservableObject {
     
     @Published var loginSuccessful: Bool = false
     @Published var showInitialView: Bool = false
     @Published var errorMessage: String?
+    @Published var isDeleting: Bool = false
+    @Published var showDeleteConfirmation: Bool = false
     
     private let authService: AuthenticationService
+    private lazy var accountDeletionService = AccountDeletionService()
+    private var skipSessionRestore = false
     
     /// Initialize with custom authentication service (useful for testing)
     init(authService: AuthenticationService) {
@@ -23,6 +26,13 @@ final class LoginViewModel: ObservableObject {
     }
     
     func onAppear() {
+        // Skip session restore if we just deleted the account
+        if skipSessionRestore {
+            skipSessionRestore = false
+            showInitialView = true
+            return
+        }
+        
         authService.restoreSession { [weak self] result in
             guard let self else { return }
             switch result {
@@ -62,6 +72,43 @@ final class LoginViewModel: ObservableObject {
         authService.signOut()
         loginSuccessful = false
         showInitialView = true
+    }
+    
+    /// Request account deletion with confirmation
+    /// Shows a confirmation dialog to prevent accidental deletion
+    func requestAccountDeletion() {
+        showDeleteConfirmation = true
+    }
+    
+    /// Confirm and proceed with account deletion
+    /// This will permanently delete the user account and all associated data
+    func confirmAccountDeletion() {
+        showDeleteConfirmation = false
+        isDeleting = true
+        
+        accountDeletionService.deleteAccount { [weak self] result in
+            guard let self = self else { return }
+            
+            self.isDeleting = false
+            
+            switch result {
+            case .success:
+                // Account deleted successfully
+                // Set flag to skip session restore on next onAppear
+                self.skipSessionRestore = true
+                self.loginSuccessful = false
+                self.showInitialView = true
+                self.errorMessage = nil
+                
+            case .failure:
+                self.errorMessage = String(localized: "account_deletion_error")
+            }
+        }
+    }
+    
+    /// Cancel account deletion request
+    func cancelAccountDeletion() {
+        showDeleteConfirmation = false
     }
     
 }
