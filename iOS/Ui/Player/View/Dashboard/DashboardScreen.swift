@@ -23,7 +23,7 @@ struct DashboardScreen: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Header()
+                Header(showAccountScreenBinding: $showAccountScreen)
                 switch viewModel.isLoading {
                     case true:
                     LoadingScreen()
@@ -163,15 +163,6 @@ struct DashboardScreen: View {
                     .resizable()
                     .scaledToFit()
                     .frame(height: 30, alignment: .center)
-            }
-            .padding(.leading)
-            // MARK: Account/Profile button
-            Button(action: { showAccountScreen = true }) {
-                Image(systemName: "person.circle")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 30, alignment: .center)
-                    .foregroundStyle(Color("PSBlue"))
             }
             .padding(.leading)
         }

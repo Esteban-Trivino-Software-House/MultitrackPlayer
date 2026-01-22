@@ -9,6 +9,8 @@ import SwiftUI
 
 struct Header: View {
     @State var showInfoSheet: Bool = false
+    var showAccountScreenBinding: Binding<Bool>?
+    
     var body: some View {
         HStack {
             Image(systemName: "iphone.badge.play")
@@ -20,6 +22,16 @@ struct Header: View {
                 Text("v\(version)").italic().font(.system(size: 14))
             }
             Spacer()
+            if let showAccountScreenBinding = showAccountScreenBinding {
+                Button(action: { showAccountScreenBinding.wrappedValue = true }) {
+                    Image(systemName: "person.circle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 20)
+                        .foregroundStyle(Color("PSBlue"))
+                }
+                .padding(.trailing, 8)
+            }
             Image(systemName: "info.circle")
                 .resizable()
                 .scaledToFit()
