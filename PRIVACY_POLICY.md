@@ -11,11 +11,13 @@ Al utilizar Multitrack Player, usted acepta las prácticas descritas en esta pol
 ## 2. Información que Recopilamos
 
 ### 2.1 Información de Cuenta
-Cuando inicia sesión con Google Sign-In, recopilamos:
+Cuando inicia sesión con Google Sign-In o Sign in with Apple, recopilamos:
 - Dirección de correo electrónico
 - Nombre de usuario
-- ID de usuario único proporcionado por Google
+- ID de usuario único proporcionado por el proveedor de autenticación (Google o Apple)
 - Foto de perfil (si está disponible)
+
+Nota: Al usar Sign in with Apple, tiene la opción de ocultar su dirección de correo electrónico. En ese caso, Apple proporciona una dirección de correo electrónico de retransmisión privada.
 
 ### 2.2 Datos de Uso y Analytics
 A través de Firebase Analytics, recopilamos:
@@ -49,6 +51,12 @@ Utilizamos la información recopilada para:
 
 ### 4.1 Servicios de Terceros
 Utilizamos los siguientes servicios de terceros:
+
+**Sign in with Apple:**
+- Proveedor: Apple Inc.
+- Propósito: Autenticación de usuarios
+- Política de privacidad: https://www.apple.com/es/legal/privacy/
+- Nota: Sign in with Apple limita la recopilación de datos y permite a los usuarios ocultar su dirección de correo electrónico
 
 **Google Sign-In:**
 - Proveedor: Google LLC

@@ -15,18 +15,18 @@ final class LoginViewModel: ObservableObject {
     @Published var showInitialView: Bool = false
     @Published var errorMessage: String?
     
-    let authenticator: GoogleAuthenticatorManager
+    private let authService: AuthenticationService
     
-    init(authenticator: GoogleAuthenticatorManager) {
-        self.authenticator = authenticator
+    /// Initialize with custom authentication service (useful for testing)
+    init(authService: AuthenticationService) {
+        self.authService = authService
     }
     
     func onAppear() {
-        authenticator.restoreSession { [weak self] result in
+        authService.restoreSession { [weak self] result in
             guard let self else { return }
             switch result {
-            case .success(let user):
-                SessionManager.shared.setSession(user: user)
+            case .success:
                 loginSuccessful = true
             case .failure:
                 showInitialView = true
@@ -35,11 +35,22 @@ final class LoginViewModel: ObservableObject {
     }
     
     func onTapLoginWithGoogle() {
-        authenticator.signIn{ [weak self] loginResult in
+        authService.signInWithGoogle { [weak self] loginResult in
             guard let self else { return }
             switch loginResult {
-            case .success(let user):
-                SessionManager.shared.setSession(user: user)
+            case .success:
+                loginSuccessful = true
+            case .failure:
+                errorMessage = String(localized: "login_error")
+            }
+        }
+    }
+    
+    func onTapLoginWithApple() {
+        authService.signInWithApple { [weak self] loginResult in
+            guard let self else { return }
+            switch loginResult {
+            case .success:
                 loginSuccessful = true
             case .failure:
                 errorMessage = String(localized: "login_error")
@@ -48,8 +59,7 @@ final class LoginViewModel: ObservableObject {
     }
     
     func logOut() {
-        authenticator.signOut()
-        SessionManager.shared.clearSession()
+        authService.signOut()
         loginSuccessful = false
         showInitialView = true
     }

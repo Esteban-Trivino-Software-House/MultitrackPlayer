@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 struct LoginView: View {
     @ObservedObject private var viewModel: LoginViewModel
@@ -60,11 +61,28 @@ struct LoginView: View {
             Text(String(localized: "login_prompt"))
                 .font(.title2)
                 .padding(.vertical)
+            
+            // Sign in with Apple button
+            SignInWithAppleButton(
+                onRequest: { request in
+                    request.requestedScopes = [.fullName, .email]
+                },
+                onCompletion: { _ in
+                    viewModel.onTapLoginWithApple()
+                }
+            )
+            .signInWithAppleButtonStyle(.black)
+            .frame(width: 199, height: 50)
+            .padding(.horizontal, 40)
+            .padding(.bottom, 10)
+            
+            // Google Sign-In button
             Button(action: {
                 viewModel.onTapLoginWithGoogle()
             }) {
                 Image("ios_neutral_rd_ctn")
             }
+            
             Spacer()
         }
         .padding()
@@ -72,5 +90,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView(viewModel: LoginViewModel(authenticator: GoogleAuthenticatorManager()))
+    LoginView(viewModel: LoginViewModel(authService: AuthenticationService()))
 }

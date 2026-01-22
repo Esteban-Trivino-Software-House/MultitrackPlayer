@@ -175,7 +175,7 @@ struct DashboardScreen: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = DashboardViewModel(multitrackRepository: MultitrackLocalRepository(dataManager: .init()),
-                                           loginViewModel: .init(authenticator: .init()))
+                                           loginViewModel: .init(authService: AuthenticationService()))
         let id1 = UUID()
         viewModel.multitracks[id1] = (
             .init(
