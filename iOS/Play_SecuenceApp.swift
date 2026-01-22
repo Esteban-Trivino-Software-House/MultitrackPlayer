@@ -40,7 +40,7 @@ struct Play_SecuenceApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                LoginView(viewModel: .init(authenticator: .init()))
+                LoginView(viewModel: .init(authService: AuthenticationService()))
                     .onAppear() {
                         UIApplication.shared.isIdleTimerDisabled = true
                     }

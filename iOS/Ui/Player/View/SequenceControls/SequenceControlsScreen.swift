@@ -28,7 +28,7 @@ struct SequenceControlsScreen: View {
 struct Faders_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = DashboardViewModel(multitrackRepository: MultitrackLocalRepository(dataManager: .init()),
-                                           loginViewModel: LoginViewModel(authenticator: .init(), ))
+                                           loginViewModel: LoginViewModel(authService: AuthenticationService()))
     viewModel.appendTrackController(using: Track(id: UUID(), name: "Click", relativePath: String.empty, config: .init(pan: 0, volume: 0.5, isMuted: false)))
     viewModel.appendTrackController(using: Track(id: UUID(), name: "Sequence", relativePath: String.empty, config: .init(pan: 0, volume: 0.5, isMuted: false)))
     viewModel.appendTrackController(using: Track(id: UUID(), name: "Keys", relativePath: String.empty, config: .init(pan: 0, volume: 0.5, isMuted: false)))
