@@ -100,13 +100,26 @@ Usted tiene derecho a:
 
 - **Acceder:** Solicitar una copia de los datos personales que tenemos sobre usted
 - **Rectificar:** Corregir datos inexactos o incompletos
-- **Eliminar:** Solicitar la eliminación de sus datos personales
-- **Revocar consentimiento:** Cerrar sesión y dejar de usar la aplicación en cualquier momento
+- **Eliminar:** Solicitar la eliminación de sus datos personales y cuenta
+- **Revocar consentimiento:** Cerrar sesión e dejar de usar la aplicación en cualquier momento
 
 Para ejercer estos derechos, puede:
-- Cerrar sesión desde la aplicación
-- Desinstalar la aplicación para eliminar todos los datos locales
-- Contactarnos en la dirección proporcionada en la sección 11
+- Eliminar su cuenta directamente en la aplicación (Configuración → Eliminar Cuenta)
+- Cerrar sesión de la aplicación
+- Contactarnos en la dirección proporcionada en la Sección 11
+
+### 7.1 Eliminación de Cuenta
+
+Tiene derecho a solicitar la eliminación de su cuenta y todos los datos personales asociados en cualquier momento. Para eliminar su cuenta:
+
+1. Abra The Multitrack Player en su dispositivo
+2. Vaya a la configuración de su cuenta
+3. Seleccione "Eliminar Cuenta"
+4. Confirme la eliminación cuando se le solicite
+
+**Importante:** La eliminación de cuenta es permanente y no se puede deshacer. Toda la información personal, incluidos los datos de autenticación, se eliminará permanentemente de nuestros sistemas. Los archivos de audio almacenados localmente y los datos del proyecto en su dispositivo se pueden eliminar desinstalando la aplicación.
+
+El proceso de eliminación se realiza inmediatamente. Para solicitudes de eliminación de cuenta, permita hasta 30 días para la eliminación completa de los sistemas de copia de seguridad, en cumplimiento de las regulaciones de protección de datos.
 
 ## 8. Privacidad de Menores
 

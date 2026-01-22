@@ -48,7 +48,6 @@
 		4F57C91F2E67D5050039C13A /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F57C91E2E67D5050039C13A /* View+Extensions.swift */; };
 		4F57C9242E67DA370039C13A /* SystemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F57C9232E67DA300039C13A /* SystemInfo.swift */; };
 		4F677D172F1DC33F0030D101 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 4F677D162F1DC33F0030D101 /* AppIcon.icon */; };
-		4F677D1A2F221C4D0030D101 /* AccountDeletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F677D192F221C4D0030D101 /* AccountDeletionService.swift */; };
 		4F78A43B2F1CAC55002934AD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4F78A4392F1CAC55002934AD /* Localizable.xcstrings */; };
 		4F78A43D2F1CBCEE002934AD /* String+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F78A43C2F1CBCEE002934AD /* String+Empty.swift */; };
 		4F78A45D2F1CD534002934AD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F78A45C2F1CD534002934AD /* GoogleService-Info.plist */; };
@@ -57,6 +56,7 @@
 		4FB7E1BB2E57F0E6009FE171 /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB7E1BA2E57F0E0009FE171 /* LoadingScreen.swift */; };
 		BC4D6AF002434A29B9E55677 /* AuthenticationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF7362F061D401898334AC8 /* AuthenticationProvider.swift */; };
 		BFE9D956CCE04E2D8D8BF113 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1093F93908C84313AF8B0BA3 /* AuthenticationService.swift */; };
+		ACDE1234567890ABCDEF1234 /* AccountDeletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDE1234567890ABCDEF5678 /* AccountDeletionService.swift */; };
 		EF029E9EFF444B77B175E316 /* AppleAuthProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335F0713532F4F119492725B /* AppleAuthProvider.swift */; };
 /* End PBXBuildFile section */
 
@@ -87,7 +87,7 @@
 		21F0D53028CA060300814C1C /* Play_SecuenceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Play_SecuenceApp.swift; sourceTree = "<group>"; };
 		21F0D53128CA060300814C1C /* DashboardScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardScreen.swift; sourceTree = "<group>"; };
 		21F0D53228CA060700814C1C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		21F0D53728CA060700814C1C /* The Multitrack Player.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Multitrack Player.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		21F0D53728CA060700814C1C /* Multitrack Player.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multitrack Player.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21F0D53F28CA060700814C1C /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		21F0D54428CA060700814C1C /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21F0D54828CA060700814C1C /* Tests_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOS.swift; sourceTree = "<group>"; };
@@ -111,7 +111,6 @@
 		4F57C9232E67DA300039C13A /* SystemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemInfo.swift; sourceTree = "<group>"; };
 		4F677D162F1DC33F0030D101 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		4F677D182F21F3B00030D101 /* Multitrack Player (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Multitrack Player (iOS).entitlements"; sourceTree = "<group>"; };
-		4F677D192F221C4D0030D101 /* AccountDeletionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDeletionService.swift; sourceTree = "<group>"; };
 		4F78A4392F1CAC55002934AD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		4F78A43C2F1CBCEE002934AD /* String+Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Empty.swift"; sourceTree = "<group>"; };
 		4F78A4592F1CD50B002934AD /* GoogleService-Info-Dev.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Dev.plist"; sourceTree = "<group>"; };
@@ -122,6 +121,7 @@
 		4FB7E1B82E57E2CA009FE171 /* NameInputDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameInputDialogView.swift; sourceTree = "<group>"; };
 		4FB7E1BA2E57F0E0009FE171 /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
 		E1A62DE8324043D086CAE53F /* GoogleAuthProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthProvider.swift; sourceTree = "<group>"; };
+		BCDE1234567890ABCDEF5678 /* AccountDeletionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDeletionService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,7 +286,7 @@
 		21F0D53828CA060700814C1C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				21F0D53728CA060700814C1C /* The Multitrack Player.app */,
+				21F0D53728CA060700814C1C /* Multitrack Player.app */,
 				21F0D54428CA060700814C1C /* Tests iOS.xctest */,
 				21F0D55028CA060700814C1C /* Tests macOS.xctest */,
 			);
@@ -486,9 +486,9 @@
 		4FAA1111111111111111AAAA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				4F677D192F221C4D0030D101 /* AccountDeletionService.swift */,
 				0FF7362F061D401898334AC8 /* AuthenticationProvider.swift */,
 				1093F93908C84313AF8B0BA3 /* AuthenticationService.swift */,
+				BCDE1234567890ABCDEF5678 /* AccountDeletionService.swift */,
 				4FAA2222222222222222BBBB /* Providers */,
 			);
 			path = Authentication;
@@ -506,9 +506,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		21F0D53628CA060700814C1C /* The Multitrack Player (iOS) */ = {
+		21F0D53628CA060700814C1C /* Multitrack Player (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 21F0D56028CA060700814C1C /* Build configuration list for PBXNativeTarget "The Multitrack Player (iOS)" */;
+			buildConfigurationList = 21F0D56028CA060700814C1C /* Build configuration list for PBXNativeTarget "Multitrack Player (iOS)" */;
 			buildPhases = (
 				4F78A4502F1CCDC0002934AD /* Select GoogleService-Info */,
 				21F0D53328CA060700814C1C /* Sources */,
@@ -520,9 +520,9 @@
 			);
 			dependencies = (
 			);
-			name = "The Multitrack Player (iOS)";
+			name = "Multitrack Player (iOS)";
 			productName = "Play Secuence (iOS)";
-			productReference = 21F0D53728CA060700814C1C /* The Multitrack Player.app */;
+			productReference = 21F0D53728CA060700814C1C /* Multitrack Player.app */;
 			productType = "com.apple.product-type.application";
 		};
 		21F0D54328CA060700814C1C /* Tests iOS */ = {
@@ -583,7 +583,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 21F0D52E28CA060200814C1C /* Build configuration list for PBXProject "The Multitrack Player" */;
+			buildConfigurationList = 21F0D52E28CA060200814C1C /* Build configuration list for PBXProject "Multitrack Player" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -600,7 +600,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				21F0D53628CA060700814C1C /* The Multitrack Player (iOS) */,
+				21F0D53628CA060700814C1C /* Multitrack Player (iOS) */,
 				21F0D54328CA060700814C1C /* Tests iOS */,
 				21F0D54F28CA060700814C1C /* Tests macOS */,
 			);
@@ -660,7 +660,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"DWARF File: ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+			shellScript = "echo \"DWARF File: ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"   \n";
 		};
 		4F78A4502F1CCDC0002934AD /* Select GoogleService-Info */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -705,7 +705,6 @@
 				4F38933C2F1CEC9000314733 /* FirebaseAnalyticsManager.swift in Sources */,
 				219215DB29AD7BEF00EB7937 /* MultitrackRepository.swift in Sources */,
 				21F0D57728CA1C0500814C1C /* SequenceControlsScreen.swift in Sources */,
-				4F677D1A2F221C4D0030D101 /* AccountDeletionService.swift in Sources */,
 				4F57C9112E677A690039C13A /* UserDefaultsManager.swift in Sources */,
 				219215CF29AA76B900EB7937 /* Multitrack.swift in Sources */,
 				219215D929AD7AA800EB7937 /* CoreDataMultitrackManager.swift in Sources */,
@@ -722,6 +721,7 @@
 				21CCB74D7B7E47AFA0928686 /* GoogleAuthProvider.swift in Sources */,
 				EF029E9EFF444B77B175E316 /* AppleAuthProvider.swift in Sources */,
 				BFE9D956CCE04E2D8D8BF113 /* AuthenticationService.swift in Sources */,
+				ACDE1234567890ABCDEF1234 /* AccountDeletionService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -748,7 +748,7 @@
 /* Begin PBXTargetDependency section */
 		21F0D54628CA060700814C1C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 21F0D53628CA060700814C1C /* The Multitrack Player (iOS) */;
+			target = 21F0D53628CA060700814C1C /* Multitrack Player (iOS) */;
 			targetProxy = 21F0D54528CA060700814C1C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -881,7 +881,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Play-Secuence--iOS--Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "The Multitrack Player";
+				INFOPLIST_KEY_CFBundleDisplayName = "Multitrack Player for iOS";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -895,7 +895,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.estebantrivino.multitrack-player";
-				PRODUCT_NAME = "The Multitrack Player";
+				PRODUCT_NAME = "Multitrack Player";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -934,7 +934,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.estebantrivino.multitrack-player";
-				PRODUCT_NAME = "The The Multitrack Player";
+				PRODUCT_NAME = "Multitrack Player";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1112,7 +1112,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.estebantrivino.multitrack-player";
-				PRODUCT_NAME = "The The Multitrack Player";
+				PRODUCT_NAME = "Multitrack Player";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1163,7 +1163,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		21F0D52E28CA060200814C1C /* Build configuration list for PBXProject "The Multitrack Player" */ = {
+		21F0D52E28CA060200814C1C /* Build configuration list for PBXProject "Multitrack Player" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21F0D55E28CA060700814C1C /* Debug */,
@@ -1173,7 +1173,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		21F0D56028CA060700814C1C /* Build configuration list for PBXNativeTarget "The Multitrack Player (iOS)" */ = {
+		21F0D56028CA060700814C1C /* Build configuration list for PBXNativeTarget "Multitrack Player (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21F0D56128CA060700814C1C /* Debug */,

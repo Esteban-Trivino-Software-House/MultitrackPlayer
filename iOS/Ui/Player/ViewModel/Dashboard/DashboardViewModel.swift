@@ -16,7 +16,7 @@ final class DashboardViewModel: ObservableObject {
     @Published var isLoading = true
     
     let multitrackRepository: MultitrackRepository
-    let loginViewModel: LoginViewModel
+    var loginViewModel: LoginViewModel
     
     init(multitrackRepository: MultitrackRepository,
          loginViewModel: LoginViewModel) {
