@@ -1,12 +1,12 @@
-# Privacy Policy - Multitrack Player
+# Privacy Policy - The Multitrack Player
 
 **Last Updated:** January 19, 2026
 
 ## 1. Introduction
 
-This Privacy Policy describes how Multitrack Player ("we", "our" or "the application") collects, uses, and protects the information of users ("you" or "user") of our iOS mobile application.
+This Privacy Policy describes how The Multitrack Player ("we", "our" or "the application") collects, uses, and protects the information of users ("you" or "user") of our iOS mobile application.
 
-By using Multitrack Player, you agree to the practices described in this policy. If you do not agree with these terms, please do not use the application.
+By using The Multitrack Player, you agree to the practices described in this policy. If you do not agree with these terms, please do not use the application.
 
 ## 2. Information We Collect
 
@@ -110,7 +110,7 @@ To exercise these rights, you can:
 
 ## 8. Children's Privacy
 
-Multitrack Player is not directed to children under 13 years of age. We do not knowingly collect personal information from children under 13. If we discover that we have collected information from a minor, we will delete it immediately.
+The Multitrack Player is not directed to children under 13 years of age. We do not knowingly collect personal information from children under 13. If we discover that we have collected information from a minor, we will delete it immediately.
 
 ## 9. International Transfers
 
@@ -163,4 +163,4 @@ If you have questions, comments, or requests about this Privacy Policy, you can 
 
 ---
 
-© 2026 Multitrack Player. All rights reserved.
+© 2026 The Multitrack Player. All rights reserved.
