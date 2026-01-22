@@ -30,6 +30,7 @@ struct Header: View {
                         .frame(height: 20)
                         .foregroundStyle(Color("PSBlue"))
                 }
+                .accessibilityLabel(String(localized: "profile"))
                 .padding(.trailing, 8)
             }
             Image(systemName: "info.circle")
