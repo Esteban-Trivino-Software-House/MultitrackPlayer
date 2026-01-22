@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "21F0D53628CA060700814C1C"
-               BuildableName = "Multitrack Player.app"
-               BlueprintName = "Multitrack Player (iOS)"
-               ReferencedContainer = "container:Multitrack Player.xcodeproj">
+               BuildableName = "The The Multitrack Player.app"
+               BlueprintName = "The Multitrack Player (iOS)"
+               ReferencedContainer = "container:The Multitrack Player.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "21F0D53628CA060700814C1C"
-            BuildableName = "Multitrack Player.app"
-            BlueprintName = "Multitrack Player (iOS)"
-            ReferencedContainer = "container:Multitrack Player.xcodeproj">
+            BuildableName = "The The Multitrack Player.app"
+            BlueprintName = "The Multitrack Player (iOS)"
+            ReferencedContainer = "container:The Multitrack Player.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "21F0D53628CA060700814C1C"
-            BuildableName = "Multitrack Player.app"
-            BlueprintName = "Multitrack Player (iOS)"
-            ReferencedContainer = "container:Multitrack Player.xcodeproj">
+            BuildableName = "The The Multitrack Player.app"
+            BlueprintName = "The Multitrack Player (iOS)"
+            ReferencedContainer = "container:The Multitrack Player.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

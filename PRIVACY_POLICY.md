@@ -1,12 +1,12 @@
-# Política de Privacidad - Multitrack Player
+# Política de Privacidad - The Multitrack Player
 
 **Última actualización:** 19 de enero de 2026
 
 ## 1. Introducción
 
-Esta Política de Privacidad describe cómo Multitrack Player ("nosotros", "nuestra" o "la aplicación") recopila, usa y protege la información de los usuarios ("usted" o "usuario") de nuestra aplicación móvil para iOS.
+Esta Política de Privacidad describe cómo The Multitrack Player ("nosotros", "nuestra" o "la aplicación") recopila, usa y protege la información de los usuarios ("usted" o "usuario") de nuestra aplicación móvil para iOS.
 
-Al utilizar Multitrack Player, usted acepta las prácticas descritas en esta política. Si no está de acuerdo con estos términos, por favor no utilice la aplicación.
+Al utilizar The Multitrack Player, usted acepta las prácticas descritas en esta política. Si no está de acuerdo con estos términos, por favor no utilice la aplicación.
 
 ## 2. Información que Recopilamos
 
@@ -110,7 +110,7 @@ Para ejercer estos derechos, puede:
 
 ## 8. Privacidad de Menores
 
-Multitrack Player no está dirigida a menores de 13 años. No recopilamos intencionalmente información personal de menores de 13 años. Si descubrimos que hemos recopilado información de un menor, la eliminaremos de inmediato.
+The Multitrack Player no está dirigida a menores de 13 años. No recopilamos intencionalmente información personal de menores de 13 años. Si descubrimos que hemos recopilado información de un menor, la eliminaremos de inmediato.
 
 ## 9. Transferencias Internacionales
 
@@ -163,4 +163,4 @@ Si tiene preguntas, comentarios o solicitudes sobre esta Política de Privacidad
 
 ---
 
-© 2026 Multitrack Player. Todos los derechos reservados.
+© 2026 The Multitrack Player. Todos los derechos reservados.
