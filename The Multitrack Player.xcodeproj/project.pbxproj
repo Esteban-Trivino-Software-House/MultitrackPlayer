@@ -49,6 +49,7 @@
 		4F57C9242E67DA370039C13A /* SystemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F57C9232E67DA300039C13A /* SystemInfo.swift */; };
 		4F677D172F1DC33F0030D101 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 4F677D162F1DC33F0030D101 /* AppIcon.icon */; };
 		4F677D1A2F221C4D0030D101 /* AccountDeletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F677D192F221C4D0030D101 /* AccountDeletionService.swift */; };
+		4F677D202F2226C70030D101 /* AccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F677D1E2F2226C70030D101 /* AccountScreen.swift */; };
 		4F78A43B2F1CAC55002934AD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4F78A4392F1CAC55002934AD /* Localizable.xcstrings */; };
 		4F78A43D2F1CBCEE002934AD /* String+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F78A43C2F1CBCEE002934AD /* String+Empty.swift */; };
 		4F78A45D2F1CD534002934AD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F78A45C2F1CD534002934AD /* GoogleService-Info.plist */; };
@@ -112,6 +113,7 @@
 		4F677D162F1DC33F0030D101 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		4F677D182F21F3B00030D101 /* Multitrack Player (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Multitrack Player (iOS).entitlements"; sourceTree = "<group>"; };
 		4F677D192F221C4D0030D101 /* AccountDeletionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDeletionService.swift; sourceTree = "<group>"; };
+		4F677D1E2F2226C70030D101 /* AccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountScreen.swift; sourceTree = "<group>"; };
 		4F78A4392F1CAC55002934AD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		4F78A43C2F1CBCEE002934AD /* String+Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Empty.swift"; sourceTree = "<group>"; };
 		4F78A4592F1CD50B002934AD /* GoogleService-Info-Dev.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Dev.plist"; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 				2124070428CAF34A00A85A14 /* DocumentPicker */,
 				21F0D57528CA1A8200814C1C /* SequenceControls */,
 				21F0D57428CA1A7400814C1C /* Dashboard */,
+				4F677D1F2F2226C70030D101 /* Account */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -473,6 +476,14 @@
 				4F57C9232E67DA300039C13A /* SystemInfo.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		4F677D1F2F2226C70030D101 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				4F677D1E2F2226C70030D101 /* AccountScreen.swift */,
+			);
+			path = Account;
 			sourceTree = "<group>";
 		};
 		4F78A43A2F1CAC55002934AD /* Resources */ = {
@@ -706,6 +717,7 @@
 				219215DB29AD7BEF00EB7937 /* MultitrackRepository.swift in Sources */,
 				21F0D57728CA1C0500814C1C /* SequenceControlsScreen.swift in Sources */,
 				4F677D1A2F221C4D0030D101 /* AccountDeletionService.swift in Sources */,
+				4F677D202F2226C70030D101 /* AccountScreen.swift in Sources */,
 				4F57C9112E677A690039C13A /* UserDefaultsManager.swift in Sources */,
 				219215CF29AA76B900EB7937 /* Multitrack.swift in Sources */,
 				219215D929AD7AA800EB7937 /* CoreDataMultitrackManager.swift in Sources */,

@@ -15,6 +15,7 @@ final class LoginViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isDeleting: Bool = false
     @Published var showDeleteConfirmation: Bool = false
+    @Published var userEmail: String?
     
     private let authService: AuthenticationService
     private lazy var accountDeletionService = AccountDeletionService()
@@ -37,6 +38,7 @@ final class LoginViewModel: ObservableObject {
             guard let self else { return }
             switch result {
             case .success:
+                self.loadUserEmail()
                 loginSuccessful = true
             case .failure:
                 showInitialView = true
@@ -49,6 +51,7 @@ final class LoginViewModel: ObservableObject {
             guard let self else { return }
             switch loginResult {
             case .success:
+                self.loadUserEmail()
                 loginSuccessful = true
             case .failure:
                 errorMessage = String(localized: "login_error")
@@ -61,6 +64,7 @@ final class LoginViewModel: ObservableObject {
             guard let self else { return }
             switch loginResult {
             case .success:
+                self.loadUserEmail()
                 loginSuccessful = true
             case .failure:
                 errorMessage = String(localized: "login_error")
@@ -70,6 +74,7 @@ final class LoginViewModel: ObservableObject {
     
     func logOut() {
         authService.signOut()
+        userEmail = nil
         loginSuccessful = false
         showInitialView = true
     }
@@ -109,6 +114,14 @@ final class LoginViewModel: ObservableObject {
     /// Cancel account deletion request
     func cancelAccountDeletion() {
         showDeleteConfirmation = false
+    }
+    
+    // MARK: - Private Methods
+    
+    private func loadUserEmail() {
+        if let user = SessionManager.shared.user {
+            userEmail = user.email
+        }
     }
     
 }

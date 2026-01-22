@@ -11,6 +11,7 @@ struct DashboardScreen: View {
     @State private var showPicker: Bool = false
     @State private var showNewMultitrackNameInputDialog: Bool = false
     @State private var showEditMultitrackNameInputDialog: Bool = false
+    @State private var showAccountScreen: Bool = false
     @StateObject private var viewModel: DashboardViewModel
     @State private var presentModalDelete: Bool = false
     @State private var newMultitrackNameTmp: String = String.empty
@@ -20,17 +21,22 @@ struct DashboardScreen: View {
     }
     
     var body: some View {
-        VStack {
-            Header()
-            switch viewModel.isLoading {
-                case true:
-                LoadingScreen()
-                case false:
-                content
+        NavigationStack {
+            VStack {
+                Header()
+                switch viewModel.isLoading {
+                    case true:
+                    LoadingScreen()
+                    case false:
+                    content
+                }
+            }
+            .onAppear(){
+                self.viewModel.onAppear()
             }
         }
-        .onAppear(){
-            self.viewModel.onAppear()
+        .sheet(isPresented: $showAccountScreen) {
+            AccountScreen(loginViewModel: viewModel.loginViewModel, showAccountScreen: $showAccountScreen)
         }
     }
     
@@ -159,38 +165,15 @@ struct DashboardScreen: View {
                     .frame(height: 30, alignment: .center)
             }
             .padding(.leading)
-            // MARK: Logout button
-            Button(action: { viewModel.didTapOnLogOut() }) {
-                Image(systemName: "rectangle.portrait.and.arrow.forward")
+            // MARK: Account/Profile button
+            Button(action: { showAccountScreen = true }) {
+                Image(systemName: "person.circle")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 30, alignment: .center)
-                    .foregroundStyle(Color("PSRed"))
+                    .foregroundStyle(Color("PSBlue"))
             }
             .padding(.leading)
-            // MARK: Delete account button
-            Button(action: { viewModel.loginViewModel.requestAccountDeletion() }) {
-                Image(systemName: "trash")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 30, alignment: .center)
-                    .foregroundStyle(Color("PSRed"))
-            }
-            .padding(.leading)
-        }
-        .confirmationDialog(
-            String(localized: "delete_account_title"),
-            isPresented: $viewModel.loginViewModel.showDeleteConfirmation,
-            presenting: ()
-        ) { _ in
-            Button("delete_account_confirm", role: .destructive) {
-                viewModel.loginViewModel.confirmAccountDeletion()
-            }
-            Button("cancel", role: .cancel) {
-                viewModel.loginViewModel.cancelAccountDeletion()
-            }
-        } message: { _ in
-            Text("delete_account_warning")
         }
     }
 }
