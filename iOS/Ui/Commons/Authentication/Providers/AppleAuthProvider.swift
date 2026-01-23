@@ -24,19 +24,9 @@ final class AppleAuthProvider: NSObject, AuthenticationProvider {
     // MARK: - AuthenticationProvider
     
     func restoreSession(completion: @escaping (Result<PSUser, Error>) -> Void) {
-        // Apple doesn't provide automatic session restoration like Google
-        // We rely on the stored PSUser in UserDefaults
-        if let storedUser = UserDefaultsManager.shared.getObject(PSUser.self, forKey: UserDefaultsKeys.Session.user),
-           !storedUser.isAnonymous {
-            FirebaseAnalyticsManager.shared.logAuthEvent(
-                "restore_session_success",
-                method: providerName,
-                userEmail: storedUser.email,
-                userId: storedUser.id,
-                isAnonymous: storedUser.isAnonymous
-            )
-            completion(.success(storedUser))
-        } else {
+        // First, check if there's a stored user
+        guard let storedUser = UserDefaultsManager.shared.getObject(PSUser.self, forKey: UserDefaultsKeys.Session.user),
+              !storedUser.isAnonymous else {
             let error = NSError(
                 domain: "AppleAuthProvider",
                 code: 2000,
@@ -48,6 +38,73 @@ final class AppleAuthProvider: NSObject, AuthenticationProvider {
                 error: error
             )
             completion(.failure(error))
+            return
+        }
+        
+        // Verify that the Apple ID credential is still valid
+        // This prevents the app from thinking there's a session when Apple has revoked it
+        guard let userId = storedUser.id else {
+            let error = NSError(
+                domain: "AppleAuthProvider",
+                code: 2001,
+                userInfo: [NSLocalizedDescriptionKey: "User ID no disponible"]
+            )
+            FirebaseAnalyticsManager.shared.logAuthEvent(
+                "restore_session_failed",
+                method: providerName,
+                error: error
+            )
+            completion(.failure(error))
+            return
+        }
+        
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        appleIDProvider.getCredentialState(forUserID: userId) { [weak self] credentialState, error in
+            guard let self = self else { return }
+            
+            switch credentialState {
+            case .authorized:
+                // User is still authorized, session is valid
+                FirebaseAnalyticsManager.shared.logAuthEvent(
+                    "restore_session_success",
+                    method: self.providerName,
+                    userEmail: storedUser.email,
+                    userId: storedUser.id,
+                    isAnonymous: storedUser.isAnonymous
+                )
+                completion(.success(storedUser))
+                
+            case .revoked, .notFound:
+                // User revoked their authorization or the credential is no longer valid
+                // Clear the stored session
+                UserDefaultsManager.shared.remove(forKey: UserDefaultsKeys.Session.user)
+                SessionManager.shared.clearSession()
+                
+                let error = NSError(
+                    domain: "AppleAuthProvider",
+                    code: 2002,
+                    userInfo: [NSLocalizedDescriptionKey: "La sesión de Apple ha sido revocada"]
+                )
+                FirebaseAnalyticsManager.shared.logAuthEvent(
+                    "restore_session_failed",
+                    method: self.providerName,
+                    error: error
+                )
+                completion(.failure(error))
+                
+            @unknown default:
+                let error = NSError(
+                    domain: "AppleAuthProvider",
+                    code: 2003,
+                    userInfo: [NSLocalizedDescriptionKey: "Estado de credencial desconocido"]
+                )
+                FirebaseAnalyticsManager.shared.logAuthEvent(
+                    "restore_session_failed",
+                    method: self.providerName,
+                    error: error
+                )
+                completion(.failure(error))
+            }
         }
     }
     
