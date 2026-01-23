@@ -17,6 +17,7 @@ final class DashboardViewModel: ObservableObject {
     
     let multitrackRepository: MultitrackRepository
     var loginViewModel: LoginViewModel
+    private let dataManager = CoreDataMultitrackManager()
     
     init(multitrackRepository: MultitrackRepository,
          loginViewModel: LoginViewModel) {
@@ -164,7 +165,26 @@ final class DashboardViewModel: ObservableObject {
     }
     
     func appendTrackController(using track: Track) {
-        self.trackControllers.append(TrackControlViewModel(track: track))
+        self.trackControllers.append(TrackControlViewModel(track: track, onTrackUpdate: { [weak self] updatedTrack in
+            self?.updateTrackInMultitrack(updatedTrack)
+        }))
+    }
+    
+    private func updateTrackInMultitrack(_ track: Track) {
+        guard let selectedMultitrackIndex = self.selectedMultitrackIndex,
+              let trackIndex = multitracks[selectedMultitrackIndex]?.tracks.firstIndex(where: { $0.id == track.id }) else {
+            return
+        }
+        
+        // Preserve the order from the current multitrack
+        var updatedTrack = track
+        updatedTrack.order = multitracks[selectedMultitrackIndex]!.tracks[trackIndex].order
+        
+        // Update in memory
+        multitracks[selectedMultitrackIndex]?.tracks[trackIndex] = updatedTrack
+        
+        // Persist to CoreData with order preserved
+        dataManager.updateTrack(updatedTrack)
     }
     
     func moveTrack(from source: IndexSet, to destination: Int) {
