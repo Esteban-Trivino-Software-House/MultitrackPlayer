@@ -10,14 +10,16 @@ import AVFoundation
 class TrackControlViewModel: ObservableObject, Identifiable {
     
     private let dataManager = CoreDataMultitrackManager()
+    private let onTrackUpdate: (Track) -> Void
     
     private(set) var id: UUID
     private var player: AVAudioPlayer
     private var track: Track
     
-    init(track: Track) {
+    init(track: Track, onTrackUpdate: @escaping (Track) -> Void = { _ in }) {
         self.track = track
         self.id = track.id
+        self.onTrackUpdate = onTrackUpdate
         self.player = TrackControlViewModel.buildPlayer(track: track)
     }
     
@@ -123,7 +125,8 @@ class TrackControlViewModel: ObservableObject, Identifiable {
     }
     
     private func updateTrack() {
-        self.dataManager.updateTrack(self.track)
+        // Don't update directly to CoreData, let the parent ViewModel handle it
+        self.onTrackUpdate(self.track)
     }
     
     var currentTime: TimeInterval {
