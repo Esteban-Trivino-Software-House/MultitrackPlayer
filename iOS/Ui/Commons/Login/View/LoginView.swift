@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import AuthenticationServices
 
 struct LoginView: View {
     @ObservedObject private var viewModel: LoginViewModel
@@ -63,16 +62,22 @@ struct LoginView: View {
                 .padding(.vertical)
             
             // Sign in with Apple button
-            SignInWithAppleButton(
-                onRequest: { request in
-                    request.requestedScopes = [.fullName, .email]
-                },
-                onCompletion: { _ in
-                    viewModel.onTapLoginWithApple()
+            Button(action: {
+                viewModel.onTapLoginWithApple()
+            }) {
+                HStack(spacing: 8) {
+                    Image(systemName: "apple.logo")
+                        .font(.system(size: 16, weight: .semibold))
+                    Text(String(localized: "sign_in_with_apple"))
+                        .font(.system(size: 16, weight: .semibold))
                 }
-            )
-            .signInWithAppleButtonStyle(.black)
-            .frame(width: 199, height: 50)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .foregroundColor(.white)
+                .background(Color.black)
+                .cornerRadius(8)
+            }
+            .frame(width: 199)
             .padding(.horizontal, 40)
             .padding(.bottom, 10)
             
