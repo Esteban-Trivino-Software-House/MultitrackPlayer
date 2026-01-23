@@ -79,11 +79,27 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
                 trackDao.volume = track.config.volume
                 trackDao.pan = track.config.pan
                 trackDao.mute = track.config.isMuted
+                trackDao.order = track.order
                 self.commit()
             }
         } catch {
             AppLogger.coreData.error("Unable to Update TrackDao in updateTrack, (\(error.localizedDescription))")
         }
+    }
+    
+    func updateTracksOrder(_ tracks: [Track]) {
+        for track in tracks {
+            let fetchRequest: NSFetchRequest<TrackDao> = TrackDao.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %@", track.id as CVarArg)
+            do {
+                if let trackDao = try self.context.fetch(fetchRequest).first {
+                    trackDao.order = track.order
+                }
+            } catch {
+                AppLogger.coreData.error("Unable to Update TrackDao order, (\(error.localizedDescription))")
+            }
+        }
+        self.commit()
     }
     
     func saveTracks(_ tracks: [Track], for multitrack: MultitrackDao) {
@@ -96,6 +112,7 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
         var tracks: [TrackDao] = []
         let fetchRequest: NSFetchRequest<TrackDao> = TrackDao.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "multitrack == %@", multitrack)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "order", ascending: true)]
         do {
             tracks = try self.context.fetch(fetchRequest)
         } catch {

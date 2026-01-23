@@ -11,7 +11,7 @@ import os
 @MainActor
 final class DashboardViewModel: ObservableObject {
     @Published var multitracks = Dictionary<UUID, Multitrack>()
-    @Published var trackControllers = Dictionary<UUID, TrackControlViewModel>()
+    @Published var trackControllers: [TrackControlViewModel] = []
     @Published var selectedMultitrackIndex: UUID?
     @Published var isLoading = true
     
@@ -43,6 +43,7 @@ final class DashboardViewModel: ObservableObject {
             trackControllers.removeAll()
             if let selectedMultitrackIndex = self.selectedMultitrackIndex,
                let tracks = multitracks[selectedMultitrackIndex]?.tracks {
+                // Tracks are already sorted by order from repository
                 for track in tracks {
                     self.appendTrackController(using: track)
                 }
@@ -107,8 +108,8 @@ final class DashboardViewModel: ObservableObject {
             guard let self = self else { return }
             var multitrack = Multitrack(id: UUID(),
                                         name: name)
-            for tmpUrl in tracksTmpUrls {
-                let track = self.saveTrack(from: tmpUrl)
+            for (index, tmpUrl) in tracksTmpUrls.enumerated() {
+                let track = self.saveTrack(from: tmpUrl, order: Int32(index))
                 multitrack.tracks.append(track)
             }
             self.multitracks[multitrack.id]  = multitrack
@@ -130,7 +131,7 @@ final class DashboardViewModel: ObservableObject {
         }
     }
     
-    private func saveTrack(from tmpUrl: URL) -> Track {
+    private func saveTrack(from tmpUrl: URL, order: Int32) -> Track {
         
 //        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 //        let urlToSave = documentsUrl.appendingPathComponent(url.lastPathComponent)
@@ -140,7 +141,8 @@ final class DashboardViewModel: ObservableObject {
             id: trackId,
             name: tmpUrl.standardizedFileURL.deletingPathExtension().lastPathComponent,
             relativePath: trackId.uuidString.appending(tmpUrl.lastPathComponent),
-            config: .init(pan: 0, volume: 0.5, isMuted: false)
+            config: .init(pan: 0, volume: 0.5, isMuted: false),
+            order: order
         )
         
         let path = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(track.relativePath)
@@ -162,7 +164,27 @@ final class DashboardViewModel: ObservableObject {
     }
     
     func appendTrackController(using track: Track) {
-        self.trackControllers[track.id] = TrackControlViewModel(track: track)
+        self.trackControllers.append(TrackControlViewModel(track: track))
+    }
+    
+    func moveTrack(from source: IndexSet, to destination: Int) {
+        trackControllers.move(fromOffsets: source, toOffset: destination)
+        
+        // Update order values and save to CoreData
+        var tracksToUpdate: [Track] = []
+        for (index, controller) in trackControllers.enumerated() {
+            var track = controller.getTrack()
+            track.order = Int32(index)
+            tracksToUpdate.append(track)
+        }
+        
+        // Update the multitrack's tracks order in memory
+        if let selectedMultitrackIndex = self.selectedMultitrackIndex {
+            self.multitracks[selectedMultitrackIndex]?.tracks = tracksToUpdate
+        }
+        
+        // Persist to CoreData
+        multitrackRepository.updateTracksOrder(tracksToUpdate)
     }
     
     func editMultitrackName(_ newName: String) {
@@ -172,18 +194,18 @@ final class DashboardViewModel: ObservableObject {
     }
     
     func playTracks() {
-        if let firstController = trackControllers.first?.value {
+        if let firstController = trackControllers.first {
             let timeToPlay = firstController.deviceCurrentTime + 1
-            for controller in trackControllers.values.map({$0}) {
+            for controller in trackControllers {
                 controller.play(at: timeToPlay)
             }
         }
     }
     
     func pauseTracks() {
-        if let firstController = trackControllers.first?.value {
+        if let firstController = trackControllers.first {
             let currentPosition = firstController.currentTime
-            for controller in trackControllers.values.map({$0}) {
+            for controller in trackControllers {
                 controller.pauseTrack()
                 controller.currentTime = currentPosition
             }
@@ -192,7 +214,7 @@ final class DashboardViewModel: ObservableObject {
     
     func stopTracks() {
         for controller in trackControllers {
-            controller.value.stopTrack()
+            controller.stopTrack()
         }
     }
     
