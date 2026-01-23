@@ -68,17 +68,33 @@ struct TrackItemView: View {
                 .background(Color.green.opacity(0.15))
             }
             
-            TrackControl(viewModel: controller)
+            VStack(spacing: 0) {
+                // Drag Handle - zona donde se puede arrastrar
+                VStack(spacing: 3) {
+                    ForEach(0..<3, id: \.self) { _ in
+                        RoundedRectangle(cornerRadius: 1.5)
+                            .fill(Color.gray.opacity(0.5))
+                            .frame(width: 28, height: 2.5)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .padding(.horizontal, 16)
+                .contentShape(Rectangle())
+                .onDrag {
+                    draggingId = controller.id
+                    draggedOverIndex = nil
+                    return NSItemProvider(object: controller.id.uuidString as NSString)
+                } preview: {
+                    TrackControl(viewModel: controller)
+                }
+                
+                // Track Control - no se puede arrastrar desde aquí
+                TrackControl(viewModel: controller)
+            }
         }
         .frame(maxHeight: .infinity)
         .animation(.easeInOut(duration: 0.2), value: draggedOverIndex)
-        .onDrag {
-            draggingId = controller.id
-            draggedOverIndex = nil
-            return NSItemProvider(object: controller.id.uuidString as NSString)
-        } preview: {
-            TrackControl(viewModel: controller)
-        }
         .dropDestination(for: String.self) { items, location in
             guard let droppedId = items.first,
                   let droppedUUID = UUID(uuidString: droppedId),
