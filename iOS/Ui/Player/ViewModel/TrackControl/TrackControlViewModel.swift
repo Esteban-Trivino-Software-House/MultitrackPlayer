@@ -37,6 +37,7 @@ class TrackControlViewModel: ObservableObject, Identifiable {
             /* iOS 10 and earlier require the following line:
             player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
             player.setVolume(track.config.volumeWithMute, fadeDuration: .infinity)
+            player.pan = track.config.pan
             player.prepareToPlay()
             
         } catch let error {
