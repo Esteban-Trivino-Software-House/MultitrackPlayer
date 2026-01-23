@@ -13,6 +13,7 @@ struct Track: Identifiable {
     var name: String
     var relativePath: String
     var config: Track.Config
+    var order: Int32
     
     struct Config {
         var pan: Float
@@ -34,12 +35,19 @@ extension Track {
         trackDao.relativePath = self.relativePath
         trackDao.pan = self.config.pan
         trackDao.volume = self.config.volume
+        trackDao.order = self.order
         return trackDao
     }
 }
 
 extension TrackDao {
     func mapToTrack() -> Track {
-    Track(id: self.id ?? UUID(), name: self.name ?? String.empty, relativePath: self.relativePath ?? String.empty, config: .init(pan: self.pan, volume: self.volume, isMuted: self.mute))
+        Track(
+            id: self.id ?? UUID(),
+            name: self.name ?? String.empty,
+            relativePath: self.relativePath ?? String.empty,
+            config: .init(pan: self.pan, volume: self.volume, isMuted: self.mute),
+            order: self.order
+        )
     }
 }

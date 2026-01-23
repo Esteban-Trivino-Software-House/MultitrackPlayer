@@ -56,6 +56,10 @@ class TrackControlViewModel: ObservableObject, Identifiable {
         self.track.config.isMuted
     }
     
+    func getTrack() -> Track {
+        self.track
+    }
+    
 // MARK: Player methods
     func play(at interval: TimeInterval) {
         self.player.play(atTime: interval)

@@ -182,7 +182,8 @@ struct ContentView_Previews: PreviewProvider {
                     id: id1,
                     name: "Click",
                     relativePath: String.empty,
-                    config: .init(pan: 0, volume: 0.5, isMuted: false)
+                    config: .init(pan: 0, volume: 0.5, isMuted: false),
+                    order: 0
                 )]
             )
         )
@@ -191,7 +192,8 @@ struct ContentView_Previews: PreviewProvider {
                 id: UUID(),
                 name: "Click",
                 relativePath: String.empty,
-                config: .init(pan: -1, volume: 0.5, isMuted: false)
+                config: .init(pan: -1, volume: 0.5, isMuted: false),
+                order: 0
             )
         )
         return DashboardScreen(viewModel: viewModel)

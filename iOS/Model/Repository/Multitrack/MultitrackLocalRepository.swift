@@ -44,4 +44,8 @@ class MultitrackLocalRepository: MultitrackRepository {
     func updateMultitrackName(multitrackId: UUID, newName: String) {
         dataManager.updateMultitrackName(multitrackId: multitrackId, newName: newName)
     }
+    
+    func updateTracksOrder(_ tracks: [Track]) {
+        dataManager.updateTracksOrder(tracks)
+    }
 }
