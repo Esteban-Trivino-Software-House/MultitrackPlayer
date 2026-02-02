@@ -35,7 +35,7 @@ struct TrackControl: View {
             Text(viewModel.trackName)
                 .font(.system(size:12))
         }
-        .frame(minWidth: 50)
+        .frame(minWidth: 50, maxHeight: .infinity)
     }
 }
 
