@@ -15,6 +15,7 @@ struct DashboardScreen: View {
     @StateObject private var viewModel: DashboardViewModel
     @State private var presentModalDelete: Bool = false
     @State private var newMultitrackNameTmp: String = String.empty
+    @Environment(\.dismiss) var dismiss
     
     init(viewModel: DashboardViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -33,6 +34,12 @@ struct DashboardScreen: View {
             }
             .onAppear(){
                 self.viewModel.onAppear()
+            }
+            .onChange(of: viewModel.loginViewModel.loginSuccessful) { oldValue, newValue in
+                // When loginSuccessful becomes false, dismiss this screen to go back to login
+                if !newValue && oldValue {
+                    dismiss()
+                }
             }
         }
         .sheet(isPresented: $showAccountScreen) {
