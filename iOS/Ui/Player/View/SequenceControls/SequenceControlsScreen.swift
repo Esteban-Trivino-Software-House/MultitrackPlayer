@@ -37,7 +37,7 @@ struct SequenceControlsScreen: View {
                     Spacer()
                 }
             }
-            .frame(minHeight: 50, maxHeight: 200)
+            .frame(minHeight: 100, maxHeight: .infinity)
         }
     }
 }
