@@ -44,9 +44,12 @@ final class AccountDeletionService {
         
         // Step 1: Sign out from all providers to revoke tokens
         // This is important to prevent session restoration
+        // Google tokens are explicitly revoked here
         GIDSignIn.sharedInstance.signOut()
         
         // Step 2: Delete Firebase Auth user if authenticated
+        // Note: Firebase Auth deletion automatically revokes associated tokens (Google, Apple, etc.)
+        // See: https://developer.apple.com/documentation/sign_in_with_apple/revoke_tokens
         if let firebaseUser = Auth.auth().currentUser {
             firebaseUser.delete { [weak self] error in
                 if let error = error {

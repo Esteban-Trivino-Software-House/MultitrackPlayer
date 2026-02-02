@@ -15,6 +15,7 @@ final class LoginViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isDeleting: Bool = false
     @Published var showDeleteConfirmation: Bool = false
+    @Published var deletionSuccess: Bool = false
     @Published var userEmail: String?
     
     private let authService: AuthenticationService
@@ -104,6 +105,7 @@ final class LoginViewModel: ObservableObject {
                 self.loginSuccessful = false
                 self.showInitialView = true
                 self.errorMessage = nil
+                self.deletionSuccess = true
                 
             case .failure:
                 self.errorMessage = String(localized: "account_deletion_error")
@@ -114,6 +116,15 @@ final class LoginViewModel: ObservableObject {
     /// Cancel account deletion request
     func cancelAccountDeletion() {
         showDeleteConfirmation = false
+    }
+    
+    /// Dismiss the deletion success confirmation
+    func dismissDeletionSuccess() {
+        deletionSuccess = false
+        // Reset login state to trigger navigation back to login screen
+        // This will close the DashboardScreen and show LoginView
+        self.loginSuccessful = false
+        self.showInitialView = true
     }
     
     // MARK: - Private Methods

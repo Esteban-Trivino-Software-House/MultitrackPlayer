@@ -117,13 +117,23 @@ struct AccountScreen: View {
         ) {
             Button(String(localized: "delete_account_confirm"), role: .destructive) {
                 loginViewModel.confirmAccountDeletion()
-                showAccountScreen = false
             }
             Button(String(localized: "cancel"), role: .cancel) {
                 loginViewModel.cancelAccountDeletion()
             }
         } message: {
             Text(String(localized: "delete_account_warning"))
+        }
+        .alert(String(localized: "account_deleted_success_title"), 
+               isPresented: $loginViewModel.deletionSuccess) {
+            Button("OK") {
+                // Dismiss the alert first
+                loginViewModel.dismissDeletionSuccess()
+                // Then close the modal - this will also trigger the onChange in DashboardScreen
+                showAccountScreen = false
+            }
+        } message: {
+            Text(String(localized: "account_deleted_success_message"))
         }
     }
 }
