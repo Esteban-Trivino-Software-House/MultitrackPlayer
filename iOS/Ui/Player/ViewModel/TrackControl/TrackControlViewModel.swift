@@ -27,8 +27,15 @@ class TrackControlViewModel: ObservableObject, Identifiable {
     class func buildPlayer(track: Track) -> AVAudioPlayer {
         var player: AVAudioPlayer
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
+            // Configure audio session for multitrack playback
+            // Use .multiRoute category to allow simultaneous playback of multiple tracks
+            // and .playAndRecord mode for better simulator compatibility
+            let audioSession = AVAudioSession.sharedInstance()
+            
+            try audioSession.setCategory(.playAndRecord, 
+                                        mode: .default, 
+                                        options: [.defaultToSpeaker, .duckOthers])
+            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
 
             let newTrackPath = UserPathManager.shared.getTrackPath(relativePath: track.relativePath)
             let newTrackUrl = URL(fileURLWithPath: newTrackPath)
@@ -36,18 +43,38 @@ class TrackControlViewModel: ObservableObject, Identifiable {
             AppLogger.general.info("Loading track from path: \(newTrackPath)")
             AppLogger.general.info("File exists: \(FileManager.default.fileExists(atPath: newTrackPath))")
             
-            /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
-            player = try AVAudioPlayer(contentsOf: newTrackUrl, fileTypeHint: AVFileType.mp3.rawValue)
-
-            /* iOS 10 and earlier require the following line:
-            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
+            // Determine file type hint from file extension
+            let fileExtension = newTrackUrl.pathExtension.lowercased()
+            let fileTypeHint: String
+            
+            switch fileExtension {
+            case "wav":
+                fileTypeHint = AVFileType.wav.rawValue
+                AppLogger.general.info("Detected WAV file")
+            case "mp3":
+                fileTypeHint = AVFileType.mp3.rawValue
+                AppLogger.general.info("Detected MP3 file")
+            case "m4a":
+                fileTypeHint = AVFileType.m4a.rawValue
+                AppLogger.general.info("Detected M4A file")
+            default:
+                // Default to MP3 for unknown formats
+                fileTypeHint = AVFileType.mp3.rawValue
+                AppLogger.general.warning("Unknown audio format: \(fileExtension), defaulting to MP3")
+            }
+            
+            // Create audio player with detected file type
+            player = try AVAudioPlayer(contentsOf: newTrackUrl, fileTypeHint: fileTypeHint)
+            
             player.setVolume(track.config.volumeWithMute, fadeDuration: .infinity)
             player.pan = track.config.pan
             player.prepareToPlay()
             
+            AppLogger.general.info("Successfully loaded track: \(track.name)")
+            
         } catch let error {
             player = AVAudioPlayer()
-            AppLogger.general.error("\(error.localizedDescription)")
+            AppLogger.general.error("Failed to load track: \(error.localizedDescription)")
         }
         return player
     }

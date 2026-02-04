@@ -151,13 +151,62 @@ final class DashboardViewModel: ObservableObject {
             order: order
         )
         
-        let path = UserPathManager.shared.getTrackPath(relativePath: track.relativePath)
+        let destinationPath = UserPathManager.shared.getTrackPath(relativePath: track.relativePath)
+        let destinationUrl = URL(fileURLWithPath: destinationPath)
+        let fileManager = FileManager.default
         
-        let encryptedData = NSData(contentsOf: tmpUrl)
-        if(encryptedData != nil){
-            let fileManager = FileManager.default
-            fileManager.createFile(atPath: path as String, contents: encryptedData as Data?, attributes: nil)
+        // Ensure the destination directory exists
+        let destinationDir = destinationUrl.deletingLastPathComponent()
+        do {
+            try fileManager.createDirectory(at: destinationDir, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            AppLogger.general.error("Failed to create destination directory: \(error.localizedDescription)")
+            return track
         }
+        
+        // Copy the file from source to destination
+        // With asCopy: false, we need to handle security-scoped access
+        var success = false
+        
+        // First, try with security-scoped access
+        if tmpUrl.startAccessingSecurityScopedResource() {
+            defer {
+                tmpUrl.stopAccessingSecurityScopedResource()
+            }
+            
+            do {
+                // Remove existing file if it exists
+                if fileManager.fileExists(atPath: destinationPath) {
+                    try fileManager.removeItem(atPath: destinationPath)
+                }
+                
+                // Copy the file
+                try fileManager.copyItem(at: tmpUrl, to: destinationUrl)
+                success = true
+                AppLogger.general.info("Successfully copied track to: \(destinationPath)")
+                AppLogger.general.info("File exists after copy: \(fileManager.fileExists(atPath: destinationPath))")
+            } catch {
+                AppLogger.general.error("Failed to copy track with security-scoped access: \(error.localizedDescription)")
+            }
+        } else {
+            // Fallback: try without security-scoped access (for asCopy: true or already-copied files)
+            do {
+                if fileManager.fileExists(atPath: destinationPath) {
+                    try fileManager.removeItem(atPath: destinationPath)
+                }
+                
+                try fileManager.copyItem(at: tmpUrl, to: destinationUrl)
+                success = true
+                AppLogger.general.info("Successfully copied track (without security scope) to: \(destinationPath)")
+            } catch {
+                AppLogger.general.error("Failed to copy track without security-scoped access: \(error.localizedDescription)")
+            }
+        }
+        
+        if !success {
+            AppLogger.general.warning("Track copy may have failed for: \(track.name)")
+        }
+        
         return track
     }
     
