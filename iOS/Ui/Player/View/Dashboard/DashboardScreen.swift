@@ -38,6 +38,10 @@ struct DashboardScreen: View {
                     }
                 }
                 .onAppear(){
+                    // Lock to landscape only on iPhone, not iPad
+                    if UIDevice.current.userInterfaceIdiom == .phone {
+                        OrientationManager.shared.lockToLandscape()
+                    }
                     self.viewModel.onAppear()
                 }
                 .onChange(of: viewModel.loginViewModel.loginSuccessful) { oldValue, newValue in
