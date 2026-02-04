@@ -12,6 +12,7 @@ struct DashboardScreen: View {
     @State private var showNewMultitrackNameInputDialog: Bool = false
     @State private var showEditMultitrackNameInputDialog: Bool = false
     @State private var showAccountScreen: Bool = false
+    @State private var showAppInfo: Bool = false
     @StateObject private var viewModel: DashboardViewModel
     @State private var presentModalDelete: Bool = false
     @State private var newMultitrackNameTmp: String = String.empty
@@ -24,22 +25,35 @@ struct DashboardScreen: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                Header(showAccountScreenBinding: $showAccountScreen)
-                switch viewModel.isLoading {
-                    case true:
-                    LoadingScreen()
-                    case false:
-                    content
+            ZStack(alignment: .center) {
+                VStack {
+                    Header(showAccountScreenBinding: $showAccountScreen, showAppInfoBinding: $showAppInfo)
+                    switch viewModel.isLoading {
+                        case true:
+                        LoadingScreen()
+                        case false:
+                        content
+                    }
                 }
-            }
-            .onAppear(){
-                self.viewModel.onAppear()
-            }
-            .onChange(of: viewModel.loginViewModel.loginSuccessful) { oldValue, newValue in
-                // When loginSuccessful becomes false, dismiss this screen to go back to login
-                if !newValue && oldValue {
-                    dismiss()
+                .onAppear(){
+                    self.viewModel.onAppear()
+                }
+                .onChange(of: viewModel.loginViewModel.loginSuccessful) { oldValue, newValue in
+                    // When loginSuccessful becomes false, dismiss this screen to go back to login
+                    if !newValue && oldValue {
+                        dismiss()
+                    }
+                }
+                
+                // Overlay for app info dialog - centered on entire screen
+                if showAppInfo {
+                    ZStack {
+                        AppInfoView(showAppInfo: $showAppInfo)
+                            .transition(.scale.combined(with: .opacity))
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black.opacity(0.3))
+                    .ignoresSafeArea()
                 }
             }
         }

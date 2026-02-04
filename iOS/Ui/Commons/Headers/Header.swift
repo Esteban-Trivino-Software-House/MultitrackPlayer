@@ -8,8 +8,20 @@
 import SwiftUI
 
 struct Header: View {
-    @State var showInfoSheet: Bool = false
+    /// Binding to show/hide AccountScreen in the parent (DashboardScreen)
+    /// Purpose: Lift state up - when user taps profile button, it triggers
+    /// the parent to show AccountScreen as a sheet
+    /// Owner: DashboardScreen (parent view)
+    /// Reason for binding: AccountScreen is managed by parent, not Header
     var showAccountScreenBinding: Binding<Bool>?
+    
+    /// Binding to show/hide AppInfoView overlay in the parent (DashboardScreen)
+    /// Purpose: Lift state up - when user taps info button, it triggers
+    /// the parent to show AppInfoView overlay (centered on entire screen)
+    /// Owner: DashboardScreen (parent view)
+    /// Reason for binding: Overlay must be in parent ZStack to center
+    /// on entire screen, not just on Header bounds
+    var showAppInfoBinding: Binding<Bool>?
     
     var body: some View {
         HStack {
@@ -38,22 +50,28 @@ struct Header: View {
                 .scaledToFit()
                 .frame(height: 20)
                 .onTapGesture {
-                    showInfoSheet = true
+                    if let binding = showAppInfoBinding {
+                        binding.wrappedValue = true
+                    }
                 }
         }
         .padding(25)
         .frame(height: 40)
         .background(Color("PSNavy"))
         .foregroundColor(Color("PSWhite"))
-        .sheet(isPresented: $showInfoSheet) {
-            AppInfoView(showInfoSheet: $showInfoSheet)
-        }
     }
 }
 
 struct AppInfoView: View {
-    @Binding var showInfoSheet: Bool
+    @Binding var showAppInfo: Bool
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     var body: some View {
+        // Responsive sizes based on device type
+        let isCompact = horizontalSizeClass == .compact // iPhone
+        let maxWidth = isCompact ? 300.0 : 480.0
+        let maxHeight = isCompact ? 220.0 : 260.0
+        
         VStack(spacing: 16) {
             Text(String(localized: "app_title")).bold().font(.system(size: 18))
             Text(String(localized: "developer")).italic().font(.system(size: 14))
@@ -61,14 +79,17 @@ struct AppInfoView: View {
                 Text("v\(version) - \(buildNumber)").italic().font(.system(size: 14))
             }
             Button {
-                showInfoSheet = false
+                showAppInfo = false
             } label: {
                 Text(String(localized: "close"))
                     .foregroundStyle(Color("PSRed"))
             }
             .padding(.vertical)
-
         }
+        .padding()
+        .frame(maxWidth: maxWidth, maxHeight: maxHeight)
+        .background(.ultraThinMaterial)
+        .cornerRadius(16)
     }
 }
 
