@@ -1,6 +1,6 @@
 # Privacy Policy - The Multitrack Player
 
-**Last Updated:** January 19, 2026
+**Last Updated:** February 3, 2026
 
 ## 1. Introduction
 
@@ -21,30 +21,34 @@ Note: When using Sign in with Apple, you have the option to hide your email addr
 
 ### 2.2 Usage and Analytics Data
 Through Firebase Analytics, we collect:
-- Authentication events (login, logout)
+- Authentication events (login, logout, account deletion)
 - Application usage patterns
 - Error and crash information
 - Feature usage statistics
 - Device information (model, operating system, app version)
 
-### 2.3 Audio Files
-- Audio files you import into the application are stored locally on your device
+### 2.3 Multitrack Projects and Audio Files
+- Multitracks (projects), tracks, and audio files you import are stored locally on your device
+- **Each user has their own separate and secure multitrack data** - each user can only see and access their own multitracks and files
 - We do not upload, share, or have access to your audio files
+- Track configuration data (volume, pan, mute, order) is stored in the application's local database
 
 ### 2.4 Locally Stored Data
-- Track configurations (volume, pan, mute)
+- Track configurations (volume, pan, mute, order)
 - Multitrack and project names
+- User session information
 - User preferences
-- User session data
+- Unique user ID (linked to authentication provider)
 
 ## 3. How We Use Your Information
 
 We use the collected information to:
 
 - **Authentication:** Verify your identity and manage your session
-- **Functionality:** Provide application features (audio playback, track management)
+- **Functionality:** Provide application features (audio playback, multitrack and track management)
 - **Service Improvement:** Analyze application usage to improve user experience
 - **Troubleshooting:** Identify and resolve technical issues
+- **Legal Compliance:** Comply with data protection regulations (GDPR, CCPA, etc.)
 - **Communication:** Send important notifications about the application (if applicable)
 
 ## 4. Sharing Information with Third Parties
@@ -76,23 +80,28 @@ We may disclose your information if required by law or in response to valid requ
 
 ## 5. Data Storage and Security
 
-### 5.1 Local Storage
-- Application data is stored locally on your device using CoreData and UserDefaults
-- Audio files remain on your device and are not synced with external servers
+### 5.1 Local Storage and Data Separation
+- Application data is stored locally on your device using CoreData and secure file storage
+- **Audio files and projects are specifically associated with your user** - each user can only see and access their own multitracks and files
+- Each user's data is stored in a segregated and independent manner on the device
+- Audio files remain on your device and are not synchronized with external servers
 
 ### 5.2 Security
 We implement reasonable security measures to protect your information:
 - Use of secure protocols (HTTPS) for communications
 - Secure storage of session data
-- Authentication through trusted services (Google Sign-In)
+- Authentication through trusted services (Google Sign-In, Sign in with Apple)
+- Data separation by user to prevent unauthorized access
+- Local storage on the device without server synchronization
 
 However, no method of Internet transmission or electronic storage is 100% secure.
 
 ## 6. Data Retention
 
 - **Session data:** Retained while your session is active or until you log out
-- **Local data:** Retained on your device until you uninstall the application or manually delete the data
+- **Local data:** Retained on your device until you uninstall the application, manually delete the data, or delete your account
 - **Analytics data:** Managed by Firebase according to their retention policies
+- **Data after account deletion:** All multitracks, audio files, tracks, and personal data are deleted immediately when you delete your account
 
 ## 7. Your Rights
 
@@ -108,16 +117,49 @@ To exercise these rights, you can:
 - Log out from the application
 - Contact us at the address provided in Section 11
 
-### 7.1 Account Deletion
+### 7.1 Account Deletion and Privacy Rights
 
-You have the right to request deletion of your account and all associated personal data at any time. To delete your account:
+You have the absolute right to request deletion of your account and all associated personal data at any time. This action complies with international data protection regulations such as GDPR (General Data Protection Regulation) and the right to be forgotten.
 
+**What is deleted when you delete your account?**
+
+When you delete your account, the following is permanently deleted:
+- All authentication and profile information
+- All multitracks (projects) associated with your user
+- All tracks and imported audio files
+- All user configuration and preferences
+- All data stored in the application's local database
+- The user's session information
+- Analytics events associated with your user
+
+**What happens after deletion?**
+
+1. **Immediate deletion:** All data is deleted immediately from the application and device
+2. **Token revocation:** Authentication tokens with Google and Apple are revoked
+3. **Irreversible:** Deletion is permanent and cannot be undone
+
+**How to delete your account?**
+
+To delete your account:
 1. Open The Multitrack Player on your device
-2. Go to your account settings
+2. Go to Account → Settings
 3. Select "Delete Account"
-4. Confirm the deletion when prompted
+4. Read the warning with the deletion timeline
+5. Confirm deletion when prompted
+6. You will be asked to confirm the action again
 
-**Important:** Account deletion is permanent and cannot be undone. All personal information, including authentication data, will be permanently removed from our systems. Locally stored audio files and project data on your device may be removed by uninstalling the application.
+**Deletion Timeline:**
+
+- **Immediate:** Complete deletion of all local data on the device and application database
+
+**Important note:** Account deletion is permanent. We do not retain copies of your data after deletion.
+
+**How to exercise other rights?**
+
+To access, rectify, or obtain information about personal data we have:
+- You can delete or uninstall the application at any time
+- You can revoke the application's access in your Google or Apple account settings
+- You can contact us at: multitrack-player-app@outlook.com
 
 The deletion process is processed immediately. For account deletion requests, please allow up to 30 days for complete removal from backup systems, in compliance with data protection regulations.
 
