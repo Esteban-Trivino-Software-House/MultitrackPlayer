@@ -35,6 +35,12 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
         }
     }
     
+    /// Reset the Core Data context to clear cached data
+    /// Call this when user logs out to ensure clean data when new user logs in
+    func resetContext() {
+        self.container.viewContext.reset()
+    }
+    
     // MARK: Multitracks
     func saveMultitrack(_ multitrack: Multitrack) {
         let multitrackDao = multitrack.mapToMultitrackDao(context: self.context)
@@ -58,6 +64,10 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
     func loadMultitracks() -> [MultitrackDao] {
         var multitracks: [MultitrackDao] = []
         let fetchRequest: NSFetchRequest<MultitrackDao> = MultitrackDao.fetchRequest()
+        
+        // Filter by current user
+        let currentUserId = SessionManager.shared.user?.id ?? ""
+        fetchRequest.predicate = NSPredicate(format: "userId == %@", currentUserId)
         
         do {
             multitracks = try self.context.fetch(fetchRequest)
@@ -122,13 +132,23 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
     }
     
     func deleteMultitracks() {
-        self.loadMultitracks().forEach() { multitrackDao in
-            self.loadTracks(for: multitrackDao).forEach() { trackDao in
-                self.context.delete(trackDao)
+        // Load only current user's multitracks
+        let currentUserId = SessionManager.shared.user?.id ?? ""
+        let fetchRequest: NSFetchRequest<MultitrackDao> = MultitrackDao.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "userId == %@", currentUserId)
+        
+        do {
+            let userMultitracks = try self.context.fetch(fetchRequest)
+            userMultitracks.forEach() { multitrackDao in
+                self.loadTracks(for: multitrackDao).forEach() { trackDao in
+                    self.context.delete(trackDao)
+                }
+                self.context.delete(multitrackDao)
             }
-            self.context.delete(multitrackDao)
+            self.commit()
+        } catch {
+            AppLogger.coreData.error("Unable to Delete MultitrackDaos in deleteMultitracks, (\(error.localizedDescription))")
         }
-        self.commit()
     }
     
     func deleteMultitrack(_ multitrackId: UUID) {

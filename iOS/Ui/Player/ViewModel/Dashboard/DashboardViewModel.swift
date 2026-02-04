@@ -26,7 +26,16 @@ final class DashboardViewModel: ObservableObject {
     }
     
     func onAppear() {
-        // Loads local multiracks
+        // Reset CoreData context to clear cached data from previous user
+        dataManager.resetContext()
+        
+        // Create user-specific directories if needed
+        UserPathManager.shared.createUserDirectoriesIfNeeded()
+        
+        // Migrate old multitracks if this is first launch after update
+        UserPathManager.shared.migrateOldMultitracks()
+        
+        // Loads local multitracks
         reloadMultitracks()
         
         // TODO: Get the selectedMultitrackIndex value from userdefaults and assign the value to selectedMultitrackIndex
@@ -81,7 +90,7 @@ final class DashboardViewModel: ObservableObject {
         let fileManager = FileManager.default
         
         multitrack.tracks.forEach { track in
-            let path = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(track.relativePath)
+            let path = UserPathManager.shared.getTrackPath(relativePath: track.relativePath)
             do {
                 try fileManager.removeItem(at: URL(fileURLWithPath: path))
             } catch {
@@ -133,10 +142,6 @@ final class DashboardViewModel: ObservableObject {
     }
     
     private func saveTrack(from tmpUrl: URL, order: Int32) -> Track {
-        
-//        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-//        let urlToSave = documentsUrl.appendingPathComponent(url.lastPathComponent)
-        
         let trackId = UUID()
         let track = Track(
             id: trackId,
@@ -146,7 +151,7 @@ final class DashboardViewModel: ObservableObject {
             order: order
         )
         
-        let path = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(track.relativePath)
+        let path = UserPathManager.shared.getTrackPath(relativePath: track.relativePath)
         
         let encryptedData = NSData(contentsOf: tmpUrl)
         if(encryptedData != nil){

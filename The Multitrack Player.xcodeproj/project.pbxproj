@@ -28,6 +28,10 @@
 		21F0D57028CA084E00814C1C /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0D56F28CA084E00814C1C /* Header.swift */; };
 		21F0D57328CA105800814C1C /* TrackControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0D57228CA105800814C1C /* TrackControl.swift */; };
 		21F0D57728CA1C0500814C1C /* SequenceControlsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0D57628CA1C0500814C1C /* SequenceControlsScreen.swift */; };
+		4F368E0A2F325471009BF611 /* UserPathManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F368E092F325471009BF611 /* UserPathManager.swift */; };
+		4F368E0C2F32FE1A009BF611 /* UserCoreDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F368E0B2F32FE1A009BF611 /* UserCoreDataRepository.swift */; };
+		4F368E0E2F32FE29009BF611 /* UserFileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F368E0D2F32FE29009BF611 /* UserFileRepository.swift */; };
+		4F368E102F32FE42009BF611 /* UserDataDeletionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F368E0F2F32FE42009BF611 /* UserDataDeletionCoordinator.swift */; };
 		4F38933C2F1CEC9000314733 /* FirebaseAnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38933B2F1CEC9000314733 /* FirebaseAnalyticsManager.swift */; };
 		4F38933E2F1CF75100314733 /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38933D2F1CF75100314733 /* AppLogger.swift */; };
 		4F57C8ED2E6643240039C13A /* FirebaseAI in Frameworks */ = {isa = PBXBuildFile; productRef = 4F57C8EC2E6643240039C13A /* FirebaseAI */; };
@@ -100,6 +104,10 @@
 		21F0D57228CA105800814C1C /* TrackControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackControl.swift; sourceTree = "<group>"; };
 		21F0D57628CA1C0500814C1C /* SequenceControlsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceControlsScreen.swift; sourceTree = "<group>"; };
 		335F0713532F4F119492725B /* AppleAuthProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthProvider.swift; sourceTree = "<group>"; };
+		4F368E092F325471009BF611 /* UserPathManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPathManager.swift; sourceTree = "<group>"; };
+		4F368E0B2F32FE1A009BF611 /* UserCoreDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCoreDataRepository.swift; sourceTree = "<group>"; };
+		4F368E0D2F32FE29009BF611 /* UserFileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFileRepository.swift; sourceTree = "<group>"; };
+		4F368E0F2F32FE42009BF611 /* UserDataDeletionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataDeletionCoordinator.swift; sourceTree = "<group>"; };
 		4F38933B2F1CEC9000314733 /* FirebaseAnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalyticsManager.swift; sourceTree = "<group>"; };
 		4F38933D2F1CF75100314733 /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
 		4F57C8FA2E672CF20039C13A /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -226,6 +234,8 @@
 			children = (
 				219215DA29AD7BEF00EB7937 /* MultitrackRepository.swift */,
 				219215D329AA812900EB7937 /* Multitrack */,
+				4F368E0B2F32FE1A009BF611 /* UserCoreDataRepository.swift */,
+				4F368E0D2F32FE29009BF611 /* UserFileRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -474,6 +484,7 @@
 				4F38933D2F1CF75100314733 /* AppLogger.swift */,
 				4F38933B2F1CEC9000314733 /* FirebaseAnalyticsManager.swift */,
 				4F57C9232E67DA300039C13A /* SystemInfo.swift */,
+				4F368E092F325471009BF611 /* UserPathManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -501,6 +512,7 @@
 				0FF7362F061D401898334AC8 /* AuthenticationProvider.swift */,
 				1093F93908C84313AF8B0BA3 /* AuthenticationService.swift */,
 				4FAA2222222222222222BBBB /* Providers */,
+				4F368E0F2F32FE42009BF611 /* UserDataDeletionCoordinator.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -706,15 +718,18 @@
 				4F57C91F2E67D5050039C13A /* View+Extensions.swift in Sources */,
 				2124071128CBC99D00A85A14 /* PanSelector.swift in Sources */,
 				21469CAB28CA22D100FA72DC /* DashboardViewModel.swift in Sources */,
+				4F368E0A2F325471009BF611 /* UserPathManager.swift in Sources */,
 				21F0D57028CA084E00814C1C /* Header.swift in Sources */,
 				219215D129AA76DB00EB7937 /* Sequences.xcdatamodeld in Sources */,
 				2124070628CAF36C00A85A14 /* DocumentPicker.swift in Sources */,
 				4F57C8FD2E6731950039C13A /* LoginViewModel.swift in Sources */,
 				4FB7E1BB2E57F0E6009FE171 /* LoadingScreen.swift in Sources */,
+				4F368E102F32FE42009BF611 /* UserDataDeletionCoordinator.swift in Sources */,
 				4F57C90B2E6758510039C13A /* PSUser.swift in Sources */,
 				4F57C9132E677ADD0039C13A /* UserDefaultsKeys.swift in Sources */,
 				4F38933C2F1CEC9000314733 /* FirebaseAnalyticsManager.swift in Sources */,
 				219215DB29AD7BEF00EB7937 /* MultitrackRepository.swift in Sources */,
+				4F368E0C2F32FE1A009BF611 /* UserCoreDataRepository.swift in Sources */,
 				21F0D57728CA1C0500814C1C /* SequenceControlsScreen.swift in Sources */,
 				4F677D1A2F221C4D0030D101 /* AccountDeletionService.swift in Sources */,
 				4F677D202F2226C70030D101 /* AccountScreen.swift in Sources */,
@@ -725,6 +740,7 @@
 				4F38933E2F1CF75100314733 /* AppLogger.swift in Sources */,
 				4F78A43D2F1CBCEE002934AD /* String+Empty.swift in Sources */,
 				219215D029AA76BC00EB7937 /* Track.swift in Sources */,
+				4F368E0E2F32FE29009BF611 /* UserFileRepository.swift in Sources */,
 				4FB7E1B92E57E2CA009FE171 /* NameInputDialogView.swift in Sources */,
 				4F57C8FB2E672CF90039C13A /* LoginView.swift in Sources */,
 				4F57C9242E67DA370039C13A /* SystemInfo.swift in Sources */,
