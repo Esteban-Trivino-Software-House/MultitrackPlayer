@@ -28,7 +28,7 @@ struct Header: View {
             Image(systemName: "iphone.badge.play")
                 .resizable()
                 .scaledToFit()
-                .frame(height: 35, alignment: .center)
+                .frame(height: 28, alignment: .center)
             Text(String(localized: "app_title")).bold().font(.system(size: 18))
             if let version = SystemInfo.version {
                 Text("v\(version)").italic().font(.system(size: 14))

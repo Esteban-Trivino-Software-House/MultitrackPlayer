@@ -314,10 +314,10 @@ class TrackNamingService {
     /// Extract song name from directory path using pattern matching
     /// Examples:
     ///   - "ORIGINAL_Socorro_Un_Corazon_100bpm_4_4_D" → "Socorro Un Corazon"
-    ///   - "Nada nos Detendrá-G#m-110bpm" → "Nada nos Detendrá"
-    ///   - "Noche de paz - G - 418Records" → "Noche de paz"
-    ///   - "In Jesus Name - Darlene Zchech - MultiTrack" → "In Jesus Name Darlene Zchech"
-    ///   - "We Have Overcome - Israel Houghton - MT" → "We Have Overcome Israel Houghton"
+    ///   - "Nada nos Detendrá-G#m-110bpm" → "Nada Nos Detendrá"
+    ///   - "Multitracks Nada nos Detendrá-G#m-110bpm" → "Nada Nos Detendrá"
+    ///   - "Tu Proveeras (feat. Christine DClario)-Gb-72.00bpm" → "Tu Proveeras (feat. Christine Dclario)"
+    ///   - "Quien Dices Que Soy (Comp s 4-4) BPM 86 Tono Gb" → "Quien Dices Que Soy"
     static func extractSongName(from directoryName: String) -> String {
         guard !directoryName.isEmpty else { return "" }
         
@@ -333,40 +333,63 @@ class TrackNamingService {
         text = text.replacingOccurrences(of: "^BACKUP_", with: "", options: .regularExpression)
         text = text.replacingOccurrences(of: "^DEMO_", with: "", options: .regularExpression)
         
-        // 2. Remove MultiTrack/MT suffix FIRST (before other processing)
+        // 1.5. Remove MultiTrack/Multitracks prefix at the beginning (with or without space)
+        // Try plural first, then singular to avoid leaving "s" behind
+        text = text.replacingOccurrences(of: "^(multitracks|multitrack)\\s*", with: "", options: [.regularExpression, .caseInsensitive])
+        text = text.trimmingCharacters(in: .whitespaces)
+        
+        // 2. Remove MultiTrack/MT suffix at the end (before other processing)
         text = text.replacingOccurrences(of: "\\s*-?\\s*(multitrack|multitracks|MT)\\s*$", 
                                          with: "", options: [.regularExpression, .caseInsensitive])
         text = text.trimmingCharacters(in: .whitespaces)
         
-        // 3. Remove BPM patterns (keep everything before BPM indicator)
-        text = text.replacingOccurrences(of: "\\s*-\\s*\\d+bpm.*$", with: "", options: .regularExpression)
-        text = text.replacingOccurrences(of: "-[A-G](?:#|b)?m?-\\d+bpm.*$", with: "", options: .regularExpression)
+        // 3. Remove BPM patterns (including decimals like 72.00bpm)
+        // Patterns: "- 142bpm", "_100bpm", "-G#m-110bpm", " BPM 86", "-Gb-72.00bpm"
+        text = text.replacingOccurrences(of: "\\s*-\\s*\\d+(?:\\.\\d+)?bpm.*$", with: "", options: [.regularExpression, .caseInsensitive])
+        text = text.replacingOccurrences(of: "-[A-G](?:#|b)?m?-\\d+(?:\\.\\d+)?bpm.*$", with: "", options: .regularExpression)
+        text = text.replacingOccurrences(of: "_\\d+(?:\\.\\d+)?bpm.*$", with: "", options: [.regularExpression, .caseInsensitive])
+        // "BPM 86" or "BPM 72.00" format
+        text = text.replacingOccurrences(of: "\\s+BPM\\s+\\d+(?:\\.\\d+)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
+        // Also catch "-Gb-72.00bpm" or "-A-54" patterns
+        text = text.replacingOccurrences(of: "-[A-G](?:#|b)?-\\d+(?:\\.\\d+)?.*$", with: "", options: .regularExpression)
         
-        // 4. Remove lone tonality after dash: - G, - Bb, - C (but not in middle of words)
-        text = text.replacingOccurrences(of: "\\s*-\\s*[A-G](?:#|b)?m?\\s*$", with: "", options: .regularExpression)
+        // 4. Remove tonality patterns: - G, - Bb, - G#m, Tono Gb
+        // Must remove ALL tonality patterns, not just at end
+        text = text.replacingOccurrences(of: "\\s*-\\s*[A-G](?:#|b)?m?\\s*(?=-|$|\\s)", with: "", options: .regularExpression)
+        text = text.replacingOccurrences(of: "\\s*-\\s*Tono\\s+[A-G](?:#|b)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
+        text = text.replacingOccurrences(of: "\\s*Tono\\s+[A-G](?:#|b)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
         text = text.trimmingCharacters(in: .whitespaces)
         
-        // 5. Remove known record labels/metadata keywords only
-        // These are typically at the end after a dash
-        let labelsAndMetadata = ["418records", "418 records", "records", "worship", "music"]
+        // 5. Remove composite patterns like "(Comp s 4-4)" or "Comp s 4-4"
+        text = text.replacingOccurrences(of: "\\s*\\(Comp.*?\\).*$", with: "", options: [.regularExpression, .caseInsensitive])
+        text = text.replacingOccurrences(of: "\\s+Comp\\s+.*?\\d-\\d.*$", with: "", options: [.regularExpression, .caseInsensitive])
+        text = text.trimmingCharacters(in: .whitespaces)
+        
+        // 6. Remove known record labels/metadata keywords
+        let labelsAndMetadata = ["418records", "418 records", "records", "recursos"]
         for label in labelsAndMetadata {
-            text = text.replacingOccurrences(of: "\\s*-?\\s*" + NSRegularExpression.escapedPattern(for: label) + "\\s*$", 
+            text = text.replacingOccurrences(of: "\\s*-?\\s*" + NSRegularExpression.escapedPattern(for: label) + ".*$", 
                                             with: "", options: [.regularExpression, .caseInsensitive])
             text = text.trimmingCharacters(in: .whitespaces)
         }
         
-        // 6. Replace separators with spaces (underscores, hyphens with spaces)
+        // 7. Clean up special characters
+        text = text.replacingOccurrences(of: "^[¿!¡]+", with: "", options: .regularExpression)
+        text = text.replacingOccurrences(of: "[¿!¡]+$", with: "", options: .regularExpression)
+        text = text.trimmingCharacters(in: .whitespaces)
+        
+        // 8. Replace separators with spaces (underscores, hyphens)
         text = text.replacingOccurrences(of: "_", with: " ")
         text = text.replacingOccurrences(of: "-", with: " ")
         text = text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
         text = text.trimmingCharacters(in: .whitespaces)
         
-        // 7. Validate result
+        // 9. Validate result
         if text.isEmpty {
             return ""
         }
         
-        // 8. Format as title case
+        // 10. Format as title case
         return formatAsTitle(text)
     }
     
