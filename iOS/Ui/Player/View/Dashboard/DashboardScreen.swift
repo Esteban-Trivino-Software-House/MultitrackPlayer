@@ -15,6 +15,7 @@ struct DashboardScreen: View {
     @StateObject private var viewModel: DashboardViewModel
     @State private var presentModalDelete: Bool = false
     @State private var newMultitrackNameTmp: String = String.empty
+    @State private var selectedAudioFilesUrls: [URL] = []
     @Environment(\.dismiss) var dismiss
     
     init(viewModel: DashboardViewModel) {
@@ -59,10 +60,8 @@ struct DashboardScreen: View {
             }
             .sheet(isPresented: $showPicker) {
                 DocumentPicker() { urls in
-                    self.viewModel.createMultitrack(
-                        withName: newMultitrackNameTmp,
-                        using: urls
-                    )
+                    self.selectedAudioFilesUrls = urls
+                    self.showNewMultitrackNameInputDialog = true
                 }
             }
             .confirmationDialog(String(localized: "confirm_delete"), isPresented: self.$presentModalDelete) {
@@ -78,11 +77,16 @@ struct DashboardScreen: View {
                         .ignoresSafeArea()
                     
                     NameInputDialogView { newMultitrackName in
-                        newMultitrackNameTmp = newMultitrackName
+                        self.viewModel.createMultitrack(
+                            withName: newMultitrackName,
+                            using: self.selectedAudioFilesUrls
+                        )
+                        newMultitrackNameTmp = String.empty
+                        selectedAudioFilesUrls = []
                         showNewMultitrackNameInputDialog = false
-                        showPicker = true
                     } onCancel: {
                         newMultitrackNameTmp = String.empty
+                        selectedAudioFilesUrls = []
                         showNewMultitrackNameInputDialog = false
                     }
                     .transition(.scale.combined(with: .opacity))
@@ -112,7 +116,7 @@ struct DashboardScreen: View {
             Spacer()
             Text(String(localized: "add_multitrack"))
                 .font(.largeTitle)
-            Button(action: { self.showNewMultitrackNameInputDialog = true }) {
+            Button(action: { self.showPicker = true }) {
                 Image(systemName: "folder.badge.plus")
                     .resizable()
                     .scaledToFit()
@@ -183,7 +187,7 @@ struct DashboardScreen: View {
             }
             Spacer()
             // MARK: Add new multitrack button
-            Button(action: { self.showNewMultitrackNameInputDialog = true }) {
+            Button(action: { self.showPicker = true }) {
                 Image(systemName: "folder.badge.plus")
                     .resizable()
                     .scaledToFit()
