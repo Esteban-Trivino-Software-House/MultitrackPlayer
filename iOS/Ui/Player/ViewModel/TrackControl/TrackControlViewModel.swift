@@ -30,8 +30,11 @@ class TrackControlViewModel: ObservableObject, Identifiable {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
 
-            let newTrackPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(track.relativePath)
+            let newTrackPath = UserPathManager.shared.getTrackPath(relativePath: track.relativePath)
             let newTrackUrl = URL(fileURLWithPath: newTrackPath)
+            
+            AppLogger.general.info("Loading track from path: \(newTrackPath)")
+            AppLogger.general.info("File exists: \(FileManager.default.fileExists(atPath: newTrackPath))")
             
             /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
             player = try AVAudioPlayer(contentsOf: newTrackUrl, fileTypeHint: AVFileType.mp3.rawValue)

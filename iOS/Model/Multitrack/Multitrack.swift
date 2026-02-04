@@ -19,6 +19,7 @@ extension Multitrack {
         let multitrackDao = MultitrackDao(context: context)
         multitrackDao.id = self.id
         multitrackDao.name = self.name
+        multitrackDao.userId = SessionManager.shared.user?.id ?? ""
         return multitrackDao
     }
 }

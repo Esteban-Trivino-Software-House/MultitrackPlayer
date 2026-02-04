@@ -15,6 +15,11 @@ import GoogleSignIn
 final class AccountDeletionService {
     
     private let googleProvider = GoogleAuthProvider()
+    private let userDataDeletionCoordinator: UserDataDeletionCoordinator
+    
+    init(userDataDeletionCoordinator: UserDataDeletionCoordinator = DefaultUserDataDeletionCoordinator()) {
+        self.userDataDeletionCoordinator = userDataDeletionCoordinator
+    }
     
     /// Delete the current user account permanently
     /// This will:
@@ -37,7 +42,7 @@ final class AccountDeletionService {
         FirebaseAnalyticsManager.shared.logAuthEvent(
             "account_deletion_initiated",
             method: "-",
-            userEmail: sessionUser.email,
+            userEmail: sessionUser.email ?? "",
             userId: sessionUser.id,
             isAnonymous: nil
         )
@@ -56,7 +61,7 @@ final class AccountDeletionService {
                     FirebaseAnalyticsManager.shared.logAuthEvent(
                         "account_deletion_failed",
                         method: "-",
-                        userEmail: sessionUser.email,
+                        userEmail: sessionUser.email ?? "",
                         userId: sessionUser.id,
                         error: error
                     )
@@ -65,42 +70,51 @@ final class AccountDeletionService {
                 }
                 
                 // Step 3: Clear local session data
-                self?.clearLocalSessionData()
-                
-                // Log successful deletion
-                FirebaseAnalyticsManager.shared.logAuthEvent(
-                    "account_deletion_success",
-                    method: "-",
-                    userEmail: sessionUser.email,
-                    userId: sessionUser.id
-                )
-                
-                completion(.success(()))
+                self?.clearLocalSessionData(userID: sessionUser.id ?? "") { result in
+                    // Log successful deletion
+                    FirebaseAnalyticsManager.shared.logAuthEvent(
+                        "account_deletion_success",
+                        method: "-",
+                        userEmail: sessionUser.email ?? "",
+                        userId: sessionUser.id
+                    )
+                    
+                    completion(result)
+                }
             }
         } else {
             // No Firebase user, just clear local data
-            clearLocalSessionData()
-            
-            FirebaseAnalyticsManager.shared.logAuthEvent(
-                "account_deletion_success",
-                method: "-",
-                userEmail: sessionUser.email,
-                userId: sessionUser.id
-            )
-            
-            completion(.success(()))
+            clearLocalSessionData(userID: sessionUser.id ?? "") { result in
+                FirebaseAnalyticsManager.shared.logAuthEvent(
+                    "account_deletion_success",
+                    method: "-",
+                    userEmail: sessionUser.email ?? "",
+                    userId: sessionUser.id
+                )
+                
+                completion(result)
+            }
         }
     }
     
-    /// Clear all local session data
-    private func clearLocalSessionData() {
+    /// Clear all local session data and user files
+    /// - Parameter userID: The user ID whose data should be deleted
+    /// - Parameter completion: Callback with result of deletion
+    private func clearLocalSessionData(userID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         // Sign out from Firebase Auth
         try? Auth.auth().signOut()
         
-        // Clear UserDefaults
-        UserDefaultsManager.shared.remove(forKey: UserDefaultsKeys.Session.user)
-        
-        // Clear SessionManager
-        SessionManager.shared.clearSession()
+        // Coordinate deletion of all user data (CoreData, files, session)
+        userDataDeletionCoordinator.deleteAllUserData(userID: userID) { result in
+            // Log the result
+            switch result {
+            case .success:
+                AppLogger.general.info("User data deletion completed successfully for user: \(userID)")
+                completion(.success(()))
+            case .failure(let error):
+                AppLogger.general.error("User data deletion failed: \(error.localizedDescription)")
+                completion(.failure(error))
+            }
+        }
     }
 }
