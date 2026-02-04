@@ -288,37 +288,43 @@ struct ContentView_Previews: PreviewProvider {
 /// Extracts song names from directory paths using heuristic pattern matching
 class TrackNamingService {
     
-    static func suggestMultitrackName(from urls: [URL], originalDirectoryName: String? = nil) async -> String {
+    static func suggestMultitrackName(from urls: [URL], originalDirectoryName: String? = nil, keepTonality: Bool = false, keepBPM: Bool = false) async -> String {
         guard !urls.isEmpty else { return "" }
         
         let fileUrl = urls.first!
+        let pathComponents = fileUrl.pathComponents
         
-        // Try parent directory first
-        let parentDir = fileUrl.deletingLastPathComponent().lastPathComponent
-        var result = extractSongName(from: parentDir)
-        if !result.isEmpty { return result }
-        
-        // Try grandparent
-        let grandparentDir = fileUrl.deletingLastPathComponent().deletingLastPathComponent().lastPathComponent
-        result = extractSongName(from: grandparentDir)
-        if !result.isEmpty { return result }
-        
-        // Try great-grandparent
-        let greatGrandparentDir = fileUrl.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().lastPathComponent
-        result = extractSongName(from: greatGrandparentDir)
-        if !result.isEmpty { return result }
+        // Start from the file's parent directory and work upwards
+        // pathComponents includes "/" at index 0, so start from count-2 (parent directory)
+        for i in stride(from: pathComponents.count - 2, through: 0, by: -1) {
+            let directoryName = pathComponents[i]
+            
+            // Skip special paths
+            if directoryName.isEmpty || directoryName == "/" {
+                continue
+            }
+            
+            // Try to extract song name from this directory
+            let result = extractSongName(from: directoryName, keepTonality: keepTonality, keepBPM: keepBPM)
+            if !result.isEmpty {
+                return result
+            }
+        }
         
         return ""
     }
     
     /// Extract song name from directory path using pattern matching
+    /// - Parameters:
+    ///   - directoryName: The directory name to extract from
+    ///   - keepTonality: If true, keeps tonality info (G, Bb, G#m, etc). Default: false
+    ///   - keepBPM: If true, keeps BPM information in all formats. Default: false
     /// Examples:
     ///   - "ORIGINAL_Socorro_Un_Corazon_100bpm_4_4_D" → "Socorro Un Corazon"
     ///   - "Nada nos Detendrá-G#m-110bpm" → "Nada Nos Detendrá"
-    ///   - "Multitracks Nada nos Detendrá-G#m-110bpm" → "Nada Nos Detendrá"
-    ///   - "Tu Proveeras (feat. Christine DClario)-Gb-72.00bpm" → "Tu Proveeras (feat. Christine Dclario)"
-    ///   - "Quien Dices Que Soy (Comp s 4-4) BPM 86 Tono Gb" → "Quien Dices Que Soy"
-    static func extractSongName(from directoryName: String) -> String {
+    ///   - "Nada nos Detendrá-G#m-110bpm" (keepTonality: true) → "Nada Nos Detendrá G#m"
+    ///   - "Nada nos Detendrá-G#m-110bpm" (keepBPM: true) → "Nada Nos Detendrá 110bpm"
+    static func extractSongName(from directoryName: String, keepTonality: Bool = false, keepBPM: Bool = false) -> String {
         guard !directoryName.isEmpty else { return "" }
         
         // Check if it's a generic directory name
@@ -343,22 +349,26 @@ class TrackNamingService {
                                          with: "", options: [.regularExpression, .caseInsensitive])
         text = text.trimmingCharacters(in: .whitespaces)
         
-        // 3. Remove BPM patterns (including decimals like 72.00bpm)
-        // Patterns: "- 142bpm", "_100bpm", "-G#m-110bpm", " BPM 86", "-Gb-72.00bpm"
-        text = text.replacingOccurrences(of: "\\s*-\\s*\\d+(?:\\.\\d+)?bpm.*$", with: "", options: [.regularExpression, .caseInsensitive])
-        text = text.replacingOccurrences(of: "-[A-G](?:#|b)?m?-\\d+(?:\\.\\d+)?bpm.*$", with: "", options: .regularExpression)
-        text = text.replacingOccurrences(of: "_\\d+(?:\\.\\d+)?bpm.*$", with: "", options: [.regularExpression, .caseInsensitive])
-        // "BPM 86" or "BPM 72.00" format
-        text = text.replacingOccurrences(of: "\\s+BPM\\s+\\d+(?:\\.\\d+)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
-        // Also catch "-Gb-72.00bpm" or "-A-54" patterns
-        text = text.replacingOccurrences(of: "-[A-G](?:#|b)?-\\d+(?:\\.\\d+)?.*$", with: "", options: .regularExpression)
+        // 3. Remove BPM patterns (including decimals like 72.00bpm) - conditional
+        if !keepBPM {
+            // Patterns: "- 142bpm", "_100bpm", "-G#m-110bpm", " BPM 86", "-Gb-72.00bpm"
+            text = text.replacingOccurrences(of: "\\s*-\\s*\\d+(?:\\.\\d+)?bpm.*$", with: "", options: [.regularExpression, .caseInsensitive])
+            text = text.replacingOccurrences(of: "-[A-G](?:#|b)?m?-\\d+(?:\\.\\d+)?bpm.*$", with: "", options: .regularExpression)
+            text = text.replacingOccurrences(of: "_\\d+(?:\\.\\d+)?bpm.*$", with: "", options: [.regularExpression, .caseInsensitive])
+            // "BPM 86" or "BPM 72.00" format
+            text = text.replacingOccurrences(of: "\\s+BPM\\s+\\d+(?:\\.\\d+)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
+            // Also catch "-Gb-72.00bpm" or "-A-54" patterns
+            text = text.replacingOccurrences(of: "-[A-G](?:#|b)?-\\d+(?:\\.\\d+)?.*$", with: "", options: .regularExpression)
+        }
         
-        // 4. Remove tonality patterns: - G, - Bb, - G#m, Tono Gb
-        // Must remove ALL tonality patterns, not just at end
-        text = text.replacingOccurrences(of: "\\s*-\\s*[A-G](?:#|b)?m?\\s*(?=-|$|\\s)", with: "", options: .regularExpression)
-        text = text.replacingOccurrences(of: "\\s*-\\s*Tono\\s+[A-G](?:#|b)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
-        text = text.replacingOccurrences(of: "\\s*Tono\\s+[A-G](?:#|b)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
-        text = text.trimmingCharacters(in: .whitespaces)
+        // 4. Remove tonality patterns: - G, - Bb, - G#m, Tono Gb - conditional
+        if !keepTonality {
+            // Must remove ALL tonality patterns, not just at end
+            text = text.replacingOccurrences(of: "\\s*-\\s*[A-G](?:#|b)?m?\\s*(?=-|$|\\s)", with: "", options: .regularExpression)
+            text = text.replacingOccurrences(of: "\\s*-\\s*Tono\\s+[A-G](?:#|b)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
+            text = text.replacingOccurrences(of: "\\s*Tono\\s+[A-G](?:#|b)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
+            text = text.trimmingCharacters(in: .whitespaces)
+        }
         
         // 5. Remove composite patterns like "(Comp s 4-4)" or "Comp s 4-4"
         text = text.replacingOccurrences(of: "\\s*\\(Comp.*?\\).*$", with: "", options: [.regularExpression, .caseInsensitive])
