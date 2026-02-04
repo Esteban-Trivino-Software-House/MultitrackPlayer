@@ -24,6 +24,13 @@ struct Track: Identifiable {
             isMuted ? 0 : volume
         }
     }
+    
+    /// Computed property that returns the full URL to the track file
+    var url: URL? {
+        guard !relativePath.isEmpty else { return nil }
+        let fullPath = UserPathManager.shared.getTrackPath(relativePath: relativePath)
+        return URL(fileURLWithPath: fullPath)
+    }
 }
 
 extension Track {

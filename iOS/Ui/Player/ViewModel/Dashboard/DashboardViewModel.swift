@@ -122,6 +122,11 @@ final class DashboardViewModel: ObservableObject {
                 let track = self.saveTrack(from: tmpUrl, order: Int32(index))
                 multitrack.tracks.append(track)
             }
+            
+            // MARK: - Intelligent Track Reordering
+            // After all tracks are created, apply intelligent reordering based on classification
+            multitrack.tracks = TrackReorderingService.reorderTracks(multitrack.tracks)
+            
             self.multitracks[multitrack.id]  = multitrack
             self.multitrackRepository.saveMultitrack(multitrack)
             self.selectMultitrack(multitrack.id)
