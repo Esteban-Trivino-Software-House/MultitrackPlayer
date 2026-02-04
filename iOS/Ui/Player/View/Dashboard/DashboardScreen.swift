@@ -49,42 +49,60 @@ struct DashboardScreen: View {
     
     @ViewBuilder
     var content: some View {
-        VStack(spacing: 0) {
-            if viewModel.multitracks.isEmpty {
-                noMultitracksView
-            } else {
-                playerView
+        ZStack(alignment: .center) {
+            VStack(spacing: 0) {
+                if viewModel.multitracks.isEmpty {
+                    noMultitracksView
+                } else {
+                    playerView
+                }
             }
-        }
-        .sheet(isPresented: $showPicker) {
-            DocumentPicker() { urls in
-                self.viewModel.createMultitrack(
-                    withName: newMultitrackNameTmp,
-                    using: urls
-                )
+            .sheet(isPresented: $showPicker) {
+                DocumentPicker() { urls in
+                    self.viewModel.createMultitrack(
+                        withName: newMultitrackNameTmp,
+                        using: urls
+                    )
+                }
             }
-        }
-        .sheet(isPresented: $showNewMultitrackNameInputDialog, content: {
-            NameInputDialogView { newMultitrackName in
-                newMultitrackNameTmp = newMultitrackName
-                showNewMultitrackNameInputDialog = false
-                showPicker = true
-            } onCancel: {
-                newMultitrackNameTmp = String.empty
-                showNewMultitrackNameInputDialog = false
+            .confirmationDialog(String(localized: "confirm_delete"), isPresented: self.$presentModalDelete) {
+                Button("delete \(viewModel.getSelectedMultitrackName())", role: .destructive) {
+                    self.viewModel.deleteSelectedMultitrack()
+                }
             }
-        })
-        .sheet(isPresented: $showEditMultitrackNameInputDialog, content: {
-            NameInputDialogView(name: viewModel.getSelectedMultitrackName()) { newMultitrackName in
-                viewModel.editMultitrackName(newMultitrackName)
-                showEditMultitrackNameInputDialog = false
-            } onCancel: {
-                showEditMultitrackNameInputDialog = false
+            
+            // Overlay for new multitrack dialog
+            if showNewMultitrackNameInputDialog {
+                ZStack {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                    
+                    NameInputDialogView { newMultitrackName in
+                        newMultitrackNameTmp = newMultitrackName
+                        showNewMultitrackNameInputDialog = false
+                        showPicker = true
+                    } onCancel: {
+                        newMultitrackNameTmp = String.empty
+                        showNewMultitrackNameInputDialog = false
+                    }
+                    .transition(.scale.combined(with: .opacity))
+                }
             }
-        })
-        .confirmationDialog(String(localized: "confirm_delete"), isPresented: self.$presentModalDelete) {
-            Button("delete \(viewModel.getSelectedMultitrackName())", role: .destructive) {
-                self.viewModel.deleteSelectedMultitrack()
+            
+            // Overlay for edit multitrack dialog
+            if showEditMultitrackNameInputDialog {
+                ZStack {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                    
+                    NameInputDialogView(name: viewModel.getSelectedMultitrackName()) { newMultitrackName in
+                        viewModel.editMultitrackName(newMultitrackName)
+                        showEditMultitrackNameInputDialog = false
+                    } onCancel: {
+                        showEditMultitrackNameInputDialog = false
+                    }
+                    .transition(.scale.combined(with: .opacity))
+                }
             }
         }
     }
