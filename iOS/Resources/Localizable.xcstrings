@@ -290,13 +290,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your account will be deleted immediately. All personal data will be removed from our systems. Complete removal from backup systems may take up to 30 days. This action cannot be undone."
+            "value" : "Your account and all associated data will be deleted immediately. This includes all multitracks, audio files, and personal information. This action cannot be undone."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tu cuenta será eliminada inmediatamente. Todos tus datos personales serán removidos de nuestros sistemas. La eliminación completa de sistemas de backup puede tomar hasta 30 días. Esta acción no se puede deshacer."
+            "value" : "Tu cuenta y todos tus datos asociados serán eliminados inmediatamente. Esto incluye todos tus multitracks, archivos de audio e información personal. Esta acción no se puede deshacer."
           }
         }
       }
