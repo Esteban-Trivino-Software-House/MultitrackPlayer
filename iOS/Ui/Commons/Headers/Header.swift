@@ -23,6 +23,9 @@ struct Header: View {
     /// on entire screen, not just on Header bounds
     var showAppInfoBinding: Binding<Bool>?
     
+    /// Whether to show the info button
+    var showInfoButton: Bool = true
+    
     var body: some View {
         HStack {
             Image(systemName: "iphone.badge.play")
@@ -45,15 +48,17 @@ struct Header: View {
                 .accessibilityLabel(String(localized: "profile"))
                 .padding(.trailing, 8)
             }
-            Image(systemName: "info.circle")
-                .resizable()
-                .scaledToFit()
-                .frame(height: 20)
-                .onTapGesture {
-                    if let binding = showAppInfoBinding {
-                        binding.wrappedValue = true
+            if showInfoButton {
+                Image(systemName: "info.circle")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 20)
+                    .onTapGesture {
+                        if let binding = showAppInfoBinding {
+                            binding.wrappedValue = true
+                        }
                     }
-                }
+            }
         }
         .padding(25)
         .frame(height: 40)
