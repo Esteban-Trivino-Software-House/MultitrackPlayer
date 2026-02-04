@@ -11,10 +11,16 @@ import os
 
 struct NameInputDialogView: View {
     @State var name: String = String.empty
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     var onAccept: ((String) -> Void)
     var onCancel: (() -> Void)
     
     var body: some View {
+        // Responsive sizes based on device type
+        let isCompact = horizontalSizeClass == .compact // iPhone
+        let maxWidth = isCompact ? 360.0 : 520.0
+        let maxHeight = isCompact ? 240.0 : 280.0
+        
         VStack(spacing: 20) {
             Text(String(localized: "enter_name"))
                 .font(.headline)
@@ -32,7 +38,6 @@ struct NameInputDialogView: View {
                 Spacer()
                 
                 Button(String(localized: "accept")) {
-                    // Here you can validate or save the name
                     onAccept(name)
                 }
                 .foregroundColor(.blue)
@@ -40,6 +45,9 @@ struct NameInputDialogView: View {
             .padding(.horizontal)
         }
         .padding()
+        .frame(maxWidth: maxWidth, maxHeight: maxHeight)
+        .background(.ultraThinMaterial)
+        .cornerRadius(16)
     }
 }
 
