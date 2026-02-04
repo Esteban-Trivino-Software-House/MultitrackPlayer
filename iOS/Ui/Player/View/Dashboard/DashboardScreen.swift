@@ -285,333 +285,119 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 // MARK: - TrackNamingService
-/// Provides intelligent naming suggestions for multitrack projects based on:
-/// - File path analysis
-/// - ID3 metadata tags
-/// - User's project history
-/// - File names
+/// Extracts song names from directory paths using heuristic pattern matching
 class TrackNamingService {
     
-    // MARK: - Public Methods
-    
-    /// Suggests a multitrack name based on selected audio file URLs
-    /// - Parameter urls: Array of audio file URLs from file manager
-    /// - Parameter originalDirectoryName: The parent directory name from security-scoped resource access
-    /// - Returns: Suggested name as String
     static func suggestMultitrackName(from urls: [URL], originalDirectoryName: String? = nil) async -> String {
-        // Guard against empty array
-        guard !urls.isEmpty else {
-            return "Untitled"
-        }
+        guard !urls.isEmpty else { return "" }
         
-        // 1. If we have the original directory name from security-scoped access, use it
-        if let dirName = originalDirectoryName,
-           !isGenericDirectoryName(dirName) && 
-           !isBundleIdentifier(dirName) && 
-           !isSystemPath(dirName) {
-            if let extracted = cleanDirectoryName(dirName) {
-                return extracted
-            }
-        }
+        let fileUrl = urls.first!
         
-        // 2. Try to extract name from the directory structure of the URLs
-        if let nameFromPath = extractNameFromDirectoryPath(urls) {
-            return nameFromPath
-        }
+        // Try parent directory first
+        let parentDir = fileUrl.deletingLastPathComponent().lastPathComponent
+        var result = extractSongName(from: parentDir)
+        if !result.isEmpty { return result }
         
-        // 3. Try to extract name from ID3 tags
-        if let nameFromTags = await extractNameFromID3(urls.first!) {
-            return nameFromTags
-        }
+        // Try grandparent
+        let grandparentDir = fileUrl.deletingLastPathComponent().deletingLastPathComponent().lastPathComponent
+        result = extractSongName(from: grandparentDir)
+        if !result.isEmpty { return result }
         
-        // 4. Try to suggest from history
-        if let nameFromHistory = suggestFromHistory() {
-            return nameFromHistory
-        }
+        // Try great-grandparent
+        let greatGrandparentDir = fileUrl.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().lastPathComponent
+        result = extractSongName(from: greatGrandparentDir)
+        if !result.isEmpty { return result }
         
-        // 5. Fallback: use first filename
-        let fallbackName = urls.first?.deletingPathExtension().lastPathComponent ?? "Untitled"
-        return formatAsTitle(fallbackName)
+        return ""
     }
     
-    // MARK: - Private Methods: Directory Path Analysis
-    
-    /// Extracts project name from the directory structure of original URLs
-    /// URLs from file manager contain the original folder hierarchy before sandbox copy
+    /// Extract song name from directory path using pattern matching
     /// Examples:
-    ///   - /Users/user/Music/Rey de reyes/click.mp3 → "Rey de reyes"
-    ///   - /Users/user/Music/ORIGINAL_Socorro_100bpm/drums.mp3 → "Socorro"
-    ///   - /Volumes/ExternalDrive/Projects/MySong/bass.mp3 → "MySong"
-    private static func extractNameFromDirectoryPath(_ urls: [URL]) -> String? {
-        guard let firstUrl = urls.first else {
-            return nil
+    ///   - "ORIGINAL_Socorro_Un_Corazon_100bpm_4_4_D" → "Socorro Un Corazon"
+    ///   - "Nada nos Detendrá-G#m-110bpm" → "Nada nos Detendrá"
+    ///   - "Noche de paz - G - 418Records" → "Noche de paz"
+    ///   - "In Jesus Name - Darlene Zchech - MultiTrack" → "In Jesus Name Darlene Zchech"
+    ///   - "We Have Overcome - Israel Houghton - MT" → "We Have Overcome Israel Houghton"
+    static func extractSongName(from directoryName: String) -> String {
+        guard !directoryName.isEmpty else { return "" }
+        
+        // Check if it's a generic directory name
+        if isGenericDirectoryName(directoryName) {
+            return ""
         }
         
-        // The directory containing the audio files (parent of the audio file)
-        let parentDir = firstUrl.deletingLastPathComponent().lastPathComponent
+        var text = directoryName
         
-        // Validate and extract name from parent directory
-        if !isGenericDirectoryName(parentDir) && 
-           !isBundleIdentifier(parentDir) && 
-           !isSystemPath(parentDir) {
-            if let extracted = cleanDirectoryName(parentDir) {
-                return extracted
-            }
+        // 1. Remove common prefixes
+        text = text.replacingOccurrences(of: "^ORIGINAL_", with: "", options: .regularExpression)
+        text = text.replacingOccurrences(of: "^BACKUP_", with: "", options: .regularExpression)
+        text = text.replacingOccurrences(of: "^DEMO_", with: "", options: .regularExpression)
+        
+        // 2. Remove MultiTrack/MT suffix FIRST (before other processing)
+        text = text.replacingOccurrences(of: "\\s*-?\\s*(multitrack|multitracks|MT)\\s*$", 
+                                         with: "", options: [.regularExpression, .caseInsensitive])
+        text = text.trimmingCharacters(in: .whitespaces)
+        
+        // 3. Remove BPM patterns (keep everything before BPM indicator)
+        text = text.replacingOccurrences(of: "\\s*-\\s*\\d+bpm.*$", with: "", options: .regularExpression)
+        text = text.replacingOccurrences(of: "-[A-G](?:#|b)?m?-\\d+bpm.*$", with: "", options: .regularExpression)
+        
+        // 4. Remove lone tonality after dash: - G, - Bb, - C (but not in middle of words)
+        text = text.replacingOccurrences(of: "\\s*-\\s*[A-G](?:#|b)?m?\\s*$", with: "", options: .regularExpression)
+        text = text.trimmingCharacters(in: .whitespaces)
+        
+        // 5. Remove known record labels/metadata keywords only
+        // These are typically at the end after a dash
+        let labelsAndMetadata = ["418records", "418 records", "records", "worship", "music"]
+        for label in labelsAndMetadata {
+            text = text.replacingOccurrences(of: "\\s*-?\\s*" + NSRegularExpression.escapedPattern(for: label) + "\\s*$", 
+                                            with: "", options: [.regularExpression, .caseInsensitive])
+            text = text.trimmingCharacters(in: .whitespaces)
         }
         
-        // If parent didn't work, try grandparent directory (less specific)
-        let grandparentPath = firstUrl.deletingLastPathComponent().deletingLastPathComponent()
-        let grandparentDir = grandparentPath.lastPathComponent
+        // 6. Replace separators with spaces (underscores, hyphens with spaces)
+        text = text.replacingOccurrences(of: "_", with: " ")
+        text = text.replacingOccurrences(of: "-", with: " ")
+        text = text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+        text = text.trimmingCharacters(in: .whitespaces)
         
-        if parentDir != grandparentDir &&
-           !isGenericDirectoryName(grandparentDir) && 
-           !isBundleIdentifier(grandparentDir) && 
-           !isSystemPath(grandparentDir) {
-            if let extracted = cleanDirectoryName(grandparentDir) {
-                return extracted
-            }
+        // 7. Validate result
+        if text.isEmpty {
+            return ""
         }
         
-        return nil
+        // 8. Format as title case
+        return formatAsTitle(text)
     }
     
-    /// Cleans and validates a directory name to extract a meaningful project name
-    /// Removes common patterns and validates the result
-    /// Examples:
-    ///   - "Rey de reyes multitrack" → "Rey de reyes"
-    ///   - "ORIGINAL_Socorro_Un_Corazon_100bpm" → "Socorro Un Corazon"
-    ///   - "Song_Name_remix" → "Song Name"
-    private static func cleanDirectoryName(_ dirName: String) -> String? {
-        var cleaned = dirName
-        
-        // Remove common prefixes
-        let prefixes = ["ORIGINAL_", "BACKUP_", "TEMP_", "NEW_", "FINAL_", "v1_", "v2_", "v3_"]
-        for prefix in prefixes {
-            if cleaned.uppercased().hasPrefix(prefix.uppercased()) {
-                cleaned = String(cleaned.dropFirst(prefix.count))
-                break
-            }
-        }
-        
-        // Remove "multitrack" suffix
-        cleaned = cleaned.replacingOccurrences(
-            of: #"\s*multitrack\s*$"#,
-            with: "",
-            options: [.regularExpression, .caseInsensitive]
-        )
-        
-        // Remove BPM patterns like "_100bpm", " 120 BPM"
-        cleaned = cleaned.replacingOccurrences(
-            of: #"[\s_-]*\d{2,3}\s*bpm\s*$"#,
-            with: "",
-            options: [.regularExpression, .caseInsensitive]
-        )
-        
-        // Remove common suffixes
-        let suffixes = ["remix", "edit", "version", "take", "draft", "mix"]
-        for suffix in suffixes {
-            cleaned = cleaned.replacingOccurrences(
-                of: #"[\s_-]*" + suffix + #"\s*$"#,
-                with: "",
-                options: [.regularExpression, .caseInsensitive]
-            )
-        }
-        
-        // Convert underscores and hyphens to spaces
-        cleaned = cleaned
-            .replacingOccurrences(of: "_", with: " ")
-            .replacingOccurrences(of: "-", with: " ")
-            .replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
-            .trimmingCharacters(in: .whitespaces)
-        
-        // Validate result
-        if cleaned.isEmpty || 
-           cleaned.count < 2 || 
-           isNumericOnly(cleaned) || 
-           isGenericDirectoryName(cleaned) ||
-           isBundleIdentifier(cleaned) ||
-           isSystemPath(cleaned) {
-            return nil
-        }
-        
-        return formatAsTitle(cleaned)
-    }
-    
-    // MARK: - Private Methods: Audio Filename Analysis (Deprecated)
-    
-    // MARK: - Private Methods: Path Analysis
-    /// Extracts a clean name from filename using common patterns
-    /// Examples:
-    ///   "Song_Name_-_Key_Of_Song" → "Song Name Key Of Song"
-    ///   "Artist-Album-Track" → "Artist Album Track"
-    ///   "track_01_drums" → "Track 01 Drums"
-    private static func extractFromFilename(_ filename: String) -> String? {
-        let cleaned = filename
-            .replacingOccurrences(of: "_", with: " ")
-            .replacingOccurrences(of: "-", with: " ")
-            .replacingOccurrences(of: "  ", with: " ")
-            .trimmingCharacters(in: .whitespaces)
-        
-        // If the result looks meaningful (not too short, not all numbers)
-        if !cleaned.isEmpty && cleaned.count > 2 && !isNumericOnly(cleaned) {
-            return formatAsTitle(cleaned)
-        }
-        
-        return nil
-    }
-    
-    /// Checks if a directory name is generic (should be skipped)
     private static func isGenericDirectoryName(_ name: String) -> Bool {
-        let genericNames = ["Music", "Downloads", "Documents", "Desktop", "Projects", 
-                           "Audio", "Tracks", "Files", "Audios", "Media", "Multitrack", "Multitracks",
-                           "Inbox", "Sent", "Draft", "Trash", "iCloud", "Library",
-                           "Applications", "System", "Users", "var", "tmp", "private",
-                           "Shared", "Public", "Pictures", "Movies", "Videos"]
-        return genericNames.contains(name)
-    }
-    
-    /// Checks if a string looks like a Bundle Identifier or App-related path
-    /// Examples: "com.example.app", "Com.estebantrivino.multitrack", "com.apple.safari"
-    private static func isBundleIdentifier(_ name: String) -> Bool {
-        let lowerName = name.lowercased()
-        
-        // Pattern 1: Standard bundle ID format (com.something.something)
-        let bundleIdPattern = #"^[a-z]+(\.[a-z0-9]+)+$"#
-        do {
-            let regex = try NSRegularExpression(pattern: bundleIdPattern, options: [])
-            let range = NSRange(name.startIndex..., in: name)
-            if regex.firstMatch(in: lowerName, options: [], range: range) != nil {
-                return true
-            }
-        } catch {
-            // Ignore regex errors
-        }
-        
-        // Pattern 2: Apple-like identifiers with spaces (Com.example.app Bundle, Com.estebantrivino.multitrack Player)
-        if lowerName.contains(".") && (lowerName.hasPrefix("com.") || lowerName.hasPrefix("com ") || lowerName.contains("player")) {
-            return true
-        }
-        
-        // Pattern 3: Mixed case com.* format (Com.estebantrivino...)
-        if name.hasPrefix("Com.") || name.hasPrefix("com.") {
-            return true
-        }
-        
-        return false
-    }
-    
-    /// Checks if a path segment looks like a system path
-    /// Examples: "Containers", "Data", "Application", "PluginKitPlugin"
-    private static func isSystemPath(_ name: String) -> Bool {
-        let systemPathNames = [
-            "Containers", "Data", "Application", "PluginKitPlugin",
-            "Documents", "Library", "Caches", "Preferences",
-            "Bundle", "Frameworks", "PlugIns", "Resources",
-            "Plugins", "Extensions", "Watch", "iCloud"
+        let genericNames = [
+            // Storage/System paths
+            "MultiTracks", "Multitracks", "Tracks", "Audio", "Audios", "Music", "Media",
+            "Downloads", "Documents", "Desktop", "Files", "Inbox", "Draft", "Trash",
+            "Mobile", "Library", "Caches", "iCloud", "CloudDocs", "com~apple~CloudDocs",
+            "var", "private", "tmp", "Containers", "Data", "Application",
+            // Audio formats and technical folders
+            "MP3", "MP4", "WAV", "FLAC", "AAC", "M4A", "OGG", "WMA", "AIFF",
+            "Stems", "Instrumentals", "Vocals", "Drums", "Bass", "Guitar", "Keys", "Strings",
+            // Common folder names
+            "Samples", "Imported", "Exports", "Projects", "Sessions", "Recordings",
+            "Backups", "Archives", "Temp", "Cache", "Logs",
+            // iOS specific
+            "Documents", "Library", "Application", "PluginKitPlugin", "Frameworks",
+            "Resources", "Bundle"
         ]
-        return systemPathNames.contains(name)
+        let lowerName = name.lowercased()
+        return genericNames.contains { $0.lowercased() == lowerName }
     }
     
-    /// Checks if a string contains only numbers and spaces
-    private static func isNumericOnly(_ text: String) -> Bool {
-        let cleaned = text.trimmingCharacters(in: .whitespaces)
-        return !cleaned.isEmpty && cleaned.allSatisfy { $0.isNumber || $0.isWhitespace }
-    }
-    
-    // MARK: - Private Methods: ID3 Tag Analysis
-    
-    /// Extracts name from ID3 tags using AVAsset metadata
-    /// Prefers: Title - Artist format
-    private static func extractNameFromID3(_ url: URL) async -> String? {
-        do {
-            let asset = AVAsset(url: url)
-            
-            // Load metadata asynchronously
-            let metadata = try await asset.load(.metadata)
-            
-            var title: String?
-            var artist: String?
-            var albumName: String?
-            
-            // Extract common metadata fields
-            for item in metadata {
-                if let identifier = item.identifier?.rawValue {
-                    if identifier == AVMetadataIdentifier.commonIdentifierTitle.rawValue {
-                        title = (try? await item.load(.stringValue)) ?? nil
-                    } else if identifier == AVMetadataIdentifier.commonIdentifierArtist.rawValue {
-                        artist = (try? await item.load(.stringValue)) ?? nil
-                    } else if identifier == AVMetadataIdentifier.commonIdentifierAlbumName.rawValue {
-                        albumName = (try? await item.load(.stringValue)) ?? nil
-                    }
-                }
-            }
-            
-            // Format the result
-            if let title = title, !title.isEmpty {
-                if let artist = artist, !artist.isEmpty {
-                    return "\(artist) - \(title)"
-                }
-                return formatAsTitle(title)
-            }
-            
-            if let albumName = albumName, !albumName.isEmpty {
-                return formatAsTitle(albumName)
-            }
-            
-            return nil
-        } catch {
-            // If metadata extraction fails, return nil and fall back to other methods
-            return nil
-        }
-    }
-    
-    // MARK: - Private Methods: History Analysis
-    
-    /// Suggests a name based on user's project history
-    /// Examples:
-    ///   If user has "Jazz Session 1" and "Jazz Session 2" → suggests "Jazz Session 3"
-    private static func suggestFromHistory() -> String? {
-        // This method requires access to existing multitracks
-        // For now, we'll leave it for future implementation when we can access DashboardViewModel
-        // TODO: Implement in Phase 2 with access to existing multitracks
-        return nil
-    }
-    
-    // MARK: - Private Methods: Formatting
-    
-    /// Formats a string as a proper title
-    /// Examples:
-    ///   "song name" → "Song Name"
-    ///   "SONG NAME" → "Song Name"
-    ///   "song-name" → "Song Name"
     private static func formatAsTitle(_ text: String) -> String {
-        let cleaned = text
-            .replacingOccurrences(of: "_", with: " ")
-            .replacingOccurrences(of: "-", with: " ")
-            .replacingOccurrences(of: "  ", with: " ")
-            .trimmingCharacters(in: .whitespaces)
-        
-        // Split into words and capitalize each one
-        let words = cleaned.split(separator: " ").map { word -> String in
-            let lower = String(word).lowercased()
-            
-            // Skip common small words (articles, prepositions)
-            let skipWords = ["a", "an", "the", "and", "or", "but", "in", "on", "at", "to", "for"]
-            if skipWords.contains(lower) && !cleaned.hasPrefix(lower) {
-                return lower
+        return text
+            .split(separator: " ")
+            .map { word in
+                let lower = word.lowercased()
+                return lower.prefix(1).uppercased() + lower.dropFirst()
             }
-            
-            // Capitalize first letter
-            return String(word).prefix(1).uppercased() + String(word).dropFirst().lowercased()
-        }
-        
-        var result = words.joined(separator: " ")
-        
-        // Ensure first character is always uppercase
-        if !result.isEmpty {
-            result = String(result.prefix(1)).uppercased() + String(result.dropFirst())
-        }
-        
-        return result.isEmpty ? "Untitled" : result
+            .joined(separator: " ")
     }
 }
