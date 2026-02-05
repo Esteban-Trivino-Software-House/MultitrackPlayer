@@ -11,10 +11,24 @@ import os
 
 struct NameInputDialogView: View {
     @State var name: String = String.empty
+    @State var showEmptyNameAlert: Bool = false
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     var suggestedName: String?
     var onAccept: ((String) -> Void)
     var onCancel: (() -> Void)
+    
+    private let maxNameLength = 50
+    
+    // Check if name is valid (not empty and not just whitespace)
+    private var isNameValid: Bool {
+        let trimmed = name.trimmingCharacters(in: .whitespaces)
+        return !trimmed.isEmpty && trimmed.count <= maxNameLength
+    }
+    
+    // Check if name exceeds max length
+    private var exceedsMaxLength: Bool {
+        name.count > maxNameLength
+    }
     
     var body: some View {
         // Responsive sizes based on device type
@@ -34,12 +48,27 @@ struct NameInputDialogView: View {
                 TextField(String(localized: "name"), text: $name)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal)
+                    .onChange(of: name) { oldValue, newValue in
+                        // Limit to 50 characters
+                        if newValue.count > maxNameLength {
+                            name = String(newValue.prefix(maxNameLength))
+                        }
+                    }
                     .onAppear {
                         // Set initial value only once on appear
                         if name.isEmpty && !initialName.isEmpty {
                             name = initialName
                         }
                     }
+                
+                // Character counter
+                HStack(spacing: 4) {
+                    Spacer()
+                    Text("\(name.count)/\(maxNameLength)")
+                        .font(.caption2)
+                        .foregroundColor(exceedsMaxLength ? .red : .secondary)
+                }
+                .padding(.horizontal)
                 
                 // Show AI Suggested badge if we used a suggestion
                 if !initialName.isEmpty && name == initialName {
@@ -50,6 +79,18 @@ struct NameInputDialogView: View {
                             .font(.caption2)
                     }
                     .foregroundColor(.secondary)
+                    .padding(.horizontal)
+                }
+                
+                // Show error message if name is empty
+                if name.isEmpty {
+                    HStack(spacing: 4) {
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .font(.caption2)
+                        Text("Required field")
+                            .font(.caption2)
+                    }
+                    .foregroundColor(.red)
                     .padding(.horizontal)
                 }
             }
@@ -63,9 +104,16 @@ struct NameInputDialogView: View {
                 Spacer()
                 
                 Button(String(localized: "accept")) {
-                    onAccept(name)
+                    // Validate before accepting
+                    if isNameValid {
+                        onAccept(name.trimmingCharacters(in: .whitespaces))
+                    } else {
+                        showEmptyNameAlert = true
+                    }
                 }
                 .foregroundColor(.blue)
+                .disabled(!isNameValid)
+                .opacity(isNameValid ? 1.0 : 0.5)
             }
             .padding(.horizontal)
         }
@@ -73,6 +121,11 @@ struct NameInputDialogView: View {
         .frame(maxWidth: maxWidth, maxHeight: maxHeight)
         .background(.ultraThinMaterial)
         .cornerRadius(16)
+        .alert("Invalid Name", isPresented: $showEmptyNameAlert) {
+            Button("OK") { }
+        } message: {
+            Text("Please enter a name with at least 1 character.")
+        }
     }
 }
 

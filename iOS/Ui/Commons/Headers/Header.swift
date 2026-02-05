@@ -31,7 +31,7 @@ struct Header: View {
             Image(systemName: "iphone.badge.play")
                 .resizable()
                 .scaledToFit()
-                .frame(height: 28, alignment: .center)
+                .frame(height: 35, alignment: .center)
             Text(String(localized: "app_title")).bold().font(.system(size: 18))
             if let version = SystemInfo.version {
                 Text("v\(version)").italic().font(.system(size: 14))
@@ -42,7 +42,7 @@ struct Header: View {
                     Image(systemName: "person.circle")
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 20)
+                        .frame(height: 28)
                         .foregroundStyle(Color("PSBlue"))
                 }
                 .accessibilityLabel(String(localized: "profile"))
@@ -52,7 +52,7 @@ struct Header: View {
                 Image(systemName: "info.circle")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 20)
+                    .frame(height: 28)
                     .onTapGesture {
                         if let binding = showAppInfoBinding {
                             binding.wrappedValue = true
@@ -61,7 +61,7 @@ struct Header: View {
             }
         }
         .padding(25)
-        .frame(height: 40)
+        .frame(height: 49)
         .background(Color("PSNavy"))
         .foregroundColor(Color("PSWhite"))
     }

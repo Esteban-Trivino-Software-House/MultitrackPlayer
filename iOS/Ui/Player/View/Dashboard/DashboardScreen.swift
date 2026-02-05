@@ -187,22 +187,44 @@ struct DashboardScreen: View {
     
     var playerView: some View {
         VStack(alignment: .leading, spacing: 0) {
-            controlButtons
-                .frame(height: 40)
-            Divider().padding(.top, 8)
-            HStack(spacing: 16) {
-                // MARK: Multitrack Picker
-                if let selectedMultitrackIndex = viewModel.selectedMultitrackIndex {
-                    HStack {
-                        Text(String(localized: "current_multitrack"))
-                        MultitrackPicker(
-                            selectedMultitrackIndex: selectedMultitrackIndex,
-                            multitracks: Array(viewModel.multitracks.values)) { selectedMultitrackIndex in
-                                self.viewModel.selectMultitrack(selectedMultitrackIndex)
-                            }
-                    }
+            // MARK: All controls in one compact row
+            HStack(spacing: 8) {
+                // Play/Pause/Stop controls
+                Button(action: { self.viewModel.playTracks() }) {
+                    Image(systemName: "play.square")
+                        .resizable()
+                        .scaledToFit()
                 }
-                Spacer()
+                .frame(width: 32, height: 32)
+                
+                Button(action: { self.viewModel.pauseTracks() }) {
+                    Image(systemName: "pause.square")
+                        .resizable()
+                        .scaledToFit()
+                }
+                .frame(width: 32, height: 32)
+                
+                Button(action: { self.viewModel.stopTracks() }) {
+                    Image(systemName: "stop.circle")
+                        .resizable()
+                        .scaledToFit()
+                }
+                .frame(width: 32, height: 32)
+                
+                Divider()
+                    .frame(height: 24)
+                
+                // Multitrack Picker
+                if let selectedMultitrackIndex = viewModel.selectedMultitrackIndex {
+                    MultitrackPicker(
+                        selectedMultitrackIndex: selectedMultitrackIndex,
+                        multitracks: Array(viewModel.multitracks.values)) { selectedMultitrackIndex in
+                            self.viewModel.selectMultitrack(selectedMultitrackIndex)
+                        }
+                        .frame(minWidth: 100, maxWidth: .infinity)
+                }
+                
+                // Edit, Delete, and Add multitrack buttons
                 if let _ = self.viewModel.selectedMultitrackIndex {
                     Button(action: {
                         showEditMultitrackNameInputDialog = true
@@ -211,6 +233,8 @@ struct DashboardScreen: View {
                             .resizable()
                             .scaledToFit()
                     }
+                    .frame(width: 28, height: 28)
+                    
                     Button(action: {
                         self.presentModalDelete.toggle()
                     }) {
@@ -219,41 +243,30 @@ struct DashboardScreen: View {
                             .scaledToFit()
                             .foregroundStyle(Color("PSRed"))
                     }
+                    .frame(width: 28, height: 28)
                 }
+                
+                // Add multitrack button
+                Button(action: { self.showPicker = true }) {
+                    Image(systemName: "folder.badge.plus")
+                        .resizable()
+                        .scaledToFit()
+                }
+                .frame(width: 32, height: 32)
             }
-            .frame(minHeight:30, maxHeight: 40)
-            .padding(.vertical)
-            Divider().padding(.bottom, 8)
+            .frame(minHeight: 44)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 8)
+            
+            Divider()
+            
             Spacer()
             SequenceControlsScreen(viewModel: viewModel)
         }
         .padding(.horizontal, 30)
     }
     
-    @ViewBuilder
-    var controlButtons: some View {
-        HStack(spacing: 16) {
-            Button(action: { self.viewModel.playTracks() }) {
-                Image(systemName: "play.square")
-                    .resizable()
-                    .scaledToFit()
-            }
-            Button(action: { self.viewModel.stopTracks() }) {
-                Image(systemName: "stop.circle")
-                    .resizable()
-                    .scaledToFit()
-            }
-            Spacer()
-            // MARK: Add new multitrack button
-            Button(action: { self.showPicker = true }) {
-                Image(systemName: "folder.badge.plus")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 30, alignment: .center)
-            }
-            .padding(.leading)
-        }
-    }
+    // This property is no longer needed as controls are integrated in playerView
 }
 
 struct ContentView_Previews: PreviewProvider {
