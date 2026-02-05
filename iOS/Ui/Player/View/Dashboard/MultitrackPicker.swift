@@ -12,18 +12,38 @@ struct MultitrackPicker: View {
     var multitracks: [Multitrack]
     var onChange: (UUID) -> Void
     
+    // Find current selected multitrack name
+    private var selectedMultitrackName: String {
+        multitracks.first(where: { $0.id == selectedMultitrackIndex })?.name ?? "Select"
+    }
+    
     var body: some View {
-        VStack {
-            Picker(String.empty, selection: $selectedMultitrackIndex) {
-                ForEach(multitracks) { multitrack in
-                    Text(multitrack.name)
-                        .tag(multitrack.id)
+        Menu {
+            ForEach(multitracks) { multitrack in
+                Button(action: {
+                    selectedMultitrackIndex = multitrack.id
+                    onChange(multitrack.id)
+                }) {
+                    HStack {
+                        Text(multitrack.name)
+                        if multitrack.id == selectedMultitrackIndex {
+                            Image(systemName: "checkmark")
+                        }
+                    }
                 }
             }
-            .pickerStyle(.menu)
-            .onChange(of: selectedMultitrackIndex) { oldValue, newValue in
-                onChange(newValue)
+        } label: {
+            HStack {
+                Text(selectedMultitrackName)
+                    .lineLimit(1)
+                Image(systemName: "chevron.down")
+                    .font(.caption)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 8)
+            .background(Color(.systemGray6))
+            .cornerRadius(6)
         }
     }
 }
