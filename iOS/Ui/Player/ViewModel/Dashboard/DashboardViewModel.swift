@@ -14,6 +14,7 @@ final class DashboardViewModel: ObservableObject {
     @Published var trackControllers: [TrackControlViewModel] = []
     @Published var selectedMultitrackIndex: UUID?
     @Published var isLoading = true
+    @Published var multitrackPitch: Float = 0.0
     
     let multitrackRepository: MultitrackRepository
     var loginViewModel: LoginViewModel
@@ -52,10 +53,16 @@ final class DashboardViewModel: ObservableObject {
             stopTracks()
             trackControllers.removeAll()
             if let selectedMultitrackIndex = self.selectedMultitrackIndex,
-               let tracks = multitracks[selectedMultitrackIndex]?.tracks {
+               let multitrack = multitracks[selectedMultitrackIndex] {
                 // Tracks are already sorted by order from repository
-                for track in tracks {
+                for track in multitrack.tracks {
                     self.appendTrackController(using: track)
+                }
+                // Apply pitch to all loaded tracks AFTER they're created
+                self.multitrackPitch = multitrack.pitch
+                // Update all players with the loaded pitch value
+                for trackController in trackControllers {
+                    trackController.setGlobalPitch(multitrack.pitch)
                 }
             }
         }
@@ -110,6 +117,24 @@ final class DashboardViewModel: ObservableObject {
             return "Multitrack"
         }
         return name
+    }
+    
+    func updateMultitrackPitch(_ pitch: Float) {
+        let clampedPitch = max(-6, min(6, pitch))
+        self.multitrackPitch = clampedPitch
+        
+        // Update selected multitrack's pitch value
+        if let selectedMultitrackIndex = self.selectedMultitrackIndex {
+            self.multitracks[selectedMultitrackIndex]?.pitch = clampedPitch
+            
+            // Persist to Core Data
+            self.dataManager.updateMultitrackPitch(multitrackId: selectedMultitrackIndex, pitch: clampedPitch)
+        }
+        
+        // Apply pitch to all tracks' audio players
+        for trackController in trackControllers {
+            trackController.setGlobalPitch(clampedPitch)
+        }
     }
     
     func createMultitrack(withName name: String, using tracksTmpUrls: [URL]) {

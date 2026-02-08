@@ -61,6 +61,20 @@ class CoreDataMultitrackManager {// Get Core Data managed object context
         }
     }
     
+    func updateMultitrackPitch(multitrackId: UUID, pitch: Float) {
+        let fetchRequest: NSFetchRequest<MultitrackDao> = MultitrackDao.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", multitrackId as CVarArg)
+        
+        do {
+            if let multitrackDao = try self.context.fetch(fetchRequest).first {
+                multitrackDao.pitch = pitch
+                self.commit()
+            }
+        } catch {
+            AppLogger.coreData.error("Unable to Update MultitrackDao in updateMultitrackPitch, (\(error.localizedDescription))")
+        }
+    }
+    
     func loadMultitracks() -> [MultitrackDao] {
         var multitracks: [MultitrackDao] = []
         let fetchRequest: NSFetchRequest<MultitrackDao> = MultitrackDao.fetchRequest()

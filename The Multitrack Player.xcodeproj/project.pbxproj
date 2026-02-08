@@ -62,6 +62,8 @@
 		4FB7E1B72E57D620009FE171 /* MultitrackPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB7E1B62E57D620009FE171 /* MultitrackPicker.swift */; };
 		4FB7E1B92E57E2CA009FE171 /* NameInputDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB7E1B82E57E2CA009FE171 /* NameInputDialogView.swift */; };
 		4FB7E1BB2E57F0E6009FE171 /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB7E1BA2E57F0E0009FE171 /* LoadingScreen.swift */; };
+		4FCD031A2F366BB00006A0A7 /* AudioEnginePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD03182F366BB00006A0A7 /* AudioEnginePlayer.swift */; };
+		4FCD031C2F366BD80006A0A7 /* PitchSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD031B2F366BD80006A0A7 /* PitchSelector.swift */; };
 		BC4D6AF002434A29B9E55677 /* AuthenticationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF7362F061D401898334AC8 /* AuthenticationProvider.swift */; };
 		BFE9D956CCE04E2D8D8BF113 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1093F93908C84313AF8B0BA3 /* AuthenticationService.swift */; };
 		EF029E9EFF444B77B175E316 /* AppleAuthProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335F0713532F4F119492725B /* AppleAuthProvider.swift */; };
@@ -135,6 +137,8 @@
 		4FB7E1B62E57D620009FE171 /* MultitrackPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultitrackPicker.swift; sourceTree = "<group>"; };
 		4FB7E1B82E57E2CA009FE171 /* NameInputDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameInputDialogView.swift; sourceTree = "<group>"; };
 		4FB7E1BA2E57F0E0009FE171 /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
+		4FCD03182F366BB00006A0A7 /* AudioEnginePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEnginePlayer.swift; sourceTree = "<group>"; };
+		4FCD031B2F366BD80006A0A7 /* PitchSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchSelector.swift; sourceTree = "<group>"; };
 		E1A62DE8324043D086CAE53F /* GoogleAuthProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -189,6 +193,7 @@
 				2124071428CBE69100A85A14 /* Multitrack */,
 				2124070C28CB0BC600A85A14 /* Track */,
 				4F368E132F33D8C0009BF611 /* TrackReordering */,
+				4FCD03192F366BB00006A0A7 /* AudioEngine */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -206,6 +211,7 @@
 			children = (
 				2124071028CBC99D00A85A14 /* PanSelector.swift */,
 				21F0D57228CA105800814C1C /* TrackControl.swift */,
+				4FCD031B2F366BD80006A0A7 /* PitchSelector.swift */,
 			);
 			path = TrackControl;
 			sourceTree = "<group>";
@@ -540,6 +546,14 @@
 			path = Providers;
 			sourceTree = "<group>";
 		};
+		4FCD03192F366BB00006A0A7 /* AudioEngine */ = {
+			isa = PBXGroup;
+			children = (
+				4FCD03182F366BB00006A0A7 /* AudioEnginePlayer.swift */,
+			);
+			path = AudioEngine;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -744,6 +758,7 @@
 				4F57C90B2E6758510039C13A /* PSUser.swift in Sources */,
 				4F57C9132E677ADD0039C13A /* UserDefaultsKeys.swift in Sources */,
 				4F38933C2F1CEC9000314733 /* FirebaseAnalyticsManager.swift in Sources */,
+				4FCD031A2F366BB00006A0A7 /* AudioEnginePlayer.swift in Sources */,
 				219215DB29AD7BEF00EB7937 /* MultitrackRepository.swift in Sources */,
 				4F368E0C2F32FE1A009BF611 /* UserCoreDataRepository.swift in Sources */,
 				21F0D57728CA1C0500814C1C /* SequenceControlsScreen.swift in Sources */,
@@ -754,6 +769,7 @@
 				219215D929AD7AA800EB7937 /* CoreDataMultitrackManager.swift in Sources */,
 				21F0D55828CA060700814C1C /* Play_SecuenceApp.swift in Sources */,
 				4F38933E2F1CF75100314733 /* AppLogger.swift in Sources */,
+				4FCD031C2F366BD80006A0A7 /* PitchSelector.swift in Sources */,
 				4F78A43D2F1CBCEE002934AD /* String+Empty.swift in Sources */,
 				219215D029AA76BC00EB7937 /* Track.swift in Sources */,
 				4F368E0E2F32FE29009BF611 /* UserFileRepository.swift in Sources */,
