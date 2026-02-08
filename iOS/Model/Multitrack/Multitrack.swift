@@ -11,6 +11,7 @@ import CoreData
 struct Multitrack: Identifiable {
     private(set) var id: UUID
     var name: String
+    var pitch: Float = 0.0
     var tracks: [Track] = []
 }
 
@@ -19,6 +20,7 @@ extension Multitrack {
         let multitrackDao = MultitrackDao(context: context)
         multitrackDao.id = self.id
         multitrackDao.name = self.name
+        multitrackDao.pitch = self.pitch
         multitrackDao.userId = SessionManager.shared.user?.id ?? ""
         return multitrackDao
     }
@@ -26,6 +28,6 @@ extension Multitrack {
 
 extension MultitrackDao {
     func mapToMultitrack() -> Multitrack {
-        Multitrack(id: self.id ?? UUID(), name: self.name!)
+        Multitrack(id: self.id ?? UUID(), name: self.name!, pitch: self.pitch)
     }
 }

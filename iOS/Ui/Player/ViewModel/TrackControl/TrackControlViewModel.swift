@@ -13,7 +13,7 @@ class TrackControlViewModel: ObservableObject, Identifiable {
     private let onTrackUpdate: (Track) -> Void
     
     private(set) var id: UUID
-    private var player: AVAudioPlayer
+    private var player: AudioEnginePlayer
     private var track: Track
     
     init(track: Track, onTrackUpdate: @escaping (Track) -> Void = { _ in }) {
@@ -24,19 +24,10 @@ class TrackControlViewModel: ObservableObject, Identifiable {
     }
     
     //TODO: Mover de lugar
-    class func buildPlayer(track: Track) -> AVAudioPlayer {
-        var player: AVAudioPlayer
+    class func buildPlayer(track: Track) -> AudioEnginePlayer {
+        let player = AudioEnginePlayer()
+        
         do {
-            // Configure audio session for multitrack playback
-            // Use .multiRoute category to allow simultaneous playback of multiple tracks
-            // and .playAndRecord mode for better simulator compatibility
-            let audioSession = AVAudioSession.sharedInstance()
-            
-            try audioSession.setCategory(.playAndRecord, 
-                                        mode: .default, 
-                                        options: [.defaultToSpeaker, .duckOthers])
-            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-
             let newTrackPath = UserPathManager.shared.getTrackPath(relativePath: track.relativePath)
             let newTrackUrl = URL(fileURLWithPath: newTrackPath)
             
@@ -63,17 +54,16 @@ class TrackControlViewModel: ObservableObject, Identifiable {
                 AppLogger.general.warning("Unknown audio format: \(fileExtension), defaulting to MP3")
             }
             
-            // Create audio player with detected file type
-            player = try AVAudioPlayer(contentsOf: newTrackUrl, fileTypeHint: fileTypeHint)
+            // Load audio file into engine
+            try player.loadAudioFile(at: newTrackUrl, fileTypeHint: fileTypeHint)
             
-            player.setVolume(track.config.volumeWithMute, fadeDuration: .infinity)
+            player.volume = track.config.volumeWithMute
             player.pan = track.config.pan
             player.prepareToPlay()
             
             AppLogger.general.info("Successfully loaded track: \(track.name)")
             
         } catch let error {
-            player = AVAudioPlayer()
             AppLogger.general.error("Failed to load track: \(error.localizedDescription)")
         }
         return player
@@ -98,12 +88,12 @@ class TrackControlViewModel: ObservableObject, Identifiable {
     }
     
     private func muteTrack() {
-        self.player.setVolume(0, fadeDuration: .zero)
+        self.player.volume = 0
         self.track.config.isMuted = true
     }
     
     private func unmuteTrack() {
-        self.player.setVolume(self.track.config.volume, fadeDuration: .zero)
+        self.player.volume = self.track.config.volume
         self.track.config.isMuted = false
     }
     
@@ -170,6 +160,11 @@ class TrackControlViewModel: ObservableObject, Identifiable {
     
     var deviceCurrentTime: TimeInterval {
         self.player.deviceCurrentTime
+    }
+    
+    // MARK: Global Pitch Control
+    func setGlobalPitch(_ pitch: Float) {
+        self.player.pitch = pitch
     }
     
 // MARK: Pan Options

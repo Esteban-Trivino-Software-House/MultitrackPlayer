@@ -31,9 +31,9 @@ struct DashboardScreen: View {
                 VStack {
                     Header(showAccountScreenBinding: $showAccountScreen, showAppInfoBinding: $showAppInfo)
                     switch viewModel.isLoading {
-                        case true:
+                    case true:
                         LoadingScreen()
-                        case false:
+                    case false:
                         content
                     }
                 }
@@ -99,7 +99,7 @@ struct DashboardScreen: View {
                             print("Original directory name: \(originalDirectoryName ?? "unknown")")
                             
                             // Optionally: Save bookmark data for later access
-                            if let bookmarkData = try? parentUrl.bookmarkData(options: .suitableForBookmarkFile, 
+                            if let bookmarkData = try? parentUrl.bookmarkData(options: .suitableForBookmarkFile,
                                                                               relativeTo: nil) {
                                 print("Successfully obtained bookmark for original directory")
                                 // Could store this in UserDefaults or elsewhere for persistent access
@@ -253,6 +253,76 @@ struct DashboardScreen: View {
                         .scaledToFit()
                 }
                 .frame(width: 32, height: 32)
+                
+                Divider()
+                    .frame(height: 24)
+                
+                // Pitch Control Menu
+                Menu {
+                    // Positive semitones (descending: +6 to +1)
+                    ForEach((1...6).reversed(), id: \.self) { semitone in
+                        let label = formatSemitone(semitone)
+                        let isSelected = Int(viewModel.multitrackPitch) == semitone
+                        
+                        Button(action: {
+                            viewModel.updateMultitrackPitch(Float(semitone))
+                        }) {
+                            HStack {
+                                Text(label)
+                                if isSelected {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                        }
+                    }
+                    
+                    Divider()
+                    
+                    // Zero
+                    Button(action: {
+                        viewModel.updateMultitrackPitch(0)
+                    }) {
+                        HStack {
+                            Text("0st")
+                            if Int(viewModel.multitrackPitch) == 0 {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                    }
+                    
+                    Divider()
+                    
+                    // Negative semitones (ascending: -1 to -6)
+                    ForEach(1...6, id: \.self) { semitone in
+                        let label = formatSemitone(-semitone)
+                        let isSelected = Int(viewModel.multitrackPitch) == -semitone
+                        
+                        Button(action: {
+                            viewModel.updateMultitrackPitch(Float(-semitone))
+                        }) {
+                            HStack {
+                                Text(label)
+                                if isSelected {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                        }
+                    }
+                } label: {
+                    VStack(spacing: 2) {
+                        Image(systemName: "tuningfork")
+                            .font(.system(size: 14, weight: .semibold))
+                        Text(pitchLabel(viewModel.multitrackPitch))
+                            .font(.system(size: 9, weight: .semibold))
+                    }
+                    .frame(width: 44, height: 44)
+                    .foregroundColor(.blue)
+                    .background(Color.blue.opacity(0.15))
+                    .cornerRadius(6)
+                }
             }
             .frame(minHeight: 44)
             .padding(.vertical, 8)
@@ -266,188 +336,207 @@ struct DashboardScreen: View {
         .padding(.horizontal, 30)
     }
     
-    // This property is no longer needed as controls are integrated in playerView
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        let viewModel = DashboardViewModel(multitrackRepository: MultitrackLocalRepository(dataManager: .init()),
-                                           loginViewModel: .init(authService: AuthenticationService()))
-        let id1 = UUID()
-        viewModel.multitracks[id1] = (
-            .init(
-                id: id1,
-                name: "Rey de reyes",
-                tracks: [.init(
+    private func pitchLabel(_ pitch: Float) -> String {
+        let semitones = Int(pitch)
+        if semitones == 0 {
+            return "0"
+        } else if semitones > 0 {
+            return "+\(semitones)"
+        } else {
+            return "\(semitones)"
+        }
+    }
+    
+    private func formatSemitone(_ semitone: Int) -> String {
+        if semitone == 0 {
+            return "0st"
+        } else if semitone > 0 {
+            return "+\(semitone)st"
+        } else {
+            return "\(semitone)st"
+        }
+    }
+    
+    struct ContentView_Previews: PreviewProvider {
+        static var previews: some View {
+            let viewModel = DashboardViewModel(multitrackRepository: MultitrackLocalRepository(dataManager: .init()),
+                                               loginViewModel: .init(authService: AuthenticationService()))
+            let id1 = UUID()
+            viewModel.multitracks[id1] = (
+                .init(
                     id: id1,
+                    name: "Rey de reyes",
+                    tracks: [.init(
+                        id: id1,
+                        name: "Click",
+                        relativePath: String.empty,
+                        config: .init(pan: 0, volume: 0.5, isMuted: false),
+                        order: 0
+                    )]
+                )
+            )
+            viewModel.appendTrackController(
+                using: Track(
+                    id: UUID(),
                     name: "Click",
                     relativePath: String.empty,
-                    config: .init(pan: 0, volume: 0.5, isMuted: false),
+                    config: .init(pan: -1, volume: 0.5, isMuted: false),
                     order: 0
-                )]
+                )
             )
-        )
-        viewModel.appendTrackController(
-            using: Track(
-                id: UUID(),
-                name: "Click",
-                relativePath: String.empty,
-                config: .init(pan: -1, volume: 0.5, isMuted: false),
-                order: 0
-            )
-        )
-        return DashboardScreen(viewModel: viewModel)
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
-}
-
-// MARK: - TrackNamingService
-/// Extracts song names from directory paths using heuristic pattern matching
-class TrackNamingService {
-    
-    static func suggestMultitrackName(from urls: [URL], originalDirectoryName: String? = nil, keepTonality: Bool = false, keepBPM: Bool = false) async -> String {
-        guard !urls.isEmpty else { return "" }
-        
-        let fileUrl = urls.first!
-        let pathComponents = fileUrl.pathComponents
-        
-        // Start from the file's parent directory and work upwards
-        // pathComponents includes "/" at index 0, so start from count-2 (parent directory)
-        for i in stride(from: pathComponents.count - 2, through: 0, by: -1) {
-            let directoryName = pathComponents[i]
-            
-            // Skip special paths
-            if directoryName.isEmpty || directoryName == "/" {
-                continue
-            }
-            
-            // Try to extract song name from this directory
-            let result = extractSongName(from: directoryName, keepTonality: keepTonality, keepBPM: keepBPM)
-            if !result.isEmpty {
-                return result
-            }
+            return DashboardScreen(viewModel: viewModel)
+                .previewInterfaceOrientation(.landscapeLeft)
         }
-        
-        return ""
     }
     
-    /// Extract song name from directory path using pattern matching
-    /// - Parameters:
-    ///   - directoryName: The directory name to extract from
-    ///   - keepTonality: If true, keeps tonality info (G, Bb, G#m, etc). Default: false
-    ///   - keepBPM: If true, keeps BPM information in all formats. Default: false
-    /// Examples:
-    ///   - "ORIGINAL_Socorro_Un_Corazon_100bpm_4_4_D" → "Socorro Un Corazon"
-    ///   - "Nada nos Detendrá-G#m-110bpm" → "Nada Nos Detendrá"
-    ///   - "Nada nos Detendrá-G#m-110bpm" (keepTonality: true) → "Nada Nos Detendrá G#m"
-    ///   - "Nada nos Detendrá-G#m-110bpm" (keepBPM: true) → "Nada Nos Detendrá 110bpm"
-    static func extractSongName(from directoryName: String, keepTonality: Bool = false, keepBPM: Bool = false) -> String {
-        guard !directoryName.isEmpty else { return "" }
+    // MARK: - TrackNamingService
+    /// Extracts song names from directory paths using heuristic pattern matching
+    class TrackNamingService {
         
-        // Check if it's a generic directory name
-        if isGenericDirectoryName(directoryName) {
+        static func suggestMultitrackName(from urls: [URL], originalDirectoryName: String? = nil, keepTonality: Bool = false, keepBPM: Bool = false) async -> String {
+            guard !urls.isEmpty else { return "" }
+            
+            let fileUrl = urls.first!
+            let pathComponents = fileUrl.pathComponents
+            
+            // Start from the file's parent directory and work upwards
+            // pathComponents includes "/" at index 0, so start from count-2 (parent directory)
+            for i in stride(from: pathComponents.count - 2, through: 0, by: -1) {
+                let directoryName = pathComponents[i]
+                
+                // Skip special paths
+                if directoryName.isEmpty || directoryName == "/" {
+                    continue
+                }
+                
+                // Try to extract song name from this directory
+                let result = extractSongName(from: directoryName, keepTonality: keepTonality, keepBPM: keepBPM)
+                if !result.isEmpty {
+                    return result
+                }
+            }
+            
             return ""
         }
         
-        var text = directoryName
-        
-        // 1. Remove common prefixes
-        text = text.replacingOccurrences(of: "^ORIGINAL_", with: "", options: .regularExpression)
-        text = text.replacingOccurrences(of: "^BACKUP_", with: "", options: .regularExpression)
-        text = text.replacingOccurrences(of: "^DEMO_", with: "", options: .regularExpression)
-        
-        // 1.5. Remove MultiTrack/Multitracks prefix at the beginning (with or without space)
-        // Try plural first, then singular to avoid leaving "s" behind
-        text = text.replacingOccurrences(of: "^(multitracks|multitrack)\\s*", with: "", options: [.regularExpression, .caseInsensitive])
-        text = text.trimmingCharacters(in: .whitespaces)
-        
-        // 2. Remove MultiTrack/MT suffix at the end (before other processing)
-        text = text.replacingOccurrences(of: "\\s*-?\\s*(multitrack|multitracks|MT)\\s*$", 
-                                         with: "", options: [.regularExpression, .caseInsensitive])
-        text = text.trimmingCharacters(in: .whitespaces)
-        
-        // 3. Remove BPM patterns (including decimals like 72.00bpm) - conditional
-        if !keepBPM {
-            // Patterns: "- 142bpm", "_100bpm", "-G#m-110bpm", " BPM 86", "-Gb-72.00bpm"
-            text = text.replacingOccurrences(of: "\\s*-\\s*\\d+(?:\\.\\d+)?bpm.*$", with: "", options: [.regularExpression, .caseInsensitive])
-            text = text.replacingOccurrences(of: "-[A-G](?:#|b)?m?-\\d+(?:\\.\\d+)?bpm.*$", with: "", options: .regularExpression)
-            text = text.replacingOccurrences(of: "_\\d+(?:\\.\\d+)?bpm.*$", with: "", options: [.regularExpression, .caseInsensitive])
-            // "BPM 86" or "BPM 72.00" format
-            text = text.replacingOccurrences(of: "\\s+BPM\\s+\\d+(?:\\.\\d+)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
-            // Also catch "-Gb-72.00bpm" or "-A-54" patterns
-            text = text.replacingOccurrences(of: "-[A-G](?:#|b)?-\\d+(?:\\.\\d+)?.*$", with: "", options: .regularExpression)
-        }
-        
-        // 4. Remove tonality patterns: - G, - Bb, - G#m, Tono Gb - conditional
-        if !keepTonality {
-            // Must remove ALL tonality patterns, not just at end
-            text = text.replacingOccurrences(of: "\\s*-\\s*[A-G](?:#|b)?m?\\s*(?=-|$|\\s)", with: "", options: .regularExpression)
-            text = text.replacingOccurrences(of: "\\s*-\\s*Tono\\s+[A-G](?:#|b)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
-            text = text.replacingOccurrences(of: "\\s*Tono\\s+[A-G](?:#|b)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
-            text = text.trimmingCharacters(in: .whitespaces)
-        }
-        
-        // 5. Remove composite patterns like "(Comp s 4-4)" or "Comp s 4-4"
-        text = text.replacingOccurrences(of: "\\s*\\(Comp.*?\\).*$", with: "", options: [.regularExpression, .caseInsensitive])
-        text = text.replacingOccurrences(of: "\\s+Comp\\s+.*?\\d-\\d.*$", with: "", options: [.regularExpression, .caseInsensitive])
-        text = text.trimmingCharacters(in: .whitespaces)
-        
-        // 6. Remove known record labels/metadata keywords
-        let labelsAndMetadata = ["418records", "418 records", "records", "recursos"]
-        for label in labelsAndMetadata {
-            text = text.replacingOccurrences(of: "\\s*-?\\s*" + NSRegularExpression.escapedPattern(for: label) + ".*$", 
-                                            with: "", options: [.regularExpression, .caseInsensitive])
-            text = text.trimmingCharacters(in: .whitespaces)
-        }
-        
-        // 7. Clean up special characters
-        text = text.replacingOccurrences(of: "^[¿!¡]+", with: "", options: .regularExpression)
-        text = text.replacingOccurrences(of: "[¿!¡]+$", with: "", options: .regularExpression)
-        text = text.trimmingCharacters(in: .whitespaces)
-        
-        // 8. Replace separators with spaces (underscores, hyphens)
-        text = text.replacingOccurrences(of: "_", with: " ")
-        text = text.replacingOccurrences(of: "-", with: " ")
-        text = text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
-        text = text.trimmingCharacters(in: .whitespaces)
-        
-        // 9. Validate result
-        if text.isEmpty {
-            return ""
-        }
-        
-        // 10. Format as title case
-        return formatAsTitle(text)
-    }
-    
-    private static func isGenericDirectoryName(_ name: String) -> Bool {
-        let genericNames = [
-            // Storage/System paths
-            "MultiTracks", "Multitracks", "Tracks", "Audio", "Audios", "Music", "Media",
-            "Downloads", "Documents", "Desktop", "Files", "Inbox", "Draft", "Trash",
-            "Mobile", "Library", "Caches", "iCloud", "CloudDocs", "com~apple~CloudDocs",
-            "var", "private", "tmp", "Containers", "Data", "Application",
-            // Audio formats and technical folders
-            "MP3", "MP4", "WAV", "FLAC", "AAC", "M4A", "OGG", "WMA", "AIFF",
-            "Stems", "Instrumentals", "Vocals", "Drums", "Bass", "Guitar", "Keys", "Strings",
-            // Common folder names
-            "Samples", "Imported", "Exports", "Projects", "Sessions", "Recordings",
-            "Backups", "Archives", "Temp", "Cache", "Logs",
-            // iOS specific
-            "Documents", "Library", "Application", "PluginKitPlugin", "Frameworks",
-            "Resources", "Bundle"
-        ]
-        let lowerName = name.lowercased()
-        return genericNames.contains { $0.lowercased() == lowerName }
-    }
-    
-    private static func formatAsTitle(_ text: String) -> String {
-        return text
-            .split(separator: " ")
-            .map { word in
-                let lower = word.lowercased()
-                return lower.prefix(1).uppercased() + lower.dropFirst()
+        /// Extract song name from directory path using pattern matching
+        /// - Parameters:
+        ///   - directoryName: The directory name to extract from
+        ///   - keepTonality: If true, keeps tonality info (G, Bb, G#m, etc). Default: false
+        ///   - keepBPM: If true, keeps BPM information in all formats. Default: false
+        /// Examples:
+        ///   - "ORIGINAL_Socorro_Un_Corazon_100bpm_4_4_D" → "Socorro Un Corazon"
+        ///   - "Nada nos Detendrá-G#m-110bpm" → "Nada Nos Detendrá"
+        ///   - "Nada nos Detendrá-G#m-110bpm" (keepTonality: true) → "Nada Nos Detendrá G#m"
+        ///   - "Nada nos Detendrá-G#m-110bpm" (keepBPM: true) → "Nada Nos Detendrá 110bpm"
+        static func extractSongName(from directoryName: String, keepTonality: Bool = false, keepBPM: Bool = false) -> String {
+            guard !directoryName.isEmpty else { return "" }
+            
+            // Check if it's a generic directory name
+            if isGenericDirectoryName(directoryName) {
+                return ""
             }
-            .joined(separator: " ")
+            
+            var text = directoryName
+            
+            // 1. Remove common prefixes
+            text = text.replacingOccurrences(of: "^ORIGINAL_", with: "", options: .regularExpression)
+            text = text.replacingOccurrences(of: "^BACKUP_", with: "", options: .regularExpression)
+            text = text.replacingOccurrences(of: "^DEMO_", with: "", options: .regularExpression)
+            
+            // 1.5. Remove MultiTrack/Multitracks prefix at the beginning (with or without space)
+            // Try plural first, then singular to avoid leaving "s" behind
+            text = text.replacingOccurrences(of: "^(multitracks|multitrack)\\s*", with: "", options: [.regularExpression, .caseInsensitive])
+            text = text.trimmingCharacters(in: .whitespaces)
+            
+            // 2. Remove MultiTrack/MT suffix at the end (before other processing)
+            text = text.replacingOccurrences(of: "\\s*-?\\s*(multitrack|multitracks|MT)\\s*$",
+                                             with: "", options: [.regularExpression, .caseInsensitive])
+            text = text.trimmingCharacters(in: .whitespaces)
+            
+            // 3. Remove BPM patterns (including decimals like 72.00bpm) - conditional
+            if !keepBPM {
+                // Patterns: "- 142bpm", "_100bpm", "-G#m-110bpm", " BPM 86", "-Gb-72.00bpm"
+                text = text.replacingOccurrences(of: "\\s*-\\s*\\d+(?:\\.\\d+)?bpm.*$", with: "", options: [.regularExpression, .caseInsensitive])
+                text = text.replacingOccurrences(of: "-[A-G](?:#|b)?m?-\\d+(?:\\.\\d+)?bpm.*$", with: "", options: .regularExpression)
+                text = text.replacingOccurrences(of: "_\\d+(?:\\.\\d+)?bpm.*$", with: "", options: [.regularExpression, .caseInsensitive])
+                // "BPM 86" or "BPM 72.00" format
+                text = text.replacingOccurrences(of: "\\s+BPM\\s+\\d+(?:\\.\\d+)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
+                // Also catch "-Gb-72.00bpm" or "-A-54" patterns
+                text = text.replacingOccurrences(of: "-[A-G](?:#|b)?-\\d+(?:\\.\\d+)?.*$", with: "", options: .regularExpression)
+            }
+            
+            // 4. Remove tonality patterns: - G, - Bb, - G#m, Tono Gb - conditional
+            if !keepTonality {
+                // Must remove ALL tonality patterns, not just at end
+                text = text.replacingOccurrences(of: "\\s*-\\s*[A-G](?:#|b)?m?\\s*(?=-|$|\\s)", with: "", options: .regularExpression)
+                text = text.replacingOccurrences(of: "\\s*-\\s*Tono\\s+[A-G](?:#|b)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
+                text = text.replacingOccurrences(of: "\\s*Tono\\s+[A-G](?:#|b)?.*$", with: "", options: [.regularExpression, .caseInsensitive])
+                text = text.trimmingCharacters(in: .whitespaces)
+            }
+            
+            // 5. Remove composite patterns like "(Comp s 4-4)" or "Comp s 4-4"
+            text = text.replacingOccurrences(of: "\\s*\\(Comp.*?\\).*$", with: "", options: [.regularExpression, .caseInsensitive])
+            text = text.replacingOccurrences(of: "\\s+Comp\\s+.*?\\d-\\d.*$", with: "", options: [.regularExpression, .caseInsensitive])
+            text = text.trimmingCharacters(in: .whitespaces)
+            
+            // 6. Remove known record labels/metadata keywords
+            let labelsAndMetadata = ["418records", "418 records", "records", "recursos"]
+            for label in labelsAndMetadata {
+                text = text.replacingOccurrences(of: "\\s*-?\\s*" + NSRegularExpression.escapedPattern(for: label) + ".*$",
+                                                 with: "", options: [.regularExpression, .caseInsensitive])
+                text = text.trimmingCharacters(in: .whitespaces)
+            }
+            
+            // 7. Clean up special characters
+            text = text.replacingOccurrences(of: "^[¿!¡]+", with: "", options: .regularExpression)
+            text = text.replacingOccurrences(of: "[¿!¡]+$", with: "", options: .regularExpression)
+            text = text.trimmingCharacters(in: .whitespaces)
+            
+            // 8. Replace separators with spaces (underscores, hyphens)
+            text = text.replacingOccurrences(of: "_", with: " ")
+            text = text.replacingOccurrences(of: "-", with: " ")
+            text = text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+            text = text.trimmingCharacters(in: .whitespaces)
+            
+            // 9. Validate result
+            if text.isEmpty {
+                return ""
+            }
+            
+            // 10. Format as title case
+            return formatAsTitle(text)
+        }
+        
+        private static func isGenericDirectoryName(_ name: String) -> Bool {
+            let genericNames = [
+                // Storage/System paths
+                "MultiTracks", "Multitracks", "Tracks", "Audio", "Audios", "Music", "Media",
+                "Downloads", "Documents", "Desktop", "Files", "Inbox", "Draft", "Trash",
+                "Mobile", "Library", "Caches", "iCloud", "CloudDocs", "com~apple~CloudDocs",
+                "var", "private", "tmp", "Containers", "Data", "Application",
+                // Audio formats and technical folders
+                "MP3", "MP4", "WAV", "FLAC", "AAC", "M4A", "OGG", "WMA", "AIFF",
+                "Stems", "Instrumentals", "Vocals", "Drums", "Bass", "Guitar", "Keys", "Strings",
+                // Common folder names
+                "Samples", "Imported", "Exports", "Projects", "Sessions", "Recordings",
+                "Backups", "Archives", "Temp", "Cache", "Logs",
+                // iOS specific
+                "Documents", "Library", "Application", "PluginKitPlugin", "Frameworks",
+                "Resources", "Bundle"
+            ]
+            let lowerName = name.lowercased()
+            return genericNames.contains { $0.lowercased() == lowerName }
+        }
+        
+        private static func formatAsTitle(_ text: String) -> String {
+            return text
+                .split(separator: " ")
+                .map { word in
+                    let lower = word.lowercased()
+                    return lower.prefix(1).uppercased() + lower.dropFirst()
+                }
+                .joined(separator: " ")
+        }
     }
 }

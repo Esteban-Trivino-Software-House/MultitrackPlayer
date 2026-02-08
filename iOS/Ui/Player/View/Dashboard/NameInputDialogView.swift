@@ -25,9 +25,9 @@ struct NameInputDialogView: View {
         return !trimmed.isEmpty && trimmed.count <= maxNameLength
     }
     
-    // Check if name exceeds max length
-    private var exceedsMaxLength: Bool {
-        name.count > maxNameLength
+    // Check if name reached max length
+    private var reachedMaxLength: Bool {
+        name.count == maxNameLength
     }
     
     var body: some View {
@@ -66,7 +66,7 @@ struct NameInputDialogView: View {
                     Spacer()
                     Text("\(name.count)/\(maxNameLength)")
                         .font(.caption2)
-                        .foregroundColor(exceedsMaxLength ? .red : .secondary)
+                        .foregroundColor(reachedMaxLength ? .red : .secondary)
                 }
                 .padding(.horizontal)
                 
